@@ -2,7 +2,7 @@
 Zestaw aplikacji probot do zbierania informacji o zdarzeniach na żądaniach ściągnięcia
 
 ## Użycie
-1. instalacja [aplikacji](https://github.com/apps/sensor-room-prototype) wewnątrz organizacji
+1. instalacja [aplikacji](https://github.com/apps/czujnikownia) wewnątrz organizacji
 2. sklonowanie repozytorium
 3. [skonfigurowanie](#konfiguracja) ustawień w razie potrzeby
 4. użycie poleceń wewnątrz folderu z repozytorium:
