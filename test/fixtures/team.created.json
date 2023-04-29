@@ -1,0 +1,10 @@
+{
+    "action": "created",
+    "organization": {
+        "login": "test-organization",
+        "node_id": "dfgrszjknuda"
+    },
+    "team": {
+        "name": "test-team-2023"
+    }
+}

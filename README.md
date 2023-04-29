@@ -21,6 +21,9 @@ Konfiguracja aplikacji możliwa jest poprzez dodanie pliku `.github/sensor-room.
 
 Przykładowa konfiguracja `sensor-room.yml`:
 ```yml
-teamNameKeywordTrigger: "20"
-projectTitlePrefix: "monitor-"
+keywordSettings:
+  - teamNameTrigger: "20"
+    projectTitlePrefix: "monitor-"
+  - teamNameTrigger: "30"
+    projectTitlePrefix: "sensor-"
 ```

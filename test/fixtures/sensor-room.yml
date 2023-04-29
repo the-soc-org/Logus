@@ -1,0 +1,5 @@
+keywordSettings:
+  - teamNameTrigger: "20"
+    projectTitlePrefix: "monitor-"
+  - teamNameTrigger: "30"
+    projectTitlePrefix: "sensor-"
