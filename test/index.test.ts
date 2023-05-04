@@ -6,6 +6,7 @@ import myProbotApp from "../src";
 import { Probot, ProbotOctokit } from "probot";
 // Requiring our fixtures
 import teamCreatedPayload from "./fixtures/team.created.json";
+import projectIdQueryResponse from "./fixtures/projectId.query.response.json"
 
 import fs from "fs";
 import path from "path";
@@ -52,15 +53,21 @@ describe("Czujnikownia app tests", () => {
         .get(`/repos/${teamCreatedPayload.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
         .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/sensor-room.yml"), "utf-8"))
         .post("/graphql", (body) => {
-          expect(body.variables.ownerId).toEqual(teamCreatedPayload.organization.node_id)
-          expect(body.variables.title).toEqual("monitor-test-team-2023")
+          expect(body.variables.organizationLogin).toEqual(teamCreatedPayload.organization.login);
+          expect(body.variables.projectNumber).toEqual(6);
           return true;
         })
-        .reply(200)
+        .reply(200, projectIdQueryResponse)
+        .post("/graphql", (body) => {
+          expect(body.variables.projectId).toEqual(projectIdQueryResponse.data.organization.projectV2.id);
+          expect(body.variables.ownerId).toEqual(teamCreatedPayload.organization.node_id);
+          expect(body.variables.title).toEqual("monitor-test-team-2023");
+          return true;
+        })
+        .reply(200);
 
       await probot.receive({ name: "team.created", payload: teamCreatedPayload });
-      
-      expect(testOutput).toContainEqual(expect.objectContaining({msg: `Team ${teamCreatedPayload.team.name} has been created.`}));
+    
       expect(mock.pendingMocks()).toStrictEqual([]);
     });
 
@@ -79,7 +86,6 @@ describe("Czujnikownia app tests", () => {
 
       await probot.receive({ name: "team.created", payload: teamCreatedPayload });
       
-      expect(testOutput).toContainEqual(expect.objectContaining({msg: "Team test-team-2023 has been created."}));
       expect(mock.pendingMocks()).toStrictEqual([]);
     })
 

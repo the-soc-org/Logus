@@ -2,6 +2,7 @@ export class KeywordSettings
 {
     teamNameTrigger: string = "20";
     projectTitlePrefix: string = "sensor-";
+    projectTemplateNumber?: Number;
 }
 
 class AppGlobalSettings {

@@ -1,5 +1,6 @@
 keywordSettings:
   - teamNameTrigger: "20"
     projectTitlePrefix: "monitor-"
+    projectTemplateNumber: 6
   - teamNameTrigger: "30"
     projectTitlePrefix: "sensor-"
