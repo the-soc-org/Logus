@@ -48,19 +48,24 @@ export = (app: Probot) => {
 
       if(keywordSettings.projectTemplateNumber == undefined) {
         await context.octokit.graphql(createProjectMutation, projectCreateArgs);
-        
+
         app.log.info(`Project ${projectTitle} has been created.`);
       }
       else {
-        const result: any = await context.octokit.graphql(getProjectIdQuery, {
-          organizationLogin: context.payload.organization.login,
-          projectNumber: keywordSettings.projectTemplateNumber,
-        });
+        try {
+          const result: any = await context.octokit.graphql(getProjectIdQuery, {
+            organizationLogin: context.payload.organization.login,
+            projectNumber: keywordSettings.projectTemplateNumber,
+          });
+  
+          projectCreateArgs.projectId = result.organization.projectV2.id;
+          await context.octokit.graphql(copyProjectMutation, projectCreateArgs);  
 
-        projectCreateArgs.projectId = result.organization.projectV2.id;
-        await context.octokit.graphql(copyProjectMutation, projectCreateArgs);
-
-        app.log.info(`Project ${projectTitle} has been created from template ${keywordSettings.projectTemplateNumber}`);
+          app.log.info(`Project ${projectTitle} has been created from template ${keywordSettings.projectTemplateNumber}`);
+        } 
+        catch {
+          app.log.error(`Faild to create project ${projectTitle}. Probably template project ${keywordSettings.projectTemplateNumber} doesn't exisis.`);
+        }
       }
     }
   });

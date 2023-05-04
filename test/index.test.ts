@@ -71,6 +71,22 @@ describe("Czujnikownia app tests", () => {
       expect(mock.pendingMocks()).toStrictEqual([]);
     });
 
+    test("test creating projects with settings from .github-private, but template project doesn't exists", async () => {
+      const mock = nock("https://api.github.com")
+        .get(`/repos/${teamCreatedPayload.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
+        .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/sensor-room.yml"), "utf-8"))
+        .post("/graphql", (body) => {
+          expect(body.variables.organizationLogin).toEqual(teamCreatedPayload.organization.login);
+          expect(body.variables.projectNumber).toEqual(6);
+          return true;
+        })
+        .reply(404);
+        
+      await probot.receive({ name: "team.created", payload: teamCreatedPayload });
+    
+      expect(mock.pendingMocks()).toStrictEqual([]);
+    });
+
     test("test creating projects with default settings", async () => {
       const mock = nock("https://api.github.com")
         .get(`/repos/${teamCreatedPayload.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
