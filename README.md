@@ -1,23 +1,21 @@
 # Czujnikownia
-Zestaw aplikacji probot do zbierania informacji o zdarzeniach na żądaniach ściągnięcia
+Zestaw aplikacji probot do zbierania informacji o zdarzeniach na żądaniach ściągnięcia.
 
 ## Użycie
-1. instalacja [aplikacji](https://github.com/apps/czujnikownia) wewnątrz organizacji
-2. sklonowanie repozytorium
-3. [skonfigurowanie](#konfiguracja) ustawień w razie potrzeby
-4. użycie poleceń wewnątrz folderu z repozytorium:
-```
-npm install
-npm run build
-npm start
-```
+- instalacja [aplikacji GitHub](https://github.com/apps/czujnikownia) wewnątrz organizacji
+- sklonowanie repozytorium
+- [skonfigurowanie](#konfiguracja) ustawień w razie potrzeby
+- użycie poleceń wewnątrz folderu z repozytorium:
+  - `npm install` - [instalacja wszystkich niezbędnych pakietów](https://docs.npmjs.com/cli/v8/commands/npm-install#description)
+  - `npm run build` - transpilacja kodu TypeScript do JavaScript
+  - `npm start` - uruchamienie serwera obsługującego aplikację GitHub
 
-Uwaga: każda zmiana uprawnień aplikacji przez autora będzie wymagała potwierdzenia mailowego przez osoby z aktywną instalacją aplikacji.
+**Uwaga**: każda [zmiana uprawnień aplikacji GitHub przez autora](https://docs.github.com/en/apps/maintaining-github-apps/modifying-a-github-app#changing-the-permissions-of-a-github-app) będzie wymagała potwierdzenia mailowego przez osoby z aktywną instalacją aplikacji.
 
-Chcąc wykorzystać projekt w nowej aplikacji, wystarczy przed uruchomieniem usunąć plik `.env`, a następnie podążać za instrukcjami zawartymi w [dokumentacji probot](https://probot.github.io/docs/development/#configuring-a-github-app).
+Chcąc wykorzystać kod źródłowy zawarty w tym repozytorium w nowej aplikacji GitHub, wystarczy przed uruchomieniem usunąć plik `.env`, a następnie podążać za instrukcjami w [dokumentacji probot](https://probot.github.io/docs/development/#configuring-a-github-app).
 
 ## Konfiguracja
-Konfiguracja aplikacji możliwa jest poprzez dodanie pliku `.github/sensor-room.yml` do repozytorium `.github-private` lub `.github` wewnątrz organizacji.
+Konfiguracja aplikacji na poziomie organizacji możliwa jest poprzez dodanie pliku `.github/sensor-room.yml` do repozytorium `.github-private` lub `.github` wewnątrz organizacji.
 
 Przykładowa konfiguracja `sensor-room.yml`:
 ```yml

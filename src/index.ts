@@ -71,7 +71,7 @@ export = (app: Probot) => {
   });
 
   app.onAny(async (context) => {
-    app.log.info({ id: context.id, event: context.name });
+    app.log.debug({ id: context.id, event: context.name });
   });
 
   // app.on("installation", async (context) => {
