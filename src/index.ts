@@ -3,6 +3,40 @@ import { KeywordSettings, loadFirstKeywordSettings, AppGlobalSettings, loadAppGl
 import { ProjectInOrgQueryResultElement, getProjectV2Id, listProjectsInOrg, listUserTeamsInOrgRelatedToRepo } from "./czujnikowniaGraphQueries"
 import { copyProjectV2, createProjectV2, updateItemDateField, addItemToProjIfNotExist } from "./czujnikowniaGraphMutations"
 
+async function updateDateField(context: any, date: string, fieldNameSelector: (s: KeywordSettings) => string | undefined, log?: any) 
+{
+  try {
+    const userTeams: string[] = await listUserTeamsInOrgRelatedToRepo(context);
+    const projects: ProjectInOrgQueryResultElement[] = await listProjectsInOrg(context);
+    const globalSettings: AppGlobalSettings = await loadAppGlobalSettings(context);
+
+    for(const teamName of userTeams)
+    {
+      const settings: KeywordSettings | undefined = globalSettings.keywordSettings
+        .find(s => teamName.includes(s.teamNameTrigger) && s.openPullRequestDateProjectFieldName !== undefined)
+      if(settings === undefined)
+        continue;
+
+      const proj: ProjectInOrgQueryResultElement | undefined = projects.find(x => x.title.includes(teamName));
+      if(proj === undefined)
+        continue
+
+      const fieldId: string | undefined = proj.fields.find(f => f.name == fieldNameSelector(settings))?.id;
+      if(fieldId === undefined)
+        continue;
+      
+      const itemId = await addItemToProjIfNotExist(context, proj.id, context.payload.pull_request.node_id);
+      await updateItemDateField(context, proj.id, itemId, fieldId, date);
+      log?.info(`Field ${fieldId} updated in ${proj.title} project to value ${date}.`);
+    }
+  }
+  catch(ex)
+  {
+    log?.error({ex});
+    throw ex;
+  }
+}
+
 export = (app: Probot) => {
 
   app.on("team.created", async (context) => {
@@ -38,38 +72,15 @@ export = (app: Probot) => {
     const createdAt = context.payload.pull_request.created_at;
     const repoId = context.payload.repository.node_id;
     app.log.info(`Pull request ${context.payload.number} in the repo ${repoId} opened at ${createdAt}.`);
-
-    try {
-      const userTeams: string[] = await listUserTeamsInOrgRelatedToRepo(context);
-      const projects: ProjectInOrgQueryResultElement[] = await listProjectsInOrg(context);
-      const globalSettings: AppGlobalSettings = await loadAppGlobalSettings(context);
-
-      for(const teamName of userTeams)
-      {
-        const settings: KeywordSettings | undefined = globalSettings.keywordSettings
-          .find(s => teamName.includes(s.teamNameTrigger) && s.openPullRequestDateProjectFieldName !== undefined)
-        if(settings === undefined)
-          continue;
-
-        const proj: ProjectInOrgQueryResultElement | undefined = projects.find(x => x.title.includes(teamName));
-        if(proj === undefined)
-          continue
-
-        const fieldId: string | undefined = proj.fields.find(f => f.name == settings.openPullRequestDateProjectFieldName)?.id;
-        if(fieldId === undefined)
-          continue;
-        
-        const itemId = await addItemToProjIfNotExist(context, proj.id, context.payload.pull_request.node_id);
-        await updateItemDateField(context, proj.id, itemId, fieldId, createdAt);
-        app.log.info(`Field ${fieldId} updated in ${proj.title} project.`);
-      }
-    }
-    catch(ex)
-    {
-      app.log.error({ex});
-      throw ex;
-    }
     
+    await updateDateField(context, createdAt, s => s.openPullRequestDateProjectFieldName, app.log);
+  });
+
+  app.on("pull_request_review.submitted", async (context) => {
+    const reviewDate = context.payload.review.submitted_at;
+    const repoId = context.payload.repository.node_id;
+    app.log.info(`Review ${context.payload.review.node_id} submitted in the repo ${repoId} opened at ${reviewDate}.`);
+    await updateDateField(context, reviewDate, s => s.lastReviewSubmitDateProjectFieldName, app.log);
   });
 
   app.onAny(async (context) => {

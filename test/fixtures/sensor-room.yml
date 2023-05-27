@@ -3,5 +3,6 @@ keywordSettings:
     projectTitlePrefix: "monitor-"
     projectTemplateNumber: 6
     openPullRequestDateProjectFieldName: "Open Date"
+    lastReviewSubmitDateProjectFieldName: "Last Review Date"
   - teamNameTrigger: "24"
     projectTitlePrefix: "sensor-"

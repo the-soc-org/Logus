@@ -24,6 +24,7 @@ keywordSettings:
     projectTitlePrefix: "monitor-"
     projectTemplateNumber: 6
     openPullRequestDateProjectFieldName: "Open Date"
+    lastReviewSubmitDateProjectFieldName: "Last Review Date"
   - teamNameTrigger: "24"
     projectTitlePrefix: "sensor-"
 ```
@@ -33,3 +34,4 @@ keywordSettings:
 - `projectTitlePrefix` - przedrostek tytułu tworzonego projektu
 - `projectTemplateNumber` - numer istniejącego projektu w organizacji, który wykorzystywany zostanie jako wzór dla nowo tworzonego projektu. Jeżeli nie ustawiono, to nowo tworzony projekt będzie pusty.
 - `openPullRequestDateProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana data utworzenia *żądania ściągnięcia* przez użytkownika, który jest członkiem zespołu o nazwie zawierającej słowo kluczowe. Repozytorium, w którym utworzono żądanie, musi być powiązane z zespołem. Parametr opcjonalny.
+- `lastReviewSubmitDateProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana data przesłania ostatniej recenzji *żądania ściągnięcia* przez użytkownika, który jest członkiem zespołu o nazwie zawierającej słowo kluczowe. Parametr opcjonalny.

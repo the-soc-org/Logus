@@ -3,6 +3,7 @@ export class KeywordSettings
     teamNameTrigger: string = "20";
     projectTitlePrefix: string = "sensor-";
     openPullRequestDateProjectFieldName?: string;
+    lastReviewSubmitDateProjectFieldName?: string;
     projectTemplateNumber?: Number;
 }
 
