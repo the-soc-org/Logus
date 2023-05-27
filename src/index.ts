@@ -13,7 +13,7 @@ async function updateDateField(context: any, date: string, fieldNameSelector: (s
     for(const teamName of userTeams)
     {
       const settings: KeywordSettings | undefined = globalSettings.keywordSettings
-        .find(s => teamName.includes(s.teamNameTrigger) && s.openPullRequestDateProjectFieldName !== undefined)
+        .find(s => teamName.includes(s.teamNameTrigger) && fieldNameSelector(s) !== undefined)
       if(settings === undefined)
         continue;
 
