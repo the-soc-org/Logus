@@ -23,11 +23,13 @@ keywordSettings:
   - teamNameTrigger: "20"
     projectTitlePrefix: "monitor-"
     projectTemplateNumber: 6
-  - teamNameTrigger: "30"
+    openPullRequestDateProjectFieldName: "Open Date"
+  - teamNameTrigger: "24"
     projectTitlePrefix: "sensor-"
 ```
 
 - `keywordSettings` - zbiór ustawień dla poszczególnych słów kluczowych
 - `teamNameTrigger` - słowo kluczowe wyszukiwane w nazwie utworzonego zespołu, które wyzwala tworzenie nowego projektu w organizacji
 - `projectTitlePrefix` - przedrostek tytułu tworzonego projektu
-- `projectTemplateNumber` - numer istniejącego projektu w organizacji, który wykorzystywany jest jako wzór dla nowo tworzonego projektu
+- `projectTemplateNumber` - numer istniejącego projektu w organizacji, który wykorzystywany zostanie jako wzór dla nowo tworzonego projektu. Jeżeli nie ustawiono, to nowo tworzony projekt będzie pusty.
+- `openPullRequestDateProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana data utworzenia *żądania ściągnięcia* przez użytkownika, który jest członkiem zespołu o nazwie zawierającej słowo kluczowe. Repozytorium, w którym utworzono żądanie, musi być powiązane z zespołem. Parametr opcjonalny.

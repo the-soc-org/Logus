@@ -1,33 +1,7 @@
 import { Probot } from "probot";
-import { KeywordSettings, loadFirstKeywordSettings } from "./settings";
-
-const createProjectMutation: string = `
-mutation createProject($ownerId: ID!, $title: String!) { 
-  createProjectV2(input: {ownerId: $ownerId, title: $title}) {
-    projectV2 {
-      id
-    }
-  }
-}`;
-
-const getProjectIdQuery: string = `
-query getProjectId($organizationLogin: String!, $projectNumber: Int!) {
-  organization(login: $organizationLogin) {
-    projectV2(number: $projectNumber) {
-      id
-    }
-  }
-}`;
-
-const copyProjectMutation: string = `
-mutation copyProject($projectId: ID!, $ownerId: ID!, $title: String!){
-  copyProjectV2(input:{projectId: $projectId, ownerId: $ownerId, title: $title}) {
-    projectV2 {
-      id,
-      number
-    }
-  }
-}`;
+import { KeywordSettings, loadFirstKeywordSettings, AppGlobalSettings, loadAppGlobalSettings } from "./settings";
+import { ProjectInOrgQueryResultElement, getProjectV2Id, listProjectsInOrg, listUserTeamsInOrgRelatedToRepo } from "./czujnikowniaGraphQueries"
+import { copyProjectV2, createProjectV2, updateItemDateField, addItemToProjIfNotExist } from "./czujnikowniaGraphMutations"
 
 export = (app: Probot) => {
 
@@ -40,26 +14,16 @@ export = (app: Probot) => {
 
     if(keywordSettings !== undefined) {
       const projectTitle = keywordSettings.projectTitlePrefix + teamName;
-      
-      const projectCreateArgs: any = {
-        ownerId: context.payload.organization.node_id,
-        title: projectTitle,
-      };
 
       if(keywordSettings.projectTemplateNumber == undefined) {
-        await context.octokit.graphql(createProjectMutation, projectCreateArgs);
+        await createProjectV2(context, projectTitle);
 
         app.log.info(`Project ${projectTitle} has been created.`);
       }
       else {
         try {
-          const result: any = await context.octokit.graphql(getProjectIdQuery, {
-            organizationLogin: context.payload.organization.login,
-            projectNumber: keywordSettings.projectTemplateNumber,
-          });
-  
-          projectCreateArgs.projectId = result.organization.projectV2.id;
-          await context.octokit.graphql(copyProjectMutation, projectCreateArgs);  
+          const templateId = await getProjectV2Id(context, keywordSettings.projectTemplateNumber);
+          await copyProjectV2(context, projectTitle, templateId);
 
           app.log.info(`Project ${projectTitle} has been created from template ${keywordSettings.projectTemplateNumber}`);
         } 
@@ -70,10 +34,46 @@ export = (app: Probot) => {
     }
   });
 
+  app.on("pull_request.opened", async (context) => {
+    const createdAt = context.payload.pull_request.created_at;
+    const repoId = context.payload.repository.node_id;
+    app.log.info(`Pull request ${context.payload.number} in the repo ${repoId} opened at ${createdAt}.`);
+
+    try {
+      const userTeams: string[] = await listUserTeamsInOrgRelatedToRepo(context);
+      const projects: ProjectInOrgQueryResultElement[] = await listProjectsInOrg(context);
+      const globalSettings: AppGlobalSettings = await loadAppGlobalSettings(context);
+
+      for(const teamName of userTeams)
+      {
+        const settings: KeywordSettings | undefined = globalSettings.keywordSettings
+          .find(s => teamName.includes(s.teamNameTrigger) && s.openPullRequestDateProjectFieldName !== undefined)
+        if(settings === undefined)
+          continue;
+
+        const proj: ProjectInOrgQueryResultElement | undefined = projects.find(x => x.title.includes(teamName));
+        if(proj === undefined)
+          continue
+
+        const fieldId: string | undefined = proj.fields.find(f => f.name == settings.openPullRequestDateProjectFieldName)?.id;
+        if(fieldId === undefined)
+          continue;
+        
+        const itemId = await addItemToProjIfNotExist(context, proj.id, context.payload.pull_request.node_id);
+        await updateItemDateField(context, proj.id, itemId, fieldId, createdAt);
+        app.log.info(`Field ${fieldId} updated in ${proj.title} project.`);
+      }
+    }
+    catch(ex)
+    {
+      app.log.error({ex});
+      throw ex;
+    }
+    
+  });
+
   app.onAny(async (context) => {
     app.log.debug({ id: context.id, event: context.name });
   });
-
-  // app.on("installation", async (context) => {
-  // });
+  
 };

@@ -2,5 +2,6 @@ keywordSettings:
   - teamNameTrigger: "20"
     projectTitlePrefix: "monitor-"
     projectTemplateNumber: 6
-  - teamNameTrigger: "30"
+    openPullRequestDateProjectFieldName: "Open Date"
+  - teamNameTrigger: "24"
     projectTitlePrefix: "sensor-"
