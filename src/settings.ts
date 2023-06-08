@@ -1,14 +1,29 @@
 export class KeywordSettings
 {
-    teamNameTrigger: string = "20";
-    projectTitlePrefix: string = "sensor-";
-    openPullRequestDateProjectFieldName?: string;
-    lastReviewSubmitDateProjectFieldName?: string;
-    projectTemplateNumber?: Number;
+    readonly teamNameTrigger: string = "20";
+    readonly projectTitlePrefix: string = "sensor-";
+    readonly openPullRequestDateProjectFieldName?: string;
+    readonly lastReviewSubmitDateProjectFieldName?: string;
+    readonly projectTemplateNumber?: Number;
+
+    public getProjectTitle(teamName:string) : string {
+        return this.projectTitlePrefix + teamName;
+    }
+
+    constructor(settings: KeywordSettings | null = null) {
+        if(settings)
+            Object.assign(this, settings);
+    }
 }
 
 export class AppGlobalSettings {
-    keywordSettings: KeywordSettings[] = []
+    readonly keywordSettings: KeywordSettings[] = []
+
+    constructor(globalSettings: AppGlobalSettings | null = null) {
+        if(globalSettings)
+            for(const x of globalSettings.keywordSettings)
+                this.keywordSettings.push(new KeywordSettings(x));
+    }
 };
 
 export async function loadFirstKeywordSettings(context: any, testingName: string): Promise<KeywordSettings | undefined>
@@ -29,5 +44,5 @@ export async function loadAppGlobalSettings(context: any) : Promise<AppGlobalSet
         defaults: defaultSettings
     });
 
-    return <AppGlobalSettings>configHolder.config;
+    return new AppGlobalSettings(configHolder.config);
 }

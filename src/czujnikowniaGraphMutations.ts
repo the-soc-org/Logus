@@ -6,7 +6,6 @@ mutation createProject($ownerId: ID!, $title: String!) {
     }
   }
 }`;
-
 export async function createProjectV2(context: any, title: string)
 {
     const projectCreateArgs: any = {
@@ -25,7 +24,6 @@ mutation copyProject($projectId: ID!, $ownerId: ID!, $title: String!){
     }
   }
 }`;
-
 export async function copyProjectV2(context: any, newProjectTitle: string, templateProjectNumber: Number) {
     const projectCreateArgs: any = {
         ownerId: context.payload.organization.node_id,
@@ -35,6 +33,25 @@ export async function copyProjectV2(context: any, newProjectTitle: string, templ
     await context.octokit.graphql(copyProjectMutation, projectCreateArgs);  
 }
 
+const closeProjectV2Mutation = `
+mutation closeProjectV2($projectId: ID!){
+  deleteProjectV2(
+    input: {
+      projectId: $projectId
+    }) {
+    projectV2 {
+      id
+    }
+  }
+}`;
+export async function closeProjectV2(context: any, projectId: string) : Promise<string>
+{
+  const result: any = await context.octokit.graphql(closeProjectV2Mutation, {
+    projectId
+  });
+  return <string>result.deleteProjectV2.projectV2.id;
+}
+
 const addItemMutation = `mutation addItemMutation($projectId:ID!, $contentId:ID!) {
     addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
       item {
@@ -42,7 +59,6 @@ const addItemMutation = `mutation addItemMutation($projectId:ID!, $contentId:ID!
       }
     }
   }`;
-  
   export async function addItemToProjIfNotExist(context: any, projectId: string, contentId: string): Promise<string>
   {
     const result: any = await context.octokit.graphql(addItemMutation, {
@@ -69,7 +85,6 @@ const addItemMutation = `mutation addItemMutation($projectId:ID!, $contentId:ID!
       }
     }
   }`;
-  
   export async function updateItemDateField(context: any, projectId: string, itemId: string, fieldId: string, date: any): Promise<string>
   {
     const result: any = await context.octokit.graphql(updateItemDateFieldMutation, {
