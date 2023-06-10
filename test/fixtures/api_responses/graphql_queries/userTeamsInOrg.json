@@ -1,0 +1,28 @@
+{
+   "data": {
+     "user": {
+       "organization": {
+         "login": "Mikimak-Test-Organization",
+         "teams": {
+           "edges": [
+             {
+               "node": {
+                 "name": "test-2-2023",
+                 "repositories": {
+                   "edges": [
+                     {
+                       "node": {
+                         "id": "R_kgDOJWgzKA",
+                         "name": "repo-1"
+                       }
+                     }
+                   ]
+                 }
+               }
+             }
+           ]
+         }
+       }
+     }
+   }
+ }

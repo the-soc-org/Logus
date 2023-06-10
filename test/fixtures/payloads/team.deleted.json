@@ -1,0 +1,28 @@
+{
+    "action": "deleted",
+    "team": {
+      "name": "test-20",
+      "id": 8043034,
+      "node_id": "T_kwDOB8o1Ys4Aeroa",
+      "slug": "test-20",
+      "description": "",
+      "privacy": "closed",
+      "notification_setting": "notifications_enabled",
+      "permission": "pull",
+      "parent": null
+    },
+    "organization": {
+      "login": "Mikimak-Test-Organization",
+      "id": 130692450,
+      "node_id": "O_kgDOB8o1Yg",
+      "description": ""
+    },
+    "sender": {
+      "login": "Mik1mak",
+      "id": 29757080,
+      "node_id": "MDQ6VXNlcjI5NzU3MDgw",
+      "gravatar_id": "",
+      "type": "User",
+      "site_admin": false
+    }
+  }
