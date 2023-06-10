@@ -6,13 +6,14 @@ mutation createProject($ownerId: ID!, $title: String!) {
     }
   }
 }`;
-export async function createProjectV2(context: any, title: string)
+export async function createProjectV2(context: any, title: string, log?: any)
 {
     const projectCreateArgs: any = {
         ownerId: context.payload.organization.node_id,
         title: title,
       };
-    await context.octokit.graphql(createProjectMutation, projectCreateArgs);
+    const result = await context.octokit.graphql(createProjectMutation, projectCreateArgs);
+    log?.debug(`createProjectV2 mutation result:\n${JSON.stringify(result)}`);
 }
 
 const copyProjectMutation: string = `
@@ -24,13 +25,14 @@ mutation copyProject($projectId: ID!, $ownerId: ID!, $title: String!){
     }
   }
 }`;
-export async function copyProjectV2(context: any, newProjectTitle: string, templateProjectNumber: Number) {
+export async function copyProjectV2(context: any, newProjectTitle: string, templateProjectNumber: Number, log?: any) {
     const projectCreateArgs: any = {
         ownerId: context.payload.organization.node_id,
         title: newProjectTitle,
         projectId: templateProjectNumber
     };
-    await context.octokit.graphql(copyProjectMutation, projectCreateArgs);  
+    const result = await context.octokit.graphql(copyProjectMutation, projectCreateArgs);  
+    log?.debug(`copyProjectV2 mutation result:\n${JSON.stringify(result)}`);
 }
 
 const closeProjectV2Mutation = `
@@ -44,28 +46,44 @@ mutation closeProjectV2($projectId: ID!){
     }
   }
 }`;
-export async function closeProjectV2(context: any, projectId: string) : Promise<string>
+export async function closeProjectV2(context: any, projectId: string, log?: any) : Promise<string>
 {
   const result: any = await context.octokit.graphql(closeProjectV2Mutation, {
     projectId
   });
+  log?.debug(`closeProjectV2Mutation mutation result:\n${JSON.stringify(result)}`);
   return <string>result.deleteProjectV2.projectV2.id;
 }
 
-const addItemMutation = `mutation addItemMutation($projectId:ID!, $contentId:ID!) {
+const addItemMutation = `mutation addItemMutation($projectId:ID!, $contentId:ID!, $fieldName: String!) {
     addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
       item {
-        id
+        id,
+        fieldValueByName(name: $fieldName) {
+          ... on ProjectV2ItemFieldNumberValue {
+            number
+          },
+          ... on ProjectV2ItemFieldDateValue {
+            date
+          }
+        }
       }
     }
   }`;
-  export async function addItemToProjIfNotExist(context: any, projectId: string, contentId: string): Promise<string>
+  export async function addItemToProjIfNotExist(context: any, projectId: string, contentId: string, fieldName: string, log?: any)
+  : Promise<{itemId: string, fieldValue: any}>
   {
     const result: any = await context.octokit.graphql(addItemMutation, {
       projectId,
       contentId,
+      fieldName,
     });
-    return <string>result.addProjectV2ItemById.item.id;
+    log?.debug(`addItemToProjIfNotExist mutation result:\n${JSON.stringify(result)}`);
+    const item: any = result.addProjectV2ItemById.item;
+    return {
+      itemId: <string>item.id,
+      fieldValue: item.fieldValueByName?.number ?? item.fieldValueByName?.date ?? 0,
+    };
   }
   
   const updateItemDateFieldMutation = `
@@ -85,7 +103,7 @@ const addItemMutation = `mutation addItemMutation($projectId:ID!, $contentId:ID!
       }
     }
   }`;
-  export async function updateItemDateField(context: any, projectId: string, itemId: string, fieldId: string, date: any): Promise<string>
+  export async function updateItemDateField(context: any, projectId: string, itemId: string, fieldId: string, date: string, log?: any): Promise<string>
   {
     const result: any = await context.octokit.graphql(updateItemDateFieldMutation, {
       projectId,
@@ -93,5 +111,35 @@ const addItemMutation = `mutation addItemMutation($projectId:ID!, $contentId:ID!
       fieldId,
       date,
     });
+    log?.debug(`updateItemDateField mutation result:\n${JSON.stringify(result)}`);
+    return <string>result.updateProjectV2ItemFieldValue.projectV2Item.id;
+  }
+
+  const updateItemNumberFieldMutation = `
+  mutation updateItemField($projectId: ID!, $itemId: ID!, $fieldId: ID!, $number: Float){
+    updateProjectV2ItemFieldValue(
+      input: {
+        projectId: $projectId
+        itemId: $itemId
+        fieldId: $fieldId
+        value: { 
+          number: $number      
+        }
+      }
+    ) {
+      projectV2Item {
+        id
+      }
+    }
+  }`;
+  export async function updateItemNumberField(context: any, projectId: string, itemId: string, fieldId: string, number: number, log?: any): Promise<string>
+  {
+    const result: any = await context.octokit.graphql(updateItemNumberFieldMutation, {
+      projectId,
+      itemId,
+      fieldId,
+      number,
+    });
+    log?.debug(`updateItemNumberField mutation result:\n${JSON.stringify(result)}`);
     return <string>result.updateProjectV2ItemFieldValue.projectV2Item.id;
   }

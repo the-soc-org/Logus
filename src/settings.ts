@@ -1,9 +1,10 @@
 export class KeywordSettings
 {
-    readonly teamNameTrigger: string = "20";
+    readonly teamNameTrigger: string = "-";
     readonly projectTitlePrefix: string = "sensor-";
     readonly openPullRequestDateProjectFieldName?: string;
     readonly lastReviewSubmitDateProjectFieldName?: string;
+    readonly reviewIterationNumberFieldName?: string;
     readonly projectTemplateNumber?: Number;
 
     public getProjectTitle(teamName:string) : string {

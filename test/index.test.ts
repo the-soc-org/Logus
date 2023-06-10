@@ -161,7 +161,7 @@ describe("Czujnikownia app tests", () => {
 
         .post("/graphql", (body) => {
           expect(body.variables.projectId).toEqual("PVT_kwDOB8o1Ys4APwEY")
-          expect(body.variables.itemId).toEqual("sgrdlmgwrskj")
+          expect(body.variables.itemId).toEqual("PVTI_lADOB8o1Ys4APwEYzgG_Ll0")
           expect(body.variables.date).toEqual("2023-05-27T15:49:07Z")
           expect(body.variables.fieldId).toEqual("PVTF_lADOB8o1Ys4APwEYzgKDkus")
           return true;

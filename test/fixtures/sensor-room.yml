@@ -4,5 +4,6 @@ keywordSettings:
     projectTemplateNumber: 6
     openPullRequestDateProjectFieldName: "Open Date"
     lastReviewSubmitDateProjectFieldName: "Last Review Date"
+    reviewIterationNumberFieldName: "Review Iteration"
   - teamNameTrigger: "24"
     projectTitlePrefix: "sensor-"
