@@ -4,7 +4,7 @@ export class KeywordSettings
     readonly projectTitlePrefix: string = "sensor-";
     readonly openPullRequestDateProjectFieldName?: string;
     readonly lastReviewSubmitDateProjectFieldName?: string;
-    readonly reviewIterationNumberFieldName?: string;
+    readonly reviewIterationNumberProjectFieldName?: string;
     readonly projectTemplateNumber?: Number;
 
     public getProjectTitle(teamName:string) : string {

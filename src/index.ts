@@ -68,7 +68,7 @@ export = (app: Probot) => {
 
     const fieldUpdater: ProjectFieldValueUpdater = await ProjectFieldValueUpdater.initialize(context, app.log);
     await fieldUpdater.updateDate(s => s.lastReviewSubmitDateProjectFieldName, reviewDate);
-    await fieldUpdater.increment(s => s.reviewIterationNumberFieldName);
+    await fieldUpdater.increment(s => s.reviewIterationNumberProjectFieldName);
   });
 
   app.onAny(async (context) => {
