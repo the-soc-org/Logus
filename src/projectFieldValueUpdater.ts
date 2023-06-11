@@ -20,10 +20,11 @@ export class ProjectFieldValueUpdater {
   }
 
   public static async initialize(context: any, log: any = null): Promise<ProjectFieldValueUpdater> {
-    const userTeams: string[] = await listUserTeamsInOrgRelatedToRepo(context);
-    const projects: ProjectInOrgQueryResultElement[] = await listProjectsInOrg(context);
-    const globalSettings: AppGlobalSettings = await loadAppGlobalSettings(context);
-    return new ProjectFieldValueUpdater(context, userTeams, projects, globalSettings, log);
+    const userTeams: Promise<string[]> = listUserTeamsInOrgRelatedToRepo(context)
+    const projects: Promise<ProjectInOrgQueryResultElement[]> = listProjectsInOrg(context);
+    const globalSettings: Promise<AppGlobalSettings> = loadAppGlobalSettings(context);
+
+    return new ProjectFieldValueUpdater(context, await userTeams, await projects, await globalSettings, log);
   }
 
   public async updateDate(fieldNameSelector: (s: KeywordSettings) => string | undefined, newFieldValue: string) {
