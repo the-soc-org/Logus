@@ -17,6 +17,8 @@ Chcąc wykorzystać kod źródłowy zawarty w tym repozytorium w nowej aplikacji
 ## Konfiguracja
 Konfiguracja aplikacji na poziomie organizacji możliwa jest poprzez dodanie pliku `.github/sensor-room.yml` do repozytorium `.github-private` lub `.github` wewnątrz organizacji.
 
+Przechowywanie pliku konfiguracyjnego w repozytorium `.github-private` wymaga udzielenia aplikacji dostępu do tego repozytorium w ustawieniach organizacji – https://github.com/organizations/TWOJA-ORGANIZACJA/settings/installations 
+
 Przykładowa konfiguracja `sensor-room.yml`:
 ```yml
 keywordSettings:
