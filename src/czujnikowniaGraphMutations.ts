@@ -37,10 +37,10 @@ export async function copyProjectV2(context: any, newProjectTitle: string, templ
 
 const closeProjectV2Mutation = `
 mutation closeProjectV2($projectId: ID!){
-  deleteProjectV2(
-    input: {
-      projectId: $projectId
-    }) {
+  updateProjectV2(input: {
+    projectId: $projectId,
+    closed: true
+  }) {
     projectV2 {
       id
     }
@@ -52,7 +52,7 @@ export async function closeProjectV2(context: any, projectId: string, log?: any)
     projectId
   });
   log?.debug(`closeProjectV2Mutation mutation result:\n${JSON.stringify(result)}`);
-  return <string>result.deleteProjectV2.projectV2.id;
+  return <string>result.updateProjectV2.projectV2.id;
 }
 
 const addItemMutation = `mutation addItemMutation($projectId:ID!, $contentId:ID!, $fieldName: String!) {
