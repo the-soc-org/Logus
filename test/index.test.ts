@@ -9,6 +9,7 @@ import { Probot, ProbotOctokit } from "probot";
 import payloadTeamCreated from "./fixtures/payloads/team.created.json";
 import payloadTeamDeleted from "./fixtures/payloads/team.deleted.json";
 import payloadPullRequestOpened from "./fixtures/payloads/pull_request.opened.json"
+import payloadPRRequestChanges from "./fixtures/payloads/pr_review.submitted.changes_requested.json"
 
 import responseProjectsInOrg from "./fixtures/api_responses/graphql_queries/projectsInOrg.json"
 import responseProjectId from "./fixtures/api_responses/graphql_queries/projectId.json";
@@ -134,7 +135,45 @@ describe("Czujnikownia app tests", () => {
         expect(mock.pendingMocks()).toStrictEqual([]);
     });
 
-    test("saving pull request date in project", async () => {
+    test("test increment field", async () => {
+      const mock = nock("https://api.github.com")
+        .post("/graphql", (body) => {
+          expect(body.variables.userLogin).toEqual(payloadPRRequestChanges.sender.login)
+          expect(body.variables.organizationLogin).toEqual(payloadPRRequestChanges.organization.login)
+          return true;
+        })
+        .reply(200, responseUserTeamsInOrg)
+
+        .post("/graphql", (body) => {
+          expect(body.variables.organizationLogin).toEqual(payloadPRRequestChanges.organization.login)
+          return true;
+        })
+        .reply(200, responseProjectsInOrg)
+
+        .get(`/repos/${payloadTeamDeleted.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
+        .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/sensor-room.yml"), "utf-8"))
+
+        .post("/graphql", (body) => {
+          expect(body.variables.projectId).toEqual("PVT_kwDOB8o1Ys4APwEY")
+          expect(body.variables.contentId).toEqual("PR_kwDOJWgzKM5SsFz2")
+          return true;
+        })
+        .reply(200, responseAddItemToProj)
+
+        .post("/graphql", (body) => {
+          expect(body.variables.projectId).toEqual("PVT_kwDOB8o1Ys4APwEY")
+          expect(body.variables.itemId).toEqual("PVTI_lADOB8o1Ys4APwEYzgG_Ll0")
+          expect(body.variables.number).toEqual(1)
+          expect(body.variables.fieldId).toEqual("PVTF_lADOB8o1Ys4APwEYzgLGEPg")
+          return true;
+        })
+        .reply(200, responseUpdateDateField)
+
+      await probot.receive({ name: "pull_request_review.submitted", payload: payloadPRRequestChanges });
+      expect(mock.pendingMocks()).toStrictEqual([]);
+    });
+
+    test("test saving open pull request date in project", async () => {
       const mock = nock("https://api.github.com")
         .post("/graphql", (body) => {
           expect(body.variables.userLogin).toEqual(payloadPullRequestOpened.sender.login)

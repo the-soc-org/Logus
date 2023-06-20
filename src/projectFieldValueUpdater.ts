@@ -36,7 +36,9 @@ export class ProjectFieldValueUpdater {
 
   public async increment(fieldNameSelector: (s: KeywordSettings) => string | undefined) {
     await this.updateField(fieldNameSelector, async (proj, item, fieldId) => {
-      await updateItemNumberField(this.context, proj.id, item.itemId, fieldId, (item.fieldValue as number) + 1, this.log);
+      const newFieldValue: number = (item.fieldValue as number) + 1;
+      await updateItemNumberField(this.context, proj.id, item.itemId, fieldId, newFieldValue, this.log);
+      this.log?.info(`Field ${fieldId} updated in ${proj.title} project to value ${newFieldValue}.`);
     });
   }
 

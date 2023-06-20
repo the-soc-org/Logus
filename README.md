@@ -10,10 +10,6 @@ Zestaw aplikacji probot do zbierania informacji o zdarzeniach na żądaniach śc
   - `npm run build` - transpilacja kodu TypeScript do JavaScript
   - `npm start` - uruchamienie serwera obsługującego aplikację GitHub
 
-**Uwaga**: każda [zmiana uprawnień aplikacji GitHub przez autora](https://docs.github.com/en/apps/maintaining-github-apps/modifying-a-github-app#changing-the-permissions-of-a-github-app) będzie wymagała potwierdzenia mailowego przez osoby z aktywną instalacją aplikacji.
-
-Chcąc wykorzystać kod źródłowy zawarty w tym repozytorium w nowej aplikacji GitHub, wystarczy przed uruchomieniem usunąć plik `.env`, a następnie podążać za instrukcjami w [dokumentacji probot](https://probot.github.io/docs/development/#configuring-a-github-app).
-
 ## Konfiguracja
 Konfiguracja aplikacji na poziomie organizacji możliwa jest poprzez dodanie pliku `.github/sensor-room.yml` do repozytorium `.github-private` lub `.github` wewnątrz organizacji.
 

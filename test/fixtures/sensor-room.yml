@@ -5,6 +5,6 @@ keywordSettings:
     openPullRequestDateProjectFieldName: "Open Date"
     lastReviewSubmitDateProjectFieldName: "Last Review Date"
     lastApprovedReviewSubmitDateProjectFieldName: "Last Approve Review Date"
-    reviewIterationNumberProjectFieldName: "Review Iteration"
+    reviewIterationNumberProjectFieldName: "Iteration"
   - teamNameTrigger: "24"
     projectTitlePrefix: "sensor-"
