@@ -1,6 +1,6 @@
 { 
     "data": { 
-        "deleteProjectV2": { 
+        "updateProjectV2": { 
             "projectV2": { 
                 "id": "sgrdlmgwrskj"
             }
