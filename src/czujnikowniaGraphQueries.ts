@@ -1,3 +1,5 @@
+import { CzujnikowniaContext, PRCzujnikowniaContext } from "./czujnikowniaContexts";
+
 const getProjectIdQuery: string = `
 query getProjectId($organizationLogin: String!, $projectNumber: Int!) {
   organization(login: $organizationLogin) {
@@ -7,12 +9,12 @@ query getProjectId($organizationLogin: String!, $projectNumber: Int!) {
   }
 }`;
 
-export async function getProjectV2Id(context: any, projectNumber: Number): Promise<Number> {
+export async function getProjectV2Id(context: CzujnikowniaContext, projectNumber: Number): Promise<Number> {
     const result: any = await context.octokit.graphql(getProjectIdQuery, {
         organizationLogin: context.payload.organization.login,
         projectNumber: projectNumber,
     });
-    return <Number>result.organization.projectV2.id;
+    return result.organization.projectV2.id as Number;
 }
 
 const listUserTeamsInOrgQuery: string = `
@@ -39,7 +41,7 @@ query listUserTeamsInOrg($userLogin: String!, $organizationLogin: String!){
   }
 }`;
 
-export async function listUserTeamsInOrgRelatedToRepo(context: any): Promise<string[]>
+export async function listUserTeamsInOrgRelatedToRepo(context: PRCzujnikowniaContext): Promise<string[]>
 {
   const repoId = context.payload.repository.node_id;
   const userTeamsData: any = await context.octokit.graphql(listUserTeamsInOrgQuery, {
@@ -49,7 +51,7 @@ export async function listUserTeamsInOrgRelatedToRepo(context: any): Promise<str
 
   return userTeamsData.user.organization.teams.edges
     .filter((n: any) => n.node.repositories.edges.some((nn: any) => nn.node.id == repoId))
-    .map((n: any) => <string>n.node.name);
+    .map((n: any) => n.node.name as string);
 }
 
 const listProjectsInOrgQuery: string = `
@@ -79,7 +81,7 @@ query listProjectsInOrg($organizationLogin: String!) {
     }
 }`;
 
-export async function listProjectsInOrg(context: any): Promise<ProjectInOrgQueryResultElement[]>
+export async function listProjectsInOrg(context: CzujnikowniaContext): Promise<ProjectInOrgQueryResultElement[]>
 {
   const projectsInOrgData: any = await context.octokit.graphql(listProjectsInOrgQuery, {
     organizationLogin: context.payload.organization.login
@@ -89,11 +91,11 @@ export async function listProjectsInOrg(context: any): Promise<ProjectInOrgQuery
   });
 }
 
-export class ProjectInOrgQueryResultElement_Field
+export interface FieldOfProjectInOrgQueryResultElement
 {
-  id: string = "";
-  name: string = "";
-  dataType: string = "";
+  id: string;
+  name: string;
+  dataType: string;
 }
 
 export class ProjectInOrgQueryResultElement
@@ -102,7 +104,7 @@ export class ProjectInOrgQueryResultElement
   number: Number;
   title: string;
   closed: boolean = false;
-  fields: ProjectInOrgQueryResultElement_Field[] = [];
+  fields: FieldOfProjectInOrgQueryResultElement[] = [];
 
   constructor(node: any)
   {
@@ -110,6 +112,6 @@ export class ProjectInOrgQueryResultElement
     this.number = node.number;
     this.title = node.title;
     this.closed = node.closed;
-    this.fields = node.fields.edges.map((n: any) => <ProjectInOrgQueryResultElement_Field>n.node);
+    this.fields = node.fields.edges.map((n: any) => n.node as FieldOfProjectInOrgQueryResultElement);
   }
 }

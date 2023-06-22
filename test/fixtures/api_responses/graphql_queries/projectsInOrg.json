@@ -73,7 +73,14 @@
                   {
                     "node": {
                       "id": "PVTF_lADOB8o1Ys4APwEYzgKDkuw",
-                      "name": "Review Date",
+                      "name": "Last Review Date",
+                      "dataType": "DATE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOB8o1Ys4APwEYzgLoLxD",
+                      "name": "Last Approve Review Date",
                       "dataType": "DATE"
                     }
                   },

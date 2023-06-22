@@ -1,0 +1,4 @@
+keywordSettings:
+  - teamNameTrigger: "20"
+    projectTitlePrefix: "monitor-"
+    reviewIterationNumberProjectFieldName: "Iteration"

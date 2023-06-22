@@ -3,8 +3,10 @@ import { KeywordSettings, loadFirstKeywordSettings } from "./settings";
 import { ProjectInOrgQueryResultElement, getProjectV2Id, listProjectsInOrg } from "./czujnikowniaGraphQueries"
 import { copyProjectV2, createProjectV2, closeProjectV2 } from "./czujnikowniaGraphMutations"
 import { ProjectFieldValueUpdater } from "./projectFieldValueUpdater";
+import { PRCzujnikowniaContext } from "./czujnikowniaContexts";
 
 export = (app: Probot) => {
+  
   app.on("team.created", async (context) => {
 
     const teamName: string = context.payload.team.name;
@@ -57,7 +59,11 @@ export = (app: Probot) => {
     const repoId: string = context.payload.repository.node_id;
     app.log.info(`Pull request ${context.payload.number} in the repo ${repoId} opened at ${createdAt}.`);
     
-    const fieldUpdater: ProjectFieldValueUpdater = await ProjectFieldValueUpdater.initialize(context, app.log);
+    if(context.payload.organization === undefined)
+      return;
+
+    const fieldUpdater: ProjectFieldValueUpdater = await ProjectFieldValueUpdater
+      .initialize(context as PRCzujnikowniaContext, app.log);
     await fieldUpdater.updateDate(s => s.openPullRequestDateProjectFieldName, createdAt)
   });
 
@@ -66,7 +72,11 @@ export = (app: Probot) => {
     const repoId: string = context.payload.repository.node_id;
     app.log.info(`Review ${context.payload.review.node_id} submitted in the repo ${repoId} opened at ${reviewDate}.`);
 
-    const fieldUpdater: ProjectFieldValueUpdater = await ProjectFieldValueUpdater.initialize(context, app.log);
+    if(context.payload.organization === undefined)
+      return;
+
+    const fieldUpdater: ProjectFieldValueUpdater = await ProjectFieldValueUpdater
+      .initialize(context as PRCzujnikowniaContext, app.log);
     await fieldUpdater.updateDate(s => s.lastReviewSubmitDateProjectFieldName, reviewDate);
 
     if(context.payload.review.state == "approved")

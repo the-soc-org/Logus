@@ -1,5 +1,3 @@
-//import { loadFirstKeywordSettings, KeywordSettings } from "../src/settings";
-
 import nock from "nock";
 // Requiring our app implementation
 import myProbotApp from "../src";
@@ -10,11 +8,13 @@ import payloadTeamCreated from "./fixtures/payloads/team.created.json";
 import payloadTeamDeleted from "./fixtures/payloads/team.deleted.json";
 import payloadPullRequestOpened from "./fixtures/payloads/pull_request.opened.json"
 import payloadPRRequestChanges from "./fixtures/payloads/pr_review.submitted.changes_requested.json"
+import payloadPRApproved from "./fixtures/payloads/pr_review.submitted.approved.json"
 
 import responseProjectsInOrg from "./fixtures/api_responses/graphql_queries/projectsInOrg.json"
 import responseProjectId from "./fixtures/api_responses/graphql_queries/projectId.json";
-import responseProjectDelete from "./fixtures/api_responses/graphql_mutations/closeProject.json"
 import responseUserTeamsInOrg from "./fixtures/api_responses/graphql_queries/userTeamsInOrg.json"
+
+import responseProjectDelete from "./fixtures/api_responses/graphql_mutations/closeProject.json"
 import responseAddItemToProj from "./fixtures/api_responses/graphql_mutations/addItemToProj.json"
 import responseUpdateDateField from "./fixtures/api_responses/graphql_mutations/updateItemDateField.json"
 
@@ -39,7 +39,29 @@ const privateKey = fs.readFileSync(
   "utf-8"
 );
 
-describe("Czujnikownia app tests", () => {
+function TestProjectFieldValueUpdaterInitialize(mock: nock.Scope, 
+  payload: {sender: {login: string}, organization: {login: string}}, configRelPath = "fixtures/configs/sensor-room.yml"): nock.Scope 
+{
+  return mock
+    .post("/graphql", (body) => {
+      expect(body.variables.userLogin).toEqual(payload.sender.login)
+      expect(body.variables.organizationLogin).toEqual(payload.organization.login)
+      return true;
+    })
+    .reply(200, responseUserTeamsInOrg)
+
+    .post("/graphql", (body) => {
+      expect(body.variables.organizationLogin).toEqual(payload.organization.login)
+      return true;
+    })
+    .reply(200, responseProjectsInOrg)
+
+    .get(`/repos/${payload.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
+    .reply(200, fs.readFileSync(path.join(__dirname, configRelPath), "utf-8"))
+}
+
+
+describe("Czujnikownia nock app tests", () => {
   let probot: any;
 
   beforeEach(() => {
@@ -58,10 +80,10 @@ describe("Czujnikownia app tests", () => {
     probot.load(myProbotApp);
   });
 
-    test("test creating projects with settings from .github-private", async () => {
+    test("creating project with settings from .github-private", async () => {
       const mock = nock("https://api.github.com")
         .get(`/repos/${payloadTeamCreated.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
-        .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/sensor-room.yml"), "utf-8"))
+        .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/configs/sensor-room.yml"), "utf-8"))
         .post("/graphql", (body) => {
           expect(body.variables.organizationLogin).toEqual(payloadTeamCreated.organization.login);
           expect(body.variables.projectNumber).toEqual(6);
@@ -81,10 +103,10 @@ describe("Czujnikownia app tests", () => {
       expect(mock.pendingMocks()).toStrictEqual([]);
     });
 
-    test("test creating projects with settings from .github-private, but template project doesn't exists", async () => {
+    test("creating project with settings from .github-private, but template project doesn't exists", async () => {
       const mock = nock("https://api.github.com")
         .get(`/repos/${payloadTeamCreated.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
-        .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/sensor-room.yml"), "utf-8"))
+        .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/configs/sensor-room.yml"), "utf-8"))
         .post("/graphql", (body) => {
           expect(body.variables.organizationLogin).toEqual(payloadTeamCreated.organization.login);
           expect(body.variables.projectNumber).toEqual(6);
@@ -97,7 +119,7 @@ describe("Czujnikownia app tests", () => {
       expect(mock.pendingMocks()).toStrictEqual([]);
     });
 
-    test("test creating projects with default settings", async () => {
+    test("creating projects with default settings", async () => {
       const mock = nock("https://api.github.com")
         .get(`/repos/${payloadTeamCreated.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
         .reply(404)
@@ -105,7 +127,7 @@ describe("Czujnikownia app tests", () => {
         .reply(404)
         .post("/graphql", (body) => {
           expect(body.variables.ownerId).toEqual(payloadTeamCreated.organization.node_id)
-          expect(body.variables.title).toEqual("sensor-test-team-2023")
+          expect(body.variables.title).toEqual("Sensor-test-team-2023")
           return true;
         })
         .reply(200)
@@ -115,10 +137,10 @@ describe("Czujnikownia app tests", () => {
       expect(mock.pendingMocks()).toStrictEqual([]);
     });
 
-    test("test closing project", async () => {
+    test("closing project on team delete", async () => {
       const mock = nock("https://api.github.com")
         .get(`/repos/${payloadTeamDeleted.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
-        .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/sensor-room.yml"), "utf-8"))
+        .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/configs/sensor-room.yml"), "utf-8"))
         
         .post("/graphql", (body) => {
           expect(body.variables.organizationLogin).toEqual(payloadTeamDeleted.organization.login)
@@ -135,23 +157,9 @@ describe("Czujnikownia app tests", () => {
         expect(mock.pendingMocks()).toStrictEqual([]);
     });
 
-    test("test increment field", async () => {
-      const mock = nock("https://api.github.com")
-        .post("/graphql", (body) => {
-          expect(body.variables.userLogin).toEqual(payloadPRRequestChanges.sender.login)
-          expect(body.variables.organizationLogin).toEqual(payloadPRRequestChanges.organization.login)
-          return true;
-        })
-        .reply(200, responseUserTeamsInOrg)
-
-        .post("/graphql", (body) => {
-          expect(body.variables.organizationLogin).toEqual(payloadPRRequestChanges.organization.login)
-          return true;
-        })
-        .reply(200, responseProjectsInOrg)
-
-        .get(`/repos/${payloadTeamDeleted.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
-        .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/sensor-room.yml"), "utf-8"))
+    test("incrementing 'review iteration' project field value", async () => {
+      const mock = TestProjectFieldValueUpdaterInitialize(
+        nock("https://api.github.com"), payloadPRRequestChanges, "fixtures/configs/only-field-increment.yml")
 
         .post("/graphql", (body) => {
           expect(body.variables.projectId).toEqual("PVT_kwDOB8o1Ys4APwEY")
@@ -173,23 +181,9 @@ describe("Czujnikownia app tests", () => {
       expect(mock.pendingMocks()).toStrictEqual([]);
     });
 
-    test("test saving open pull request date in project", async () => {
-      const mock = nock("https://api.github.com")
-        .post("/graphql", (body) => {
-          expect(body.variables.userLogin).toEqual(payloadPullRequestOpened.sender.login)
-          expect(body.variables.organizationLogin).toEqual(payloadPullRequestOpened.organization.login)
-          return true;
-        })
-        .reply(200, responseUserTeamsInOrg)
-
-        .post("/graphql", (body) => {
-          expect(body.variables.organizationLogin).toEqual(payloadPullRequestOpened.organization.login)
-          return true;
-        })
-        .reply(200, responseProjectsInOrg)
-
-        .get(`/repos/${payloadTeamDeleted.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
-        .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/sensor-room.yml"), "utf-8"))
+    test("saving open pull request date in project", async () => {
+      const mock = TestProjectFieldValueUpdaterInitialize(
+        nock("https://api.github.com"), payloadPullRequestOpened)
 
         .post("/graphql", (body) => {
           expect(body.variables.projectId).toEqual("PVT_kwDOB8o1Ys4APwEY")
@@ -208,6 +202,44 @@ describe("Czujnikownia app tests", () => {
         .reply(200, responseUpdateDateField)
 
       await probot.receive({ name: "pull_request.opened", payload: payloadPullRequestOpened });
+      expect(mock.pendingMocks()).toStrictEqual([]);
+    });
+
+    test("updating 'review date' and 'approved review date' project fields", async () => {
+      const mock = TestProjectFieldValueUpdaterInitialize(
+        nock("https://api.github.com"), payloadPRApproved, "fixtures/configs/without-field-increment.yml")
+
+        .post("/graphql", (body) => {
+          expect(body.variables.projectId).toEqual("PVT_kwDOB8o1Ys4APwEY")
+          expect(body.variables.contentId).toEqual("PR_kwDOJWgzKM5Rgfxk")
+          return true;
+        })
+        .reply(200, responseAddItemToProj)
+        .post("/graphql", (body) => {
+          expect(body.variables.projectId).toEqual("PVT_kwDOB8o1Ys4APwEY")
+          expect(body.variables.itemId).toEqual("PVTI_lADOB8o1Ys4APwEYzgG_Ll0")
+          expect(body.variables.date).toEqual("2023-06-10T22:16:47Z")
+          expect(body.variables.fieldId).toEqual("PVTF_lADOB8o1Ys4APwEYzgKDkuw")
+          return true;
+        })
+        .reply(200, responseUpdateDateField)
+
+        .post("/graphql", (body) => {
+          expect(body.variables.projectId).toEqual("PVT_kwDOB8o1Ys4APwEY")
+          expect(body.variables.contentId).toEqual("PR_kwDOJWgzKM5Rgfxk")
+          return true;
+        })
+        .reply(200, responseAddItemToProj)
+        .post("/graphql", (body) => {
+          expect(body.variables.projectId).toEqual("PVT_kwDOB8o1Ys4APwEY")
+          expect(body.variables.itemId).toEqual("PVTI_lADOB8o1Ys4APwEYzgG_Ll0")
+          expect(body.variables.date).toEqual("2023-06-10T22:16:47Z")
+          expect(body.variables.fieldId).toEqual("PVTF_lADOB8o1Ys4APwEYzgLoLxD")
+          return true;
+        })
+        .reply(200, responseUpdateDateField)
+        
+      await probot.receive({ name: "pull_request_review.submitted", payload: payloadPRApproved });
       expect(mock.pendingMocks()).toStrictEqual([]);
     });
 

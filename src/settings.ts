@@ -1,20 +1,27 @@
 export class KeywordSettings
 {
     readonly teamNameTrigger: string = "-";
-    readonly projectTitlePrefix: string = "sensor-";
+    readonly projectTitlePrefix: string = "Sensor-";
     readonly openPullRequestDateProjectFieldName?: string;
     readonly lastReviewSubmitDateProjectFieldName?: string;
     readonly lastApprovedReviewSubmitDateProjectFieldName?: string;
     readonly reviewIterationNumberProjectFieldName?: string;
     readonly projectTemplateNumber?: Number;
 
-    public getProjectTitle(teamName:string) : string {
+    public getProjectTitle(teamName: string): string {
         return this.projectTitlePrefix + teamName;
     }
 
     constructor(settings: KeywordSettings | null = null) {
-        if(settings)
-            Object.assign(this, settings);
+        if(settings) {
+            this.teamNameTrigger = settings.teamNameTrigger;
+            this.projectTitlePrefix = settings.projectTitlePrefix;
+            this.openPullRequestDateProjectFieldName = settings.openPullRequestDateProjectFieldName;
+            this.lastReviewSubmitDateProjectFieldName = settings.lastReviewSubmitDateProjectFieldName;
+            this.lastApprovedReviewSubmitDateProjectFieldName = settings.lastApprovedReviewSubmitDateProjectFieldName;
+            this.reviewIterationNumberProjectFieldName = settings.reviewIterationNumberProjectFieldName;
+            this.projectTemplateNumber = settings.projectTemplateNumber;
+        }
     }
 }
 

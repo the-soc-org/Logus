@@ -1,16 +1,17 @@
 import { KeywordSettings, AppGlobalSettings, loadAppGlobalSettings } from "./settings";
 import { ProjectInOrgQueryResultElement, listProjectsInOrg, listUserTeamsInOrgRelatedToRepo } from "./czujnikowniaGraphQueries";
 import { updateItemDateField, addItemToProjIfNotExist, updateItemNumberField} from "./czujnikowniaGraphMutations";
+import { PRCzujnikowniaContext } from "./czujnikowniaContexts";
 
 export class ProjectFieldValueUpdater {
 
-  private readonly context: any;
+  private readonly context: PRCzujnikowniaContext;
   private readonly userTeams: string[];
   private readonly projects: ProjectInOrgQueryResultElement[];
   private readonly globalSettings: AppGlobalSettings;
   private readonly log: any | null;
 
-  private constructor(context: any,
+  private constructor(context: PRCzujnikowniaContext,
     userTeams: string[], projects: ProjectInOrgQueryResultElement[], globalSettings: AppGlobalSettings, log: any) {
     this.context = context;
     this.userTeams = userTeams;
@@ -19,7 +20,7 @@ export class ProjectFieldValueUpdater {
     this.log = log;
   }
 
-  public static async initialize(context: any, log: any = null): Promise<ProjectFieldValueUpdater> {
+  public static async initialize(context: PRCzujnikowniaContext, log: any = null): Promise<ProjectFieldValueUpdater> {
     const userTeams: Promise<string[]> = listUserTeamsInOrgRelatedToRepo(context)
     const projects: Promise<ProjectInOrgQueryResultElement[]> = listProjectsInOrg(context);
     const globalSettings: Promise<AppGlobalSettings> = loadAppGlobalSettings(context);
