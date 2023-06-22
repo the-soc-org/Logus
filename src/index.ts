@@ -1,8 +1,8 @@
 import { Probot } from "probot";
 import { KeywordSettings, loadFirstKeywordSettings } from "./settings";
-import { ProjectInOrgQueryResultElement, getProjectV2Id, listProjectsInOrg } from "./czujnikowniaGraphQueries"
+import { ProjectInOrgQueryResultElement, getProjectV2Id, listOpenedProjectsInOrg } from "./czujnikowniaGraphQueries"
 import { copyProjectV2, createProjectV2, closeProjectV2 } from "./czujnikowniaGraphMutations"
-import { ProjectFieldValueUpdater } from "./projectFieldValueUpdater";
+import { ProjectFieldValueUpdater, ProjectFieldValueUpdaterFactory } from "./projectFieldValueUpdater";
 import { PRCzujnikowniaContext } from "./czujnikowniaContexts";
 
 export = (app: Probot) => {
@@ -43,7 +43,7 @@ export = (app: Probot) => {
     if(keywordSettings === undefined)
       return;
 
-    const projectsInOrg: ProjectInOrgQueryResultElement[] = await listProjectsInOrg(context);
+    const projectsInOrg: ProjectInOrgQueryResultElement[] = await listOpenedProjectsInOrg(context);
     const projectToClose: ProjectInOrgQueryResultElement | undefined = projectsInOrg
       .find(p => p.title === keywordSettings.getProjectTitle(teamName))  
 
@@ -62,8 +62,8 @@ export = (app: Probot) => {
     if(context.payload.organization === undefined)
       return;
 
-    const fieldUpdater: ProjectFieldValueUpdater = await ProjectFieldValueUpdater
-      .initialize(context as PRCzujnikowniaContext, app.log);
+    const fieldUpdater: ProjectFieldValueUpdater = await ProjectFieldValueUpdaterFactory
+      .create(context as PRCzujnikowniaContext, app.log);
     await fieldUpdater.updateDate(s => s.openPullRequestDateProjectFieldName, createdAt)
   });
 
@@ -75,8 +75,8 @@ export = (app: Probot) => {
     if(context.payload.organization === undefined)
       return;
 
-    const fieldUpdater: ProjectFieldValueUpdater = await ProjectFieldValueUpdater
-      .initialize(context as PRCzujnikowniaContext, app.log);
+    const fieldUpdater: ProjectFieldValueUpdater = await ProjectFieldValueUpdaterFactory
+      .create(context as PRCzujnikowniaContext, app.log);
     await fieldUpdater.updateDate(s => s.lastReviewSubmitDateProjectFieldName, reviewDate);
 
     if(context.payload.review.state == "approved")

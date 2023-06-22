@@ -23,6 +23,7 @@ export interface PRCzujnikowniaContext extends CzujnikowniaContext {
         },
         repository: {
             node_id: string,
+            name: string,
         },
         pull_request: {
             node_id: string,

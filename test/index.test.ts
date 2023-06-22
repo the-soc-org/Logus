@@ -40,9 +40,11 @@ const privateKey = fs.readFileSync(
 );
 
 function TestProjectFieldValueUpdaterInitialize(mock: nock.Scope, 
-  payload: {sender: {login: string}, organization: {login: string}}, configRelPath = "fixtures/configs/sensor-room.yml"): nock.Scope 
+  payload: {sender: {login: string}, organization: {login: string}}, 
+  configRelPath = "fixtures/configs/sensor-room.yml",
+  keywordSettingsNumber: number = 2): nock.Scope 
 {
-  return mock
+  mock = mock
     .post("/graphql", (body) => {
       expect(body.variables.userLogin).toEqual(payload.sender.login)
       expect(body.variables.organizationLogin).toEqual(payload.organization.login)
@@ -57,7 +59,14 @@ function TestProjectFieldValueUpdaterInitialize(mock: nock.Scope,
     .reply(200, responseProjectsInOrg)
 
     .get(`/repos/${payload.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
-    .reply(200, fs.readFileSync(path.join(__dirname, configRelPath), "utf-8"))
+    .reply(200, fs.readFileSync(path.join(__dirname, configRelPath), "utf-8"));
+
+    for(let i = 0; i < keywordSettingsNumber-1; i++) {
+      mock = mock.post("/graphql").reply(200, {data: {user: {organization: {teams: {edges: []}}}}});
+    }
+      
+
+  return mock;
 }
 
 
@@ -159,7 +168,7 @@ describe("Czujnikownia nock app tests", () => {
 
     test("incrementing 'review iteration' project field value", async () => {
       const mock = TestProjectFieldValueUpdaterInitialize(
-        nock("https://api.github.com"), payloadPRRequestChanges, "fixtures/configs/only-field-increment.yml")
+        nock("https://api.github.com"), payloadPRRequestChanges, "fixtures/configs/only-field-increment.yml", 1)
 
         .post("/graphql", (body) => {
           expect(body.variables.projectId).toEqual("PVT_kwDOB8o1Ys4APwEY")
@@ -207,7 +216,7 @@ describe("Czujnikownia nock app tests", () => {
 
     test("updating 'review date' and 'approved review date' project fields", async () => {
       const mock = TestProjectFieldValueUpdaterInitialize(
-        nock("https://api.github.com"), payloadPRApproved, "fixtures/configs/without-field-increment.yml")
+        nock("https://api.github.com"), payloadPRApproved, "fixtures/configs/without-field-increment.yml", 1)
 
         .post("/graphql", (body) => {
           expect(body.variables.projectId).toEqual("PVT_kwDOB8o1Ys4APwEY")
