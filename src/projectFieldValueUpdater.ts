@@ -30,11 +30,11 @@ export class ProjectFieldValueUpdaterFactory {
         componentUpdaters.push(new BasicProjectFieldValueUpdater(context, [team], projects, [settings], log));
       }
     }
-    return new projectFieldUpdaterGroup(componentUpdaters);
+    return new ProjectFieldUpdaterGroup(componentUpdaters);
   }
 }
 
-class projectFieldUpdaterGroup implements ProjectFieldValueUpdater {
+class ProjectFieldUpdaterGroup implements ProjectFieldValueUpdater {
   fieldUpdaters: BasicProjectFieldValueUpdater[];
 
   public constructor(fieldUpdaters: BasicProjectFieldValueUpdater[]) {

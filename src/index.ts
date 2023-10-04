@@ -1,7 +1,7 @@
 import { Probot } from "probot";
 import { KeywordSettings, loadFirstKeywordSettings } from "./settings";
 import { ProjectInOrgQueryResultElement, getProjectV2Id, listOpenedProjectsInOrg } from "./czujnikowniaGraphQueries"
-import { copyProjectV2, createProjectV2, closeProjectV2 } from "./czujnikowniaGraphMutations"
+import { copyProjectV2, createProjectV2, closeProjectV2, linkProjectV2ToTeam } from "./czujnikowniaGraphMutations"
 import { ProjectFieldValueUpdater, ProjectFieldValueUpdaterFactory } from "./projectFieldValueUpdater";
 import { PRCzujnikowniaContext } from "./czujnikowniaContexts";
 
@@ -16,21 +16,28 @@ export = (app: Probot) => {
     if(keywordSettings !== undefined) {
       const projectTitle: string = keywordSettings.getProjectTitle(teamName);
 
+      let newProjectId: string | undefined = undefined;
+
       if(keywordSettings.projectTemplateNumber == undefined) {
-        await createProjectV2(context, projectTitle, app.log);
+        newProjectId = await createProjectV2(context, projectTitle, app.log);
 
         app.log.info(`Project ${projectTitle} has been created.`);
       }
       else {
         try {
           const templateId: Number = await getProjectV2Id(context, keywordSettings.projectTemplateNumber);
-          await copyProjectV2(context, projectTitle, templateId, app.log);
+          newProjectId = await copyProjectV2(context, projectTitle, templateId, app.log);
 
-          app.log.info(`Project ${projectTitle} has been created from template ${keywordSettings.projectTemplateNumber}`);
+          app.log.info(`Project ${projectTitle} has been created from template ${keywordSettings.projectTemplateNumber}.`);
         } 
         catch {
           app.log.error(`Faild to create project ${projectTitle}. Probably template project ${keywordSettings.projectTemplateNumber} doesn't exisis.`);
         }
+      }
+
+      if(newProjectId !== undefined) {
+        await linkProjectV2ToTeam(context, newProjectId, context.payload.team.node_id);
+        app.log.info(`Project ${projectTitle} has been linked to ${context.payload.team.name} team.`);
       }
     }
   });
