@@ -96,21 +96,26 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
   {
     for (const teamName of this.userTeams) {
       const settings: KeywordSettings | undefined = this.keywordSettings
-        .find(s => teamName.includes(s.teamNameTrigger) && fieldNameSelector(s) !== undefined);
+        .find(s => teamName.toLowerCase().includes(s.teamNameTrigger.toLowerCase()) && fieldNameSelector(s) !== undefined);
       if (settings === undefined)
         continue;
       const fieldName: string = fieldNameSelector(settings)!;
 
-      const proj: ProjectInOrgQueryResultElement | undefined = this.projects.find(x => x.title === settings.getProjectTitle(teamName));
+      const proj: ProjectInOrgQueryResultElement | undefined = this.projects
+        .find(p => this.caseInsensiviteEqual(p.title, settings.getProjectTitle(teamName)));
       if (proj === undefined)
         continue;
 
-      const fieldId: string | undefined = proj.fields.find(f => f.name == fieldName)?.id;
+      const fieldId: string | undefined = proj.fields.find(f => this.caseInsensiviteEqual(f.name, fieldName))?.id;
       if (fieldId === undefined)
         continue;
 
       const item = await addItemToProjIfNotExist(this.context, proj.id, this.context.payload.pull_request.node_id, fieldName, this.log);
       await action(proj, item, fieldId);
     }
+  }
+
+  private caseInsensiviteEqual(firstString: string, secondString: string): boolean {
+    return firstString.localeCompare(secondString, undefined, { sensitivity: 'accent' }) === 0;
   }
 }
