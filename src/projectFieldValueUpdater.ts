@@ -116,6 +116,6 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
   }
 
   private caseInsensiviteEqual(firstString: string, secondString: string): boolean {
-    return firstString.localeCompare(secondString, undefined, { sensitivity: 'accent' }) === 0;
+    return firstString?.localeCompare(secondString, undefined, { sensitivity: 'accent' }) === 0;
   }
 }
