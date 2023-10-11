@@ -5,8 +5,13 @@ import { copyProjectV2, createProjectV2, closeProjectV2, linkProjectV2ToTeam } f
 import { ProjectFieldValueUpdater, ProjectFieldValueUpdaterFactory } from "./projectFieldValueUpdater";
 import { PRCzujnikowniaContext } from "./czujnikowniaContexts";
 
+const createScheduler = require('probot-scheduler')
+
 export = (app: Probot) => {
-  
+  createScheduler(app, {
+    interval: /*24 * 60 **/ 60 * 1000
+  });
+
   app.on("team.created", async (context) => {
 
     const teamName: string = context.payload.team.name;
@@ -93,6 +98,9 @@ export = (app: Probot) => {
   });
 
   app.onAny(async (context) => {
+    if(context.name.includes('schedule')) {
+      app.log.debug(`schedule event for ${context.id}`);
+    }
     app.log.debug({ id: context.id, event: context.name });
   });
 };
