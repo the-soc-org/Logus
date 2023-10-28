@@ -1,0 +1,30 @@
+import { Context, Probot } from "probot";
+import { closeProjectV2 } from "../czujnikowniaGraphMutations";
+import { listOpenedProjectsInOrg, ProjectInOrgQueryResultElement } from "../czujnikowniaGraphQueries";
+import { KeywordSettings } from "../organizationSettings";
+import Behaviour from "./behaviour";
+
+export default class CloseProjectOnTeamDeleted implements Behaviour {
+    register(agent: Probot): void {
+        agent.on("team.deleted", async (context) => this.closeProjectAction(agent, context));
+      }
+
+    private async closeProjectAction(agent: Probot, context: Context<"team.deleted">): Promise<void> { 
+        const teamName: string = context.payload.team.name;
+        agent.log.info(`Team ${teamName} has been deleted.`);
+
+        const keywordSettings: KeywordSettings | undefined = await KeywordSettings.loadFirst(context, teamName);
+        if(keywordSettings === undefined)
+            return;
+
+        const projectsInOrg: ProjectInOrgQueryResultElement[] = await listOpenedProjectsInOrg(context);
+        const projectToClose: ProjectInOrgQueryResultElement | undefined = projectsInOrg
+            .find(p => p.title === keywordSettings.getProjectTitle(teamName))  
+
+        if(projectToClose === undefined)
+            return;
+
+        await closeProjectV2(context, projectToClose.id, agent.log);
+        agent.log.info(`ProjectV2 ${projectToClose.title} has been closed.`);
+    }
+}

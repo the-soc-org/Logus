@@ -1,4 +1,4 @@
-import { KeywordSettings, AppGlobalSettings, loadAppGlobalSettings } from "./settings";
+import { KeywordSettings, OrganizationSettings } from "./organizationSettings";
 import { ProjectInOrgQueryResultElement, listOpenedProjectsInOrg, listUserTeamsInOrgRelatedToRepo } from "./czujnikowniaGraphQueries";
 import { updateItemDateField, addItemToProjIfNotExist, updateItemNumberField} from "./czujnikowniaGraphMutations";
 import { PRCzujnikowniaContext } from "./czujnikowniaContexts";
@@ -13,13 +13,13 @@ export class ProjectFieldValueUpdaterFactory {
   public static async createLimited(context: PRCzujnikowniaContext, log: any = null): Promise<ProjectFieldValueUpdater> {
     const userTeams: Promise<string[]> = listUserTeamsInOrgRelatedToRepo(context);
     const projects: Promise<ProjectInOrgQueryResultElement[]> = listOpenedProjectsInOrg(context);
-    const globalSettings: Promise<AppGlobalSettings> = loadAppGlobalSettings(context);
+    const globalSettings: Promise<OrganizationSettings> = OrganizationSettings.load(context);
 
     return new BasicProjectFieldValueUpdater(context, await userTeams, await projects, (await globalSettings).keywordSettings, log);
   }
 
   public static async create(context: PRCzujnikowniaContext, log: any = null): Promise<ProjectFieldValueUpdater> {
-    const globalSettings: AppGlobalSettings = await loadAppGlobalSettings(context);
+    const globalSettings: OrganizationSettings = await OrganizationSettings.load(context);
     const componentUpdaters: BasicProjectFieldValueUpdater[] = [];
 
     for(const settings of globalSettings.keywordSettings) {
