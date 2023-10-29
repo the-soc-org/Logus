@@ -1,6 +1,8 @@
 import { CzujnikowniaContext } from "./czujnikowniaContexts";
 
 export class OrganizationSettings {
+    [key: string]: any;
+    
     private static readonly settingsFileName: string = 'sensor-room.yml';
 
     readonly keywordSettings: KeywordSettings[] = [];
@@ -29,6 +31,8 @@ export class OrganizationSettings {
 
 export class KeywordSettings
 {
+    [key: string]: any;
+
     readonly teamNameTrigger: string = "-";
     readonly projectTitlePrefix: string = "Sensor-";
     readonly openPullRequestDateProjectFieldName?: string;
@@ -42,15 +46,9 @@ export class KeywordSettings
     }
 
     constructor(settings: KeywordSettings | null = null) {
-        if(settings) {
-            this.teamNameTrigger = settings.teamNameTrigger;
-            this.projectTitlePrefix = settings.projectTitlePrefix;
-            this.openPullRequestDateProjectFieldName = settings.openPullRequestDateProjectFieldName;
-            this.lastReviewSubmitDateProjectFieldName = settings.lastReviewSubmitDateProjectFieldName;
-            this.lastApprovedReviewSubmitDateProjectFieldName = settings.lastApprovedReviewSubmitDateProjectFieldName;
-            this.reviewIterationNumberProjectFieldName = settings.reviewIterationNumberProjectFieldName;
-            this.projectTemplateNumber = settings.projectTemplateNumber;
-        }
+        if(settings)
+            for(const key in settings)
+                this[key] = settings[key];
     }
 
     public static async loadFirst(context: CzujnikowniaContext, testingTeamName: string): Promise<KeywordSettings | undefined>

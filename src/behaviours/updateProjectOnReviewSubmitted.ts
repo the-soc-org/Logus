@@ -6,10 +6,10 @@ import Behaviour from "./behaviour";
 export default class UpdateProjectOnReviewSubmitted implements Behaviour {
 
     register(agent: Probot): void {
-        agent.on("pull_request_review.submitted", async (context) => this.updateProject(agent, context));
+        agent.on("pull_request_review.submitted", async (context) => this.updateProjectAction(agent, context));
     }
 
-    private async updateProject(agent: Probot, context: Context<"pull_request_review.submitted">): Promise<void> {
+    private async updateProjectAction(agent: Probot, context: Context<"pull_request_review.submitted">): Promise<void> {
         const reviewDate: string = context.payload.review.submitted_at;
         const repoId: string = context.payload.repository.node_id;
         agent.log.info(`Review ${context.payload.review.node_id} submitted in the repo ${repoId} opened at ${reviewDate}.`);

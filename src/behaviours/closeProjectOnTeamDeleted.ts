@@ -14,15 +14,21 @@ export default class CloseProjectOnTeamDeleted implements Behaviour {
         agent.log.info(`Team ${teamName} has been deleted.`);
 
         const keywordSettings: KeywordSettings | undefined = await KeywordSettings.loadFirst(context, teamName);
-        if(keywordSettings === undefined)
+        if(keywordSettings === undefined) {
+            agent.log.info(`There is no settings related to team ${teamName}.`);
             return;
+        }
+
+        const projectToCloseTitle = keywordSettings.getProjectTitle(teamName).toLowerCase();
 
         const projectsInOrg: ProjectInOrgQueryResultElement[] = await listOpenedProjectsInOrg(context);
         const projectToClose: ProjectInOrgQueryResultElement | undefined = projectsInOrg
-            .find(p => p.title === keywordSettings.getProjectTitle(teamName))  
+            .find(p => p.title.toLowerCase() === projectToCloseTitle);
 
-        if(projectToClose === undefined)
+        if(projectToClose === undefined) {
+            agent.log.info(`There is no project ${projectToCloseTitle} to close.`);
             return;
+        }
 
         await closeProjectV2(context, projectToClose.id, agent.log);
         agent.log.info(`ProjectV2 ${projectToClose.title} has been closed.`);

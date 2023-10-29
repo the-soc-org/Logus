@@ -1,7 +1,9 @@
 import { ScheduleContext } from "./czujnikowniaContexts";
 
 export class RepoSettings {
-    private static readonly settingsFileName: string = 'czujnikownia-repo.yml';
+    [key: string]: any;
+
+    private static readonly settingsFileName: string = 'czujnikownia.yml';
 
     readonly reviewReminder: ReminderSettings = new ReminderSettings;
     readonly replayToReviewReminder: ReminderSettings = new ReminderSettings;
@@ -24,17 +26,16 @@ export class RepoSettings {
         return new RepoSettings(configHolder.config);
     }
 }
-
 export class ReminderSettings {
+    [key: string]: any;
+
     isEnabled: boolean = false;
     message: string = '🤖';
     inactivityDaysToSend: number = 5;
 
     constructor(reminderSettings: ReminderSettings | null = null) {
-        if(reminderSettings) {
-            this.isEnabled = reminderSettings.isEnabled;
-            this.message = reminderSettings.message;
-            this.inactivityDaysToSend = reminderSettings.inactivityDaysToSend;
-        }
+        if(reminderSettings)
+            for(const key in reminderSettings)
+                this[key] = reminderSettings[key];
     }
 }

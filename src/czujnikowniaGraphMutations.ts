@@ -15,7 +15,7 @@ export async function createProjectV2(context: CzujnikowniaContext, title: strin
       ownerId: context.payload.organization.node_id,
       title: title,
     };
-  const result = await context.octokit.graphql(createProjectMutation, projectCreateArgs);
+  const result: any = await context.octokit.graphql(createProjectMutation, projectCreateArgs);
   log?.debug(`createProjectV2 mutation result:\n${JSON.stringify(result)}`);
   return result?.createProjectV2?.projectV2?.id as string;
 }
@@ -36,7 +36,7 @@ export async function copyProjectV2(context: CzujnikowniaContext, newProjectTitl
       title: newProjectTitle,
       projectId: templateProjectNumber
   };
-  const result = await context.octokit.graphql(copyProjectMutation, projectCreateArgs);  
+  const result: any = await context.octokit.graphql(copyProjectMutation, projectCreateArgs);  
   log?.debug(`copyProjectV2 mutation result:\n${JSON.stringify(result)}`);
   return result.copyProjectV2.projectV2.id as string;
 }

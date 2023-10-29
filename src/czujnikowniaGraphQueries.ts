@@ -43,6 +43,9 @@ query listUserTeamsInOrg($userLogin: String!, $organizationLogin: String!, $team
 export async function listUserTeamsInOrgRelatedToRepo(context: PRCzujnikowniaContext, 
   teamQuery: string = ""): Promise<string[]>
 {
+  if(context.payload.organization === undefined)
+    throw "Can't list user teams in organization with this payload";
+
   const repoId = context.payload.repository.node_id;
   const userTeamsData: any = await context.octokit.graphql(listUserTeamsInOrgQuery, {
     userLogin: context.payload.sender.login,

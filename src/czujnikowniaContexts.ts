@@ -1,66 +1,25 @@
-export interface PRCzujnikowniaContext extends CzujnikowniaContext {
-    payload: {
-        organization: {
-            node_id: string,
-            login: string,
-        },
-        sender: {
-            login: string,
-        },
-        repository: {
-            node_id: string,
-            name: string,
-        },
-        pull_request: {
-            node_id: string,
-        }
-    };
-}
+import { Context } from "probot";
 
-export interface CzujnikowniaContext {
-    octokit: OctokitContext;
-    payload: {
-        organization: {
-            node_id: string,
-            login: string,
-        }
-    };
-}
+export declare type CzujnikowniaOctokit = Pick<Context["octokit"], "graphql" | "config" | "pulls">
 
-export interface OctokitContext {
-    graphql(query: string, variables: any): Promise<any>;
-    config : {
-        get<T>(params: {owner: any, repo: string, path: string, defaults: any}): Promise<{config: T}>;
-    },
-    pulls: {
-        list(params: {owner: string; repo: string; state: "open"}): Promise<any>;
+export declare type CzujnikowniaContext = {octokit: CzujnikowniaOctokit} 
+    & {
+        payload: Pick<Context<"organization">["payload"], "organization">
     }
-}
 
-export interface PullRequestListElement {
-    status: number,
-        data: {
-        id: number,
-        node_id: string,
-        title: string,
-        number: number,
-        created_at: string,
-        updated_at: string,
-        creator: {
-            login: string,
-            id: number,
-            node_id: string,
-        },
-        assignee: {
-            login: string,
-            id: number,
-            node_id: string 
-        }
+export declare type PRCzujnikowniaContext = {octokit: CzujnikowniaOctokit}
+    & {
+        payload: Pick<Context<"pull_request">["payload"], "sender" | "repository">
+            & {
+                pull_request: Pick<Context<"pull_request">["payload"]["pull_request"], "node_id">
+            }
+            & {
+                organization: NonNullable<Context<"pull_request">["payload"]["organization"]>
+            } 
     }
-}
 
 export interface ScheduleContext {
-    octokit: OctokitContext;
+    octokit: CzujnikowniaOctokit;
     payload: {
         repository: {
             node_id: string;

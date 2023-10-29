@@ -1,7 +1,7 @@
 import { Probot } from "probot";
 
 import Behaviour from "./behaviours/behaviour";
-import CreateProjectOnTeamCreated from "./behaviours/createProjectEffector";
+import CreateProjectOnTeamCreated from "./behaviours/createProjectOnTeamCreated";
 import CloseProjectOnTeamDeleted from "./behaviours/closeProjectOnTeamDeleted";
 import UpdateProjectOnPullRequestOpened from "./behaviours/updateProjectOnPullRequestOpened";
 import UpdateProjectOnReviewSubmitted from "./behaviours/updateProjectOnReviewSubmitted";
@@ -12,7 +12,7 @@ const behaviours: Behaviour[] = [
   new CloseProjectOnTeamDeleted,
   new UpdateProjectOnPullRequestOpened,
   new UpdateProjectOnReviewSubmitted,
-  new SendRemindersOnSchedule,
+  new SendRemindersOnSchedule
 ];
 
 export = (agent: Probot) => {

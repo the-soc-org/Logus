@@ -27,6 +27,5 @@ export default class SendRemindersOnSchedule implements Behaviour {
   
         const repoSettings: RepoSettings = await RepoSettings.load(context);
         agent.log.debug(repoSettings.reviewReminder.message);
-        //agent.log.debug(`schedule event for ${context.id}`);
     }
 }
