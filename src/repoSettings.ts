@@ -3,7 +3,7 @@ import { ScheduleContext } from "./czujnikowniaContexts";
 export class RepoSettings {
     [key: string]: any;
 
-    private static readonly settingsFileName: string = 'czujnikownia.yml';
+    private static readonly settingsFileName: string = 'czujnikownia-repo.yml';
 
     readonly reviewReminder: ReminderSettings = new ReminderSettings;
     readonly replayToReviewReminder: ReminderSettings = new ReminderSettings;
@@ -30,8 +30,8 @@ export class ReminderSettings {
     [key: string]: any;
 
     isEnabled: boolean = false;
-    message: string = '🤖';
-    inactivityDaysToSend: number = 5;
+    message: string = "🤖";
+    inactivityHoursToSend: number = 5 * 24;
 
     constructor(reminderSettings: ReminderSettings | null = null) {
         if(reminderSettings)

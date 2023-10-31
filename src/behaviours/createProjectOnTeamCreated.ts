@@ -1,6 +1,5 @@
 import { Context, Probot } from "probot";
-import { copyProjectV2, createProjectV2, linkProjectV2ToTeam } from "../czujnikowniaGraphMutations";
-import { getProjectV2Id } from "../czujnikowniaGraphQueries";
+import { copyProject, createProject, getProjectV2Id, linkProjectToTeam } from "../graphql";
 import { KeywordSettings } from "../organizationSettings";
 import Behaviour from "./behaviour";
 
@@ -18,17 +17,17 @@ export default class CreateProjectOnTeamCreated implements Behaviour {
     if(keywordSettings !== undefined) {
       const projectTitle: string = keywordSettings.getProjectTitle(teamName);
 
-      let newProjectId: string | undefined = undefined;
+      let newProjectId: string = '';
 
       if(keywordSettings.projectTemplateNumber == undefined) {
-        newProjectId = await createProjectV2(context, projectTitle, app.log);
+        newProjectId = await createProject(context, projectTitle, app.log);
 
         app.log.info(`Project ${projectTitle} has been created.`);
-      }
+      } 
       else {
         try {
-          const templateId: Number = await getProjectV2Id(context, keywordSettings.projectTemplateNumber);
-          newProjectId = await copyProjectV2(context, projectTitle, templateId, app.log);
+          const templateId: string = await getProjectV2Id(context, keywordSettings.projectTemplateNumber);
+          newProjectId = await copyProject(context, projectTitle, templateId, app.log);
 
           app.log.info(`Project ${projectTitle} has been created from template ${keywordSettings.projectTemplateNumber}.`);
         } 
@@ -37,8 +36,8 @@ export default class CreateProjectOnTeamCreated implements Behaviour {
         }
       }
 
-      if(newProjectId !== undefined) {
-        await linkProjectV2ToTeam(context, newProjectId, context.payload.team.node_id);
+      if(newProjectId !== '') {
+        await linkProjectToTeam(context, newProjectId, context.payload.team.node_id);
         app.log.info(`Project ${projectTitle} has been linked to ${context.payload.team.name} team.`);
       }
     }

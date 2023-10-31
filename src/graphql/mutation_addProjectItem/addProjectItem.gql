@@ -1,0 +1,15 @@
+mutation addProjectItem($projectId:ID!, $contentId:ID!, $fieldName: String!) {
+    addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
+      item {
+        id,
+        fieldValueByName(name: $fieldName) {
+          ... on ProjectV2ItemFieldNumberValue {
+            number
+          },
+          ... on ProjectV2ItemFieldDateValue {
+            date
+          }
+        }
+      }
+    }
+  }

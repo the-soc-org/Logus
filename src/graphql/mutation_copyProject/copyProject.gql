@@ -1,0 +1,8 @@
+mutation copyProject($projectId: ID!, $ownerId: ID!, $title: String!){
+  copyProjectV2(input:{projectId: $projectId, ownerId: $ownerId, title: $title}) {
+    projectV2 {
+      id,
+      number
+    }
+  }
+}

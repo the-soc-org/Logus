@@ -3,6 +3,8 @@ import { ScheduleContext } from "../czujnikowniaContexts";
 import { RepoSettings } from "../repoSettings";
 import Behaviour from "./behaviour";
 
+import { listRepoPullRequests } from "../graphql";
+
 const createScheduler = require('probot-scheduler')
 
 // TODO:
@@ -19,13 +21,17 @@ export default class SendRemindersOnSchedule implements Behaviour {
     }
 
     private async sendReminders(agent: Probot, context: ScheduleContext) {
-        /*const pullList = */context.octokit.pulls.list({
-          owner: context.payload.repository.owner.login,
-          repo: context.payload.repository.name,
-          state: "open"
-        });
+        const repoSettings = await RepoSettings.load(context);
+
+        if(!repoSettings.reviewReminder.isEnabled && !repoSettings.replayToReviewReminder.isEnabled)
+            return;
+
+        const pullRequestsList = await listRepoPullRequests(context);
+        
+        for(const pull_request of pullRequestsList.repository?.pullRequests.nodes ?? []) {
+            agent.log.info(pull_request?.title ?? '');
+        }
   
-        const repoSettings: RepoSettings = await RepoSettings.load(context);
-        agent.log.debug(repoSettings.reviewReminder.message);
+        //agent.log.debug(repoSettings.reviewReminder.message);
     }
 }

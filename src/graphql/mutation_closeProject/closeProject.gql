@@ -1,0 +1,10 @@
+mutation closeProjectV2($projectId: ID!){
+  updateProjectV2(input: {
+    projectId: $projectId,
+    closed: true
+  }) {
+    projectV2 {
+      id
+    }
+  }
+}

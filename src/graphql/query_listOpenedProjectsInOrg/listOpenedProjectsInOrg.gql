@@ -1,0 +1,25 @@
+query listProjectsInOrg($organizationLogin: String!, $projectQuery: String) { 
+  organization(login: $organizationLogin) {
+    projectsV2(first: 100, query: $projectQuery) {
+      edges {
+        node {
+          id,
+          number,
+          title,
+          closed,
+          fields(first: 100) {
+            edges {
+              node {
+                 ... on ProjectV2Field {
+                  id,
+                  name,
+                  dataType,
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

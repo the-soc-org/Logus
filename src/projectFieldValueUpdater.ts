@@ -1,7 +1,7 @@
 import { KeywordSettings, OrganizationSettings } from "./organizationSettings";
-import { ProjectInOrgQueryResultElement, listOpenedProjectsInOrg, listUserTeamsInOrgRelatedToRepo } from "./czujnikowniaGraphQueries";
-import { updateItemDateField, addItemToProjIfNotExist, updateItemNumberField} from "./czujnikowniaGraphMutations";
 import { PRCzujnikowniaContext } from "./czujnikowniaContexts";
+import { addProjectItem, listOpenedProjectsInOrg, listUserTeamsInOrgRelatedToRepo,
+   ProjectInOrgQueryResultElement, updateItemDate, updateItemNumber } from "./graphql";
 
 export interface ProjectFieldValueUpdater {
   updateDate(fieldNameSelector: (s: KeywordSettings) => string | undefined, newFieldValue: string): Promise<void>;
@@ -77,7 +77,7 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
 
   public async updateDate(fieldNameSelector: (s: KeywordSettings) => string | undefined, newFieldValue: string) {
     await this.updateField(fieldNameSelector, async (proj, item, fieldId) => {
-      await updateItemDateField(this.context, proj.id, item.itemId, fieldId, newFieldValue as string, this.log);
+      await updateItemDate(this.context, proj.id, item.itemId, fieldId, newFieldValue as string, this.log);
       this.log?.info(`Field ${fieldId} updated in ${proj.title} project to value ${newFieldValue}.`);
     });
   }
@@ -85,7 +85,7 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
   public async increment(fieldNameSelector: (s: KeywordSettings) => string | undefined) {
     await this.updateField(fieldNameSelector, async (proj, item, fieldId) => {
       const newFieldValue: number = (item.fieldValue as number) + 1;
-      await updateItemNumberField(this.context, proj.id, item.itemId, fieldId, newFieldValue, this.log);
+      await updateItemNumber(this.context, proj.id, item.itemId, fieldId, newFieldValue, this.log);
       this.log?.info(`Field ${fieldId} updated in ${proj.title} project to value ${newFieldValue}.`);
     });
   }
@@ -110,12 +110,12 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
       if (fieldId === undefined)
         continue;
 
-      const item = await addItemToProjIfNotExist(this.context, proj.id, this.context.payload.pull_request.node_id, fieldName, this.log);
+      const item = await addProjectItem(this.context, proj.id, this.context.payload.pull_request.node_id, fieldName, this.log);
       await action(proj, item, fieldId);
     }
   }
 
-  private caseInsensiviteEqual(firstString: string, secondString: string): boolean {
+  private caseInsensiviteEqual(firstString: string | undefined, secondString: string): boolean {
     return firstString?.localeCompare(secondString, undefined, { sensitivity: 'accent' }) === 0;
   }
 }

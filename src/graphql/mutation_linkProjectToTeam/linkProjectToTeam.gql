@@ -1,0 +1,10 @@
+mutation linkProjectToTeam($projectId: ID!, $teamId: ID!){
+  linkProjectV2ToTeam(input: {
+    projectId: $projectId,
+    teamId: $teamId
+  }) {
+    team {
+      id
+    }
+  }
+}

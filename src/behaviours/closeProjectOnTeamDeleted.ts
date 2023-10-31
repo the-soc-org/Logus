@@ -1,6 +1,5 @@
 import { Context, Probot } from "probot";
-import { closeProjectV2 } from "../czujnikowniaGraphMutations";
-import { listOpenedProjectsInOrg, ProjectInOrgQueryResultElement } from "../czujnikowniaGraphQueries";
+import { closeProject, listOpenedProjectsInOrg, ProjectInOrgQueryResultElement } from "../graphql";
 import { KeywordSettings } from "../organizationSettings";
 import Behaviour from "./behaviour";
 
@@ -30,7 +29,7 @@ export default class CloseProjectOnTeamDeleted implements Behaviour {
             return;
         }
 
-        await closeProjectV2(context, projectToClose.id, agent.log);
+        await closeProject(context, projectToClose.id, agent.log);
         agent.log.info(`ProjectV2 ${projectToClose.title} has been closed.`);
     }
 }

@@ -1,0 +1,49 @@
+query listOpenedPullRequests($owner: String!, $name: String!) {
+  repository(owner: $owner, name: $name) {
+    pullRequests(states: OPEN, first: 100) {
+      nodes {
+        id
+        number
+        title
+        updatedAt
+        author {
+          login
+        }
+        assignees(first: 5) {
+          nodes {
+            login
+          }
+        }
+        reviewRequests(last: 5) {
+          nodes {
+            asCodeOwner
+            requestedReviewer {
+              ... on User {
+                login
+              }
+            }
+          }
+        }
+        reviews(last: 10) {
+          nodes {
+            id
+            updatedAt
+            state
+            author {
+              login
+            }
+            comments(last: 50) {
+              nodes {
+                id
+                updatedAt
+                author {
+                  login
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

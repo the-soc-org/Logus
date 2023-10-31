@@ -1,0 +1,21 @@
+import { CzujnikowniaContext } from "../../czujnikowniaContexts";
+import { addProjectItemMutation, AddProjectItemResult, ProjectV2Item } from "./addProjectItemGenerated";
+
+export async function addProjectItem(context: CzujnikowniaContext, projectId: string, contentId: string, fieldName: string, log?: any)
+: Promise<{itemId: string, fieldValue: any}>
+{
+  const result: AddProjectItemResult = await context.octokit.graphql(addProjectItemMutation, {
+    projectId,
+    contentId,
+    fieldName,
+  });
+
+  log?.debug(`addItemToProjIfNotExist mutation result:\n${JSON.stringify(result)}`);
+
+  const item: ProjectV2Item | null | undefined = result?.addProjectV2ItemById?.item;
+
+  return {
+    itemId: item?.id ?? "",
+    fieldValue: item?.fieldValueByName?.number ?? item?.fieldValueByName?.date ?? 0,
+  };
+}
