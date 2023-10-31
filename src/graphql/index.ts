@@ -3,6 +3,7 @@ export * from './query_getProjectId/getProjectId'
 export * from './query_listUserTeamsInOrg/listUserTeamsInOrg'
 export * from './query_listOpenedProjectsInOrg/listOpenedProjectsInOrg'
 
+export * from './mutation_addComment/addComment'
 export * from './mutation_addProjectItem/addProjectItem'
 export * from './mutation_closeProject/closeProject'
 export * from './mutation_copyProject/copyProject'

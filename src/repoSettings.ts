@@ -8,10 +8,15 @@ export class RepoSettings {
     readonly reviewReminder: ReminderSettings = new ReminderSettings;
     readonly replayToReviewReminder: ReminderSettings = new ReminderSettings;
 
+    readonly minUTCHourOfDayToSendReminder: number = 9;
+    readonly maxUTCHourOfDayToSendReminder: number = 21;
+
     constructor(repoSettings: RepoSettings | null = null) {
         if(repoSettings) {
             this.reviewReminder = new ReminderSettings(repoSettings.reviewReminder);
             this.replayToReviewReminder = new ReminderSettings(repoSettings.replayToReviewReminder);
+            this.minUTCHourOfDayToSendReminder = repoSettings.minUTCHourOfDayToSendReminder;
+            this.maxUTCHourOfDayToSendReminder = repoSettings.maxUTCHourOfDayToSendReminder;
         }
     }
 
@@ -31,7 +36,7 @@ export class ReminderSettings {
 
     isEnabled: boolean = false;
     message: string = "🤖";
-    inactivityHoursToSend: number = 5 * 24;
+    minimalInactivityMinToSend: number = 5 * 24 * 60;
 
     constructor(reminderSettings: ReminderSettings | null = null) {
         if(reminderSettings)
