@@ -1,6 +1,6 @@
 import { Context, Probot } from "probot";
 import { closeProject, listOpenedProjectsInOrg, ProjectInOrgQueryResultElement } from "../graphql";
-import { KeywordSettings } from "../organizationSettings";
+import { KeywordConfiguration } from "../organizationConfig";
 import Behaviour from "./behaviour";
 
 export default class CloseProjectOnTeamDeleted implements Behaviour {
@@ -12,13 +12,13 @@ export default class CloseProjectOnTeamDeleted implements Behaviour {
         const teamName: string = context.payload.team.name;
         agent.log.info(`Team ${teamName} has been deleted.`);
 
-        const keywordSettings: KeywordSettings | undefined = await KeywordSettings.loadFirst(context, teamName);
-        if(keywordSettings === undefined) {
-            agent.log.info(`There is no settings related to team ${teamName}.`);
+        const keywordConfig: KeywordConfiguration | undefined = await KeywordConfiguration.loadFirst(context, teamName);
+        if(keywordConfig === undefined) {
+            agent.log.info(`There is no config related to team ${teamName}.`);
             return;
         }
 
-        const projectToCloseTitle = keywordSettings.getProjectTitle(teamName).toLowerCase();
+        const projectToCloseTitle = keywordConfig.getProjectTitle(teamName).toLowerCase();
 
         const projectsInOrg: ProjectInOrgQueryResultElement[] = await listOpenedProjectsInOrg(context);
         const projectToClose: ProjectInOrgQueryResultElement | undefined = projectsInOrg

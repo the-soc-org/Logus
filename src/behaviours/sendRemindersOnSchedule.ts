@@ -1,6 +1,6 @@
 import { Probot } from "probot";
 import { ScheduleContext } from "../czujnikowniaContexts";
-import { ReminderSettings, RepoSettings } from "../repoSettings";
+import { ReminderConfig, RepoConfig } from "../repoConfig";
 import Behaviour from "./behaviour";
 
 import { addComment, ListOpenedPullRequestsResult, listRepoPullRequests } from "../graphql";
@@ -29,9 +29,9 @@ export default class SendRemindersOnSchedule implements Behaviour {
     }
 
     private async sendReminders(agent: Probot, context: ScheduleContext) : Promise<void> {
-        const repoSettings = await RepoSettings.load(context);
+        const repoConfig: RepoConfig = await RepoConfig.load(context);
 
-        if(!this.shouldSendAnyReminderNow(repoSettings)) {
+        if(!this.shouldSendAnyReminderNow(repoConfig)) {
             agent.log.debug(`No reminder should be sent.`);
             return;
         }
@@ -40,50 +40,50 @@ export default class SendRemindersOnSchedule implements Behaviour {
         
         for(const pullRequest of pullRequestsList.repository?.pullRequests.nodes ?? []) {
             if(pullRequest!.reviewRequests?.nodes?.length !== 0) {
-                await this.sendReminderIfShould(repoSettings.reviewReminder, pullRequest!, context);
+                await this.sendReminderIfShould(repoConfig.reviewReminder, pullRequest!, context);
             }
             else if(pullRequest!.reviews?.nodes?.length !== 0) {
-                await this.sendReminderIfShould(repoSettings.replayToReviewReminder, pullRequest!, context);
+                await this.sendReminderIfShould(repoConfig.replayToReviewReminder, pullRequest!, context);
             }
         }
     }
 
-    private shouldSendAnyReminderNow(settings: RepoSettings): boolean {
-        if(!settings.reviewReminder.isEnabled && !settings.replayToReviewReminder.isEnabled)
+    private shouldSendAnyReminderNow(config: RepoConfig): boolean {
+        if(!config.reviewReminder.isEnabled && !config.replayToReviewReminder.isEnabled)
             return false;
 
         const currentUTCHourOfDay: number = new Date().getUTCHours();
-        if(currentUTCHourOfDay < settings.minUTCHourOfDayToSendReminder 
-            || currentUTCHourOfDay > settings.maxUTCHourOfDayToSendReminder)
+        if(currentUTCHourOfDay < config.minUTCHourOfDayToSendReminder 
+            || currentUTCHourOfDay > config.maxUTCHourOfDayToSendReminder)
             return false;
 
         return true;
     }
 
-    private async sendReminderIfShould(settings: ReminderSettings, pullRequest: PullRequest, context: ScheduleContext): Promise<void> {
+    private async sendReminderIfShould(config: ReminderConfig, pullRequest: PullRequest, context: ScheduleContext): Promise<void> {
         const updatedAt: Date = new Date(pullRequest!.updatedAt);
 
-        if(this.shouldSendThisReminder(settings, updatedAt)) {
-            const body: string = this.prepereReminderBody(settings, pullRequest);
+        if(this.shouldSendThisReminder(config, updatedAt)) {
+            const body: string = this.prepereReminderBody(config, pullRequest);
             await addComment(context, pullRequest.id, body)
         }
     }
 
-    private shouldSendThisReminder(settings: ReminderSettings, refDate: Date): boolean {    
-        if(!settings.isEnabled)
+    private shouldSendThisReminder(config: ReminderConfig, refDate: Date): boolean {    
+        if(!config.isEnabled)
             return false;
 
         const elapsedMs: number = (new Date).getTime() - refDate.getTime();
-        const elapsedMins: number = elapsedMs / (1000 * 60);
+        const elapsedHours: number = elapsedMs / (1000 * 60 * 60);
 
-        if(elapsedMins >= settings.minimalInactivityMinToSend)
+        if(elapsedHours >= config.minimalInactivityHoursToSend)
             return true;
 
         return false;
     }
 
-    private prepereReminderBody(settings: ReminderSettings, pullRequest: PullRequest): string {
-        let body: string = settings.message;
+    private prepereReminderBody(config: ReminderConfig, pullRequest: PullRequest): string {
+        let body: string = config.message;
         for(const msgVar of this.messageVariables)
             body = msgVar.replaceInMessage(body, pullRequest);
         return body;

@@ -15,7 +15,7 @@ query listOpenedPullRequests($owner: String!, $name: String!) {
             login
           }
         }
-        reviewRequests(last: 5) {
+        reviewRequests(first: 5) {
           nodes {
             asCodeOwner
             requestedReviewer {

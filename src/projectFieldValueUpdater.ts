@@ -1,33 +1,33 @@
-import { KeywordSettings, OrganizationSettings } from "./organizationSettings";
+import { KeywordConfiguration, OrganizationConfig } from "./organizationConfig";
 import { PRCzujnikowniaContext } from "./czujnikowniaContexts";
 import { addProjectItem, listOpenedProjectsInOrg, listUserTeamsInOrgRelatedToRepo,
    ProjectInOrgQueryResultElement, updateItemDate, updateItemNumber } from "./graphql";
 
 export interface ProjectFieldValueUpdater {
-  updateDate(fieldNameSelector: (s: KeywordSettings) => string | undefined, newFieldValue: string): Promise<void>;
-  increment(fieldNameSelector: (s: KeywordSettings) => string | undefined): Promise<void>;
+  updateDate(fieldNameSelector: (s: KeywordConfiguration) => string | undefined, newFieldValue: string): Promise<void>;
+  increment(fieldNameSelector: (s: KeywordConfiguration) => string | undefined): Promise<void>;
 }
 
 export class ProjectFieldValueUpdaterFactory {
 
-  public static async createLimited(context: PRCzujnikowniaContext, log: any = null): Promise<ProjectFieldValueUpdater> {
+  public static async createBasicUpdater(context: PRCzujnikowniaContext, log: any = null): Promise<ProjectFieldValueUpdater> {
     const userTeams: Promise<string[]> = listUserTeamsInOrgRelatedToRepo(context);
     const projects: Promise<ProjectInOrgQueryResultElement[]> = listOpenedProjectsInOrg(context);
-    const globalSettings: Promise<OrganizationSettings> = OrganizationSettings.load(context);
+    const organizationConfig: Promise<OrganizationConfig> = OrganizationConfig.load(context);
 
-    return new BasicProjectFieldValueUpdater(context, await userTeams, await projects, (await globalSettings).keywordSettings, log);
+    return new BasicProjectFieldValueUpdater(context, await userTeams, await projects, (await organizationConfig).keywordConfigs, log);
   }
 
   public static async create(context: PRCzujnikowniaContext, log: any = null): Promise<ProjectFieldValueUpdater> {
-    const globalSettings: OrganizationSettings = await OrganizationSettings.load(context);
+    const globalConfig: OrganizationConfig = await OrganizationConfig.load(context);
     const componentUpdaters: BasicProjectFieldValueUpdater[] = [];
 
-    for(const settings of globalSettings.keywordSettings) {
-      const userTeams = await listUserTeamsInOrgRelatedToRepo(context, settings.teamNameTrigger);
+    for(const config of globalConfig.keywordConfigs) {
+      const userTeams = await listUserTeamsInOrgRelatedToRepo(context, config.teamNameTrigger);
 
       for(const team of userTeams) {
-        const projects = await listOpenedProjectsInOrg(context, settings.getProjectTitle(team));
-        componentUpdaters.push(new BasicProjectFieldValueUpdater(context, [team], projects, [settings], log));
+        const projects = await listOpenedProjectsInOrg(context, config.getProjectTitle(team));
+        componentUpdaters.push(new BasicProjectFieldValueUpdater(context, [team], projects, [config], log));
       }
     }
     return new ProjectFieldUpdaterGroup(componentUpdaters);
@@ -41,7 +41,7 @@ class ProjectFieldUpdaterGroup implements ProjectFieldValueUpdater {
     this.fieldUpdaters = fieldUpdaters;
   }
 
-  public async updateDate(fieldNameSelector: (s: KeywordSettings) => string | undefined, newFieldValue: string) {
+  public async updateDate(fieldNameSelector: (s: KeywordConfiguration) => string | undefined, newFieldValue: string) {
     const promises: Promise<void>[] = [];
     for(const updater of this.fieldUpdaters)
       promises.push(updater.updateDate(fieldNameSelector, newFieldValue));
@@ -49,7 +49,7 @@ class ProjectFieldUpdaterGroup implements ProjectFieldValueUpdater {
       await Promise.all(promises);
   }
 
-  public async increment(fieldNameSelector: (s: KeywordSettings) => string | undefined) {
+  public async increment(fieldNameSelector: (s: KeywordConfiguration) => string | undefined) {
     const promises: Promise<void>[] = [];
     for(const updater of this.fieldUpdaters)
       promises.push(updater.increment(fieldNameSelector));
@@ -63,26 +63,26 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
   private readonly context: PRCzujnikowniaContext;
   private readonly userTeams: string[];
   private readonly projects: ProjectInOrgQueryResultElement[];
-  private readonly keywordSettings: KeywordSettings[];
+  private readonly keywordConfigs: KeywordConfiguration[];
   private readonly log: any | null;
 
   public constructor(context: PRCzujnikowniaContext,
-    userTeams: string[], projects: ProjectInOrgQueryResultElement[], keywordSettings: KeywordSettings[], log: any) {
+    userTeams: string[], projects: ProjectInOrgQueryResultElement[], keywordConfigs: KeywordConfiguration[], log: any) {
     this.context = context;
     this.userTeams = userTeams;
     this.projects = projects;
-    this.keywordSettings = keywordSettings;
+    this.keywordConfigs = keywordConfigs;
     this.log = log;
   }
 
-  public async updateDate(fieldNameSelector: (s: KeywordSettings) => string | undefined, newFieldValue: string) {
+  public async updateDate(fieldNameSelector: (s: KeywordConfiguration) => string | undefined, newFieldValue: string) {
     await this.updateField(fieldNameSelector, async (proj, item, fieldId) => {
       await updateItemDate(this.context, proj.id, item.itemId, fieldId, newFieldValue as string, this.log);
       this.log?.info(`Field ${fieldId} updated in ${proj.title} project to value ${newFieldValue}.`);
     });
   }
 
-  public async increment(fieldNameSelector: (s: KeywordSettings) => string | undefined) {
+  public async increment(fieldNameSelector: (s: KeywordConfiguration) => string | undefined) {
     await this.updateField(fieldNameSelector, async (proj, item, fieldId) => {
       const newFieldValue: number = (item.fieldValue as number) + 1;
       await updateItemNumber(this.context, proj.id, item.itemId, fieldId, newFieldValue, this.log);
@@ -91,18 +91,18 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
   }
 
   private async updateField(
-    fieldNameSelector: (s: KeywordSettings) => string | undefined,
+    fieldNameSelector: (s: KeywordConfiguration) => string | undefined,
     action: (proj: ProjectInOrgQueryResultElement, item: {itemId: string, fieldValue: any}, fieldId: string) => Promise<void>) 
   {
     for (const teamName of this.userTeams) {
-      const settings: KeywordSettings | undefined = this.keywordSettings
+      const config: KeywordConfiguration | undefined = this.keywordConfigs
         .find(s => teamName.toLowerCase().includes(s.teamNameTrigger.toLowerCase()) && fieldNameSelector(s) !== undefined);
-      if (settings === undefined)
+      if (config === undefined)
         continue;
-      const fieldName: string = fieldNameSelector(settings)!;
+      const fieldName: string = fieldNameSelector(config)!;
 
       const proj: ProjectInOrgQueryResultElement | undefined = this.projects
-        .find(p => this.caseInsensiviteEqual(p.title, settings.getProjectTitle(teamName)));
+        .find(p => this.caseInsensiviteEqual(p.title, config.getProjectTitle(teamName)));
       if (proj === undefined)
         continue;
 

@@ -1,6 +1,6 @@
 import { Context, Probot } from "probot";
 import { copyProject, createProject, getProjectV2Id, linkProjectToTeam } from "../graphql";
-import { KeywordSettings } from "../organizationSettings";
+import { KeywordConfiguration } from "../organizationConfig";
 import Behaviour from "./behaviour";
 
 export default class CreateProjectOnTeamCreated implements Behaviour {
@@ -13,26 +13,26 @@ export default class CreateProjectOnTeamCreated implements Behaviour {
     const teamName: string = context.payload.team.name;
     app.log.info(`Team ${teamName} has been created.`);
 
-    const keywordSettings: KeywordSettings | undefined = await KeywordSettings.loadFirst(context, teamName);
-    if(keywordSettings !== undefined) {
-      const projectTitle: string = keywordSettings.getProjectTitle(teamName);
+    const keywordConfigs: KeywordConfiguration | undefined = await KeywordConfiguration.loadFirst(context, teamName);
+    if(keywordConfigs !== undefined) {
+      const projectTitle: string = keywordConfigs.getProjectTitle(teamName);
 
       let newProjectId: string = '';
 
-      if(keywordSettings.projectTemplateNumber == undefined) {
+      if(keywordConfigs.projectTemplateNumber == undefined) {
         newProjectId = await createProject(context, projectTitle, app.log);
 
         app.log.info(`Project ${projectTitle} has been created.`);
       } 
       else {
         try {
-          const templateId: string = await getProjectV2Id(context, keywordSettings.projectTemplateNumber);
+          const templateId: string = await getProjectV2Id(context, keywordConfigs.projectTemplateNumber);
           newProjectId = await copyProject(context, projectTitle, templateId, app.log);
 
-          app.log.info(`Project ${projectTitle} has been created from template ${keywordSettings.projectTemplateNumber}.`);
+          app.log.info(`Project ${projectTitle} has been created from template ${keywordConfigs.projectTemplateNumber}.`);
         } 
         catch {
-          app.log.error(`Faild to create project ${projectTitle}. Probably template project ${keywordSettings.projectTemplateNumber} doesn't exisis.`);
+          app.log.error(`Faild to create project ${projectTitle}. Probably template project ${keywordConfigs.projectTemplateNumber} doesn't exisis.`);
         }
       }
 

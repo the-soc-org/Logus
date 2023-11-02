@@ -41,7 +41,7 @@ const privateKey = fs.readFileSync(
 
 function TestProjectFieldValueUpdaterInitialize(mock: nock.Scope, 
   payload: {sender: {login: string}, organization: {login: string}}, 
-  configRelPath = "fixtures/configs/sensor-room.yml",
+  configRelPath = "fixtures/configs/czujnikownia-org.yml",
   keywordSettingsNumber: number = 2): nock.Scope 
 {
   mock = mock
@@ -58,7 +58,7 @@ function TestProjectFieldValueUpdaterInitialize(mock: nock.Scope,
     })
     .reply(200, responseProjectsInOrg)
 
-    .get(`/repos/${payload.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
+    .get(`/repos/${payload.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia-org.yml")}`)
     .reply(200, fs.readFileSync(path.join(__dirname, configRelPath), "utf-8"));
 
     for(let i = 0; i < keywordSettingsNumber-1; i++) {
@@ -96,8 +96,8 @@ describe("Czujnikownia nock app tests", () => {
 
   test("creating project with settings from .github-private", async () => {
     const mock = nock("https://api.github.com")
-      .get(`/repos/${payloadTeamCreated.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
-      .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/configs/sensor-room.yml"), "utf-8"))
+      .get(`/repos/${payloadTeamCreated.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia-org.yml")}`)
+      .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/configs/czujnikownia-org.yml"), "utf-8"))
       .post("/graphql", (body) => {
         expect(body.variables.organizationLogin).toEqual(payloadTeamCreated.organization.login);
         expect(body.variables.projectNumber).toEqual(6);
@@ -119,8 +119,8 @@ describe("Czujnikownia nock app tests", () => {
 
   test("creating project with settings from .github-private, but template project doesn't exists", async () => {
     const mock = nock("https://api.github.com")
-      .get(`/repos/${payloadTeamCreated.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
-      .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/configs/sensor-room.yml"), "utf-8"))
+      .get(`/repos/${payloadTeamCreated.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia-org.yml")}`)
+      .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/configs/czujnikownia-org.yml"), "utf-8"))
       .post("/graphql", (body) => {
         expect(body.variables.organizationLogin).toEqual(payloadTeamCreated.organization.login);
         expect(body.variables.projectNumber).toEqual(6);
@@ -135,13 +135,13 @@ describe("Czujnikownia nock app tests", () => {
 
   test("creating projects with default settings", async () => {
     const mock = nock("https://api.github.com")
-      .get(`/repos/${payloadTeamCreated.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
+      .get(`/repos/${payloadTeamCreated.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia-org.yml")}`)
       .reply(404)
-      .get(`/repos/${payloadTeamCreated.organization.login}/.github/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
+      .get(`/repos/${payloadTeamCreated.organization.login}/.github/contents/${encodeURIComponent(".github/czujnikownia-org.yml")}`)
       .reply(404)
       .post("/graphql", (body) => {
         expect(body.variables.ownerId).toEqual(payloadTeamCreated.organization.node_id)
-        expect(body.variables.title).toEqual("Sensor-test-team-2023")
+        expect(body.variables.title).toEqual("monitor-test-team-2023")
         return true;
       })
       .reply(200)
@@ -153,8 +153,8 @@ describe("Czujnikownia nock app tests", () => {
 
   test("closing project on team delete", async () => {
     const mock = nock("https://api.github.com")
-      .get(`/repos/${payloadTeamDeleted.organization.login}/.github-private/contents/${encodeURIComponent(".github/sensor-room.yml")}`)
-      .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/configs/sensor-room.yml"), "utf-8"))
+      .get(`/repos/${payloadTeamDeleted.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia-org.yml")}`)
+      .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/configs/czujnikownia-org.yml"), "utf-8"))
       
       .post("/graphql", (body) => {
         expect(body.variables.organizationLogin).toEqual(payloadTeamDeleted.organization.login)
