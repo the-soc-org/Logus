@@ -59,7 +59,7 @@ replayToReviewReminder:
 - `rewiewReminder` - ustawienia dotyczące zamieszczania komentarza przypominającego wyznaczonej osobie o potrzebie wykonania recenzji. Przypomnienie jest wysyłane kiedy jest wyznaczona osoba do recenzji i minęła wyznaczona liczba godzin od ostatniej aktywności w PR
 - `replayToReviewReminder` - ustawienia dotyczące zamieszczania komentarza przypominającego o potrzebie odniesienia się do recenzji lub zamknięcia PR. Przypomnienie jest wysyłane kiedy zamieszczona została przynajmniej jedna recenzja, nie ma aktywnej prośby o wykonanie nowej recenzji i minęła wyznaczona liczba godzin od ostatniej aktywności w PR
   - `isEnabled` - określa czy dane przypomnienie ma być wysyłane. Domyślnie `false`
-  - `minimalInactivityHoursToSend` - określa minimalną liczbę godzin, która musi upłynąć od ostatniej aktywności w PR, aby przypomnienie zostało wysłane
+  - `minimalInactivityHoursToSend` - określa minimalną liczbę godzin, która musi upłynąć od ostatniej aktywności w PR, aby przypomnienie zostało wysłane. Domyślnie 120.
   - `message` - treść zamieszczanego komentarza w PR. Niektóre wartości zostaną zamienione w zależności od kontekstu
     - `@reviewer` - zostanie zamieniony na wzmiankę pierwszej osoby na liście *Reviewers*, która jest poproszona o wykonanie recenzji w PR
     - `@author` - zostanie zmieniony na wzmiankę autora *Pull Request*
