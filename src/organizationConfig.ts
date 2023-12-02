@@ -1,4 +1,4 @@
-import { CzujnikowniaContext } from "./czujnikowniaContexts";
+import { CzujnikowniaOrgConfigContext } from "./czujnikowniaContexts";
 
 export class OrganizationConfig {
     [key: string]: any;
@@ -13,7 +13,7 @@ export class OrganizationConfig {
                 this.keywordConfigs.push(new KeywordConfiguration(ks));
     }
 
-    public static async load(context: CzujnikowniaContext) : Promise<OrganizationConfig>
+    public static async load(context: CzujnikowniaOrgConfigContext) : Promise<OrganizationConfig>
     {
         const defaultConfig = new OrganizationConfig;
         defaultConfig.keywordConfigs.push(new KeywordConfiguration)
@@ -51,13 +51,13 @@ export class KeywordConfiguration
                 this[key] = keywordConfig[key];
     }
 
-    public static async loadFirst(context: CzujnikowniaContext, testingTeamName: string): Promise<KeywordConfiguration | undefined>
+    public static async loadFirst(context: CzujnikowniaOrgConfigContext, testingTeamName: string): Promise<KeywordConfiguration | undefined>
     {
         const config: OrganizationConfig = await OrganizationConfig.load(context);
         return config.keywordConfigs.find(s => s.nameIncludeTrigger(testingTeamName));
     }
 
-    private nameIncludeTrigger(testingTeamName: string): boolean {
+    public nameIncludeTrigger(testingTeamName: string): boolean {
         return testingTeamName.toLowerCase().includes(this.teamNameTrigger.toLowerCase());
     }
 }

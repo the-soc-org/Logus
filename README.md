@@ -45,6 +45,7 @@ Przykładowa konfiguracja `czujnikownia-repo.yml`:
 ```yml
 maxUTCHourOfDayToSendReminder: 19
 minUTCHourOfDayToSendReminder: 8
+sendRemindersOnlyIfRepoIsRelatableToTeamWithKeyword: true
 reviewReminder:
   isEnabled: true
   minimalInactivityHoursToSend: 120
@@ -55,7 +56,8 @@ replayToReviewReminder:
   message: "@assignee proszę odnieść się do recenzji lub zamknąć Pull Request #number."
 ```
 - `maxUTCHourOfDayToSendReminder` - najpóźniejsza godzina dnia czasu UTC, o której może zostać zamieszczony komentarz przypominający. Domyślnie 20 - najpóźniejszy komentarz będzie mógł być zamieszczony o 20:59 czasu UTC
-- `minUTCHourOfDayToSendReminder` - najwcześniejsza godzina dnia czasu UTC, o które może zostać zamieszczony komentarz przypominający. Domyślnie 9
+- `minUTCHourOfDayToSendReminder` - najwcześniejsza godzina dnia czasu UTC, o której może zostać zamieszczony komentarz przypominający. Domyślnie 9
+- `sendRemindersOnlyIfRepoIsRelatableToTeamWithKeyword` - Przypomnienia będą zamieszczane tylko dla żądań ściągnięć w repozytoriach powiązanych z jakimkolwiek zespołem, którego nazwa zawiera słowo kluczowe zadeklarowane wewnątrz `czujnikownia-org.yml`. Domyślnie `true`.
 - `rewiewReminder` - ustawienia dotyczące zamieszczania komentarza przypominającego wyznaczonej osobie o potrzebie wykonania recenzji. Przypomnienie jest wysyłane kiedy jest wyznaczona osoba do recenzji i minęła wyznaczona liczba godzin od ostatniej aktywności w PR
 - `replayToReviewReminder` - ustawienia dotyczące zamieszczania komentarza przypominającego o potrzebie odniesienia się do recenzji lub zamknięcia PR. Przypomnienie jest wysyłane kiedy zamieszczona została przynajmniej jedna recenzja, nie ma aktywnej prośby o wykonanie nowej recenzji i minęła wyznaczona liczba godzin od ostatniej aktywności w PR
   - `isEnabled` - określa czy dane przypomnienie ma być wysyłane. Domyślnie `false`

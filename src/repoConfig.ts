@@ -7,6 +7,7 @@ export class RepoConfig {
 
     readonly reviewReminder: ReminderConfig = new ReminderConfig;
     readonly replayToReviewReminder: ReminderConfig = new ReminderConfig;
+    readonly sendRemindersOnlyIfRepoIsRelatableToTeamWithKeyword: boolean = true;
 
     readonly minUTCHourOfDayToSendReminder: number = 9;
     readonly maxUTCHourOfDayToSendReminder: number = 20;
@@ -17,6 +18,7 @@ export class RepoConfig {
             this.replayToReviewReminder = new ReminderConfig(repoConfig.replayToReviewReminder);
             this.minUTCHourOfDayToSendReminder = repoConfig.minUTCHourOfDayToSendReminder;
             this.maxUTCHourOfDayToSendReminder = repoConfig.maxUTCHourOfDayToSendReminder;
+            this.sendRemindersOnlyIfRepoIsRelatableToTeamWithKeyword = repoConfig.sendRemindersOnlyIfRepoIsRelatableToTeamWithKeyword;
         }
     }
 

@@ -13,6 +13,7 @@
   ],
   "scripts": {
     "postinstall": "patch-package",
+    "heroku-cleanup": "npx patch-package",
     "build": "tsc",
     "start": "probot run ./lib/index.js",
     "test": "jest",

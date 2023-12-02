@@ -1,6 +1,15 @@
 import { Context } from "probot";
 
-export declare type CzujnikowniaOctokit = Pick<Context["octokit"], "graphql" | "rest" | "config" | "pulls">
+export declare type CzujnikowniaOctokit = Pick<Context["octokit"], "graphql" | "rest" | "config" | "pulls" | "repos">
+
+export declare type CzujnikowniaOrgConfigContext = {octokit: CzujnikowniaOctokit} 
+    & {
+        payload: {
+            organization: {
+                login: string
+            }
+        }
+    }
 
 export declare type CzujnikowniaContext = {octokit: CzujnikowniaOctokit} 
     & {
