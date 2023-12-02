@@ -47,10 +47,10 @@ export default class SendRemindersOnSchedule implements Behaviour {
         
         for(const pullRequest of pullRequestsList.repository?.pullRequests.nodes ?? []) {
             if(pullRequest!.reviewRequests?.nodes?.length !== 0) {
-                this.sendReminderIfShould(repoConfig.reviewReminder, pullRequest!, context, agent);
+                await this.sendReminderIfShould(repoConfig.reviewReminder, pullRequest!, context, agent);
             }
             else if(pullRequest!.reviews?.nodes?.length !== 0) {
-                this.sendReminderIfShould(repoConfig.replayToReviewReminder, pullRequest!, context, agent);
+                await this.sendReminderIfShould(repoConfig.replayToReviewReminder, pullRequest!, context, agent);
             }
         }
     }
