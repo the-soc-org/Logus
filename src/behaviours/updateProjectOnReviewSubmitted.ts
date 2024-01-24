@@ -16,7 +16,7 @@ export default class UpdateProjectOnReviewSubmitted implements Behaviour {
     
         if(context.payload.organization === undefined)
           return;
-    
+              
         const fieldUpdater: ProjectFieldValueUpdater = await ProjectFieldValueUpdaterFactory
           .create(context as PRCzujnikowniaContext, agent.log);
         await fieldUpdater.updateDate(s => s.lastReviewSubmitDateProjectFieldName, reviewDate);
@@ -25,5 +25,12 @@ export default class UpdateProjectOnReviewSubmitted implements Behaviour {
           await fieldUpdater.updateDate(s => s.lastApprovedReviewSubmitDateProjectFieldName, reviewDate);
     
         await fieldUpdater.increment(s => s.reviewIterationNumberProjectFieldName);
+
+        await fieldUpdater.updateDate(s => s.firstReviewSubmitDateProjectFieldName, reviewDate, 
+          (val: String) => {
+            if(val)
+              return false;
+            return true;
+          });
     }
 }

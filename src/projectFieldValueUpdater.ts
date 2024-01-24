@@ -4,8 +4,10 @@ import { addProjectItem, listOpenedProjectsInOrg, listUserTeamsInOrgRelatedToRep
    ProjectInOrgQueryResultElement, updateItemDate, updateItemNumber } from "./graphql";
 
 export interface ProjectFieldValueUpdater {
-  updateDate(fieldNameSelector: (s: KeywordConfiguration) => string | undefined, newFieldValue: string): Promise<void>;
-  increment(fieldNameSelector: (s: KeywordConfiguration) => string | undefined): Promise<void>;
+  updateDate(fieldNameSelector: (s: KeywordConfiguration) => string | undefined, newFieldValue: string,
+    condition?: (currentFieldVal: string) => boolean): Promise<void>;
+  increment(fieldNameSelector: (s: KeywordConfiguration) => string | undefined,
+    condition?: (currentFieldVal: string) => boolean): Promise<void>;
 }
 
 export class ProjectFieldValueUpdaterFactory {
@@ -41,10 +43,11 @@ class ProjectFieldUpdaterGroup implements ProjectFieldValueUpdater {
     this.fieldUpdaters = fieldUpdaters;
   }
 
-  public async updateDate(fieldNameSelector: (s: KeywordConfiguration) => string | undefined, newFieldValue: string) {
+  public async updateDate(fieldNameSelector: (s: KeywordConfiguration) => string | undefined, newFieldValue: string,
+    condition: (currentFieldVal: string) => boolean = (_c) => true) {
     const promises: Promise<void>[] = [];
     for(const updater of this.fieldUpdaters)
-      promises.push(updater.updateDate(fieldNameSelector, newFieldValue));
+      promises.push(updater.updateDate(fieldNameSelector, newFieldValue, condition));
 
       await Promise.all(promises);
   }
@@ -75,10 +78,13 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
     this.log = log;
   }
 
-  public async updateDate(fieldNameSelector: (s: KeywordConfiguration) => string | undefined, newFieldValue: string) {
+  public async updateDate(fieldNameSelector: (s: KeywordConfiguration) => string | undefined, newFieldValue: string,
+    condition: (currentFieldVal: string) => boolean = (_c) => true) {
     await this.updateField(fieldNameSelector, async (proj, item, fieldId) => {
-      await updateItemDate(this.context, proj.id, item.itemId, fieldId, newFieldValue as string, this.log);
-      this.log?.info(`Field ${fieldId} updated in ${proj.title} project to value ${newFieldValue}.`);
+      if(condition(item.fieldValue)) {
+        await updateItemDate(this.context, proj.id, item.itemId, fieldId, newFieldValue as string, this.log);
+        this.log?.info(`Field ${fieldId} updated in ${proj.title} project to value ${newFieldValue}.`);
+      }
     });
   }
 

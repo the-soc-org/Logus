@@ -12,18 +12,13 @@
     "probot-app"
   ],
   "scripts": {
-    "postinstall": "patch-package",
-    "heroku-cleanup": "npx patch-package",
     "build": "tsc",
     "start": "probot run ./lib/index.js",
     "test": "jest",
     "generate-types": "node ./scripts/generate-types.js"
   },
   "dependencies": {
-    "patch-package": "^8.0.0",
-    "probot": "^12.2.4",
-    "probot-scheduler": "^2.0.0-beta.1",
-    "quicktype": "^23.0.76"
+    "probot": "^12.2.4"
   },
   "devDependencies": {
     "@types/jest": "^29.0.0",
@@ -32,7 +27,8 @@
     "nock": "^13.0.5",
     "smee-client": "^1.2.2",
     "ts-jest": "^29.0.0",
-    "typescript": "^4.1.3"
+    "typescript": "^4.1.3",
+    "quicktype": "^23.0.76"
   },
   "engines": {
     "node": ">= 10.13.0"

@@ -37,6 +37,7 @@ export class KeywordConfiguration
     readonly projectTitlePrefix: string = "monitor-";
     readonly openPullRequestDateProjectFieldName?: string;
     readonly lastReviewSubmitDateProjectFieldName?: string;
+    readonly firstReviewSubmitDateProjectFieldName?: string;
     readonly lastApprovedReviewSubmitDateProjectFieldName?: string;
     readonly reviewIterationNumberProjectFieldName?: string;
     readonly projectTemplateNumber?: Number;
