@@ -1,11 +1,11 @@
 {
-  "name": "sensor-room-prototype",
+  "name": "czujnikownia",
   "version": "1.0.0",
   "private": true,
-  "description": "A Probot app",
+  "description": "Aplikacja GitHub bazująca na bibliotece Probot przeznaczona do automatyzacji wybranych procesów. Stworzona na potrzeby prowadzenia zajęć dydaktycznych w ramach organizacji Informatyka Stosowana UMK.",
   "author": "Mikołaj Makowski",
   "license": "ISC",
-  "homepage": "https://github.com//",
+  "homepage": "https://github.com/IS-UMK/Czujnikownia",
   "keywords": [
     "probot",
     "github",

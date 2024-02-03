@@ -1,15 +1,21 @@
 # Czujnikownia
-Zestaw aplikacji probot do zbierania informacji o zdarzeniach na żądaniach ściągnięcia.
+Aplikacja GitHub oparta na bibliotece [Probot](https://github.com/probot/probot) służąca do automatyzacji zbierania informacji w *projektach* o zdarzeniach dotyczących żądań ściągnięć. Przeznaczona do instalowania wewnątrz organizacji.
 
 ## Użycie
-- instalacja [aplikacji GitHub](https://github.com/apps/czujnikownia) wewnątrz organizacji
-- sklonowanie repozytorium
-- [skonfigurowanie](#konfiguracja) ustawień w razie potrzeby
-- użycie poleceń wewnątrz folderu z repozytorium:
+
+### Tworzenie i uruchamianie nowej instancji
+- instalacja środowiska [Node](https://nodejs.org/download/release/v18.19.0/)
+- wykonanie poleceń wewnątrz folderu z kodem źródłowym:
   - `npm install` - [instalacja wszystkich niezbędnych pakietów](https://docs.npmjs.com/cli/v8/commands/npm-install#description)
-  - `npx patch-package` - instalacja poprawek do pakietów
   - `npm run build` - transpilacja kodu TypeScript do JavaScript
   - `npm start` - uruchamienie serwera obsługującego aplikację GitHub
+- [rejestracja aplikacji GitHub](https://probot.github.io/docs/development/#configuring-a-github-app)
+- instalacja wewnątrz wybranej organizacji
+- ponowne uruchomienie przy pomocy polecenia `npm start`
+
+### Wykorzystanie działającej instancji
+- instalacja [aplikacji GitHub](https://github.com/apps/czujnikownia) wewnątrz organizacji
+- [skonfigurowanie](#konfiguracja) ustawień
 
 ## Konfiguracja
 Konfiguracja aplikacji na poziomie organizacji możliwa jest poprzez dodanie pliku `.github/czujnikownia-org.yml` do repozytorium `.github-private` lub `.github` wewnątrz organizacji.
