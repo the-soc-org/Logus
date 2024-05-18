@@ -26,23 +26,3 @@ export declare type PRCzujnikowniaContext = {octokit: CzujnikowniaOctokit}
                 organization: NonNullable<Context<"pull_request">["payload"]["organization"]>
             } 
     }
-
-export interface ScheduleContext {
-    octokit: CzujnikowniaOctokit;
-    payload: {
-        repository: {
-            node_id: string;
-            name: string;
-            open_issues: number;
-            owner: {
-                node_id: string;
-                login: string;
-            }
-        },
-        installation: {
-            account: {
-                login: string;
-            }
-        }
-    }
-}

@@ -3,20 +3,26 @@ import { CzujnikowniaOrgConfigContext } from "./czujnikowniaContexts";
 export class OrganizationConfig {
     [key: string]: any;
     
-    private static readonly configFileName: string = 'czujnikownia-org.yml';
+    private static readonly configFileName: string = 'czujnikownia.yml';
 
-    readonly keywordConfigs: KeywordConfiguration[] = [];
+    readonly projectTitlePrefix: string = "monitor-";
+    readonly openPullRequestDateProjectFieldName?: string;
+    readonly lastReviewSubmitDateProjectFieldName?: string;
+    readonly firstReviewSubmitDateProjectFieldName?: string;
+    readonly lastApprovedReviewSubmitDateProjectFieldName?: string;
+    readonly reviewIterationNumberProjectFieldName?: string;
+    readonly projectTemplateNumber?: Number;
+    readonly addPullRequestAuthorAsAssignee: boolean = false;
 
-    constructor(organizationConfig: OrganizationConfig | null = null) {
-        if(organizationConfig)
-            for(const ks of organizationConfig.keywordConfigs)
-                this.keywordConfigs.push(new KeywordConfiguration(ks));
+    constructor(keywordConfig: OrganizationConfig | null = null) {
+        if(keywordConfig)
+            for(const key in keywordConfig)
+                this[key] = keywordConfig[key];
     }
 
     public static async load(context: CzujnikowniaOrgConfigContext) : Promise<OrganizationConfig>
     {
         const defaultConfig = new OrganizationConfig;
-        defaultConfig.keywordConfigs.push(new KeywordConfiguration)
 
         const configHolder = await context.octokit.config.get<OrganizationConfig>({
             owner: context.payload.organization.login,
@@ -28,37 +34,3 @@ export class OrganizationConfig {
         return new OrganizationConfig(configHolder.config);
     }
 };
-
-export class KeywordConfiguration
-{
-    [key: string]: any;
-
-    readonly teamNameTrigger: string = "-";
-    readonly projectTitlePrefix: string = "monitor-";
-    readonly openPullRequestDateProjectFieldName?: string;
-    readonly lastReviewSubmitDateProjectFieldName?: string;
-    readonly firstReviewSubmitDateProjectFieldName?: string;
-    readonly lastApprovedReviewSubmitDateProjectFieldName?: string;
-    readonly reviewIterationNumberProjectFieldName?: string;
-    readonly projectTemplateNumber?: Number;
-
-    public getProjectTitle(teamName: string): string {
-        return this.projectTitlePrefix + teamName;
-    }
-
-    constructor(keywordConfig: KeywordConfiguration | null = null) {
-        if(keywordConfig)
-            for(const key in keywordConfig)
-                this[key] = keywordConfig[key];
-    }
-
-    public static async loadFirst(context: CzujnikowniaOrgConfigContext, testingTeamName: string): Promise<KeywordConfiguration | undefined>
-    {
-        const config: OrganizationConfig = await OrganizationConfig.load(context);
-        return config.keywordConfigs.find(s => s.nameIncludeTrigger(testingTeamName));
-    }
-
-    public nameIncludeTrigger(testingTeamName: string): boolean {
-        return testingTeamName.toLowerCase().includes(this.teamNameTrigger.toLowerCase());
-    }
-}
