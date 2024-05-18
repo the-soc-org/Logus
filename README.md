@@ -29,7 +29,7 @@ openPullRequestDateProjectFieldName: "Open Date"
 firstReviewSubmitDateProjectFieldName: "First Review Date"
 lastReviewSubmitDateProjectFieldName: "Last Review Date"
 lastApprovedReviewSubmitDateProjectFieldName: "Last Approve Review Date"
-reviewIterationNumberProjectFieldName : "Review Iteration"
+reviewIterationNumberProjectFieldName: "Review Iteration"
 addPullRequestAuthorAsAssignee: false
 ```
 
