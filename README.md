@@ -1,28 +1,31 @@
 # Czujnikownia
-Aplikacja GitHub oparta na bibliotece [Probot](https://github.com/probot/probot) służąca do automatyzacji zbierania informacji w *projektach* o zdarzeniach dotyczących żądań ściągnięć. Przeznaczona do instalowania wewnątrz organizacji.
+[![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/IS-UMK/Czujnikownia/blob/master/README.md)
+[![pl](https://img.shields.io/badge/lang-pl-red.svg)](https://github.com/IS-UMK/Czujnikownia/blob/master/README.pl.md)
 
-## Użycie
+A GitHub application based on the [Probot](https://github.com/probot/probot) library for automating the collection of information in projects related to pull request events. Designed for installation within an organization.
 
-### Tworzenie i uruchamianie nowej instancji
-- instalacja środowiska [Node](https://nodejs.org/download/release/v18.19.0/)
-- wykonanie poleceń wewnątrz folderu z kodem źródłowym:
-  - `npm install` - [instalacja wszystkich niezbędnych pakietów](https://docs.npmjs.com/cli/v8/commands/npm-install#description)
-  - `npm run build` - transpilacja kodu TypeScript do JavaScript
-  - `npm start` - uruchamienie serwera obsługującego aplikację GitHub
-- [rejestracja aplikacji GitHub](https://probot.github.io/docs/development/#configuring-a-github-app)
-- instalacja wewnątrz wybranej organizacji
-- ponowne uruchomienie przy pomocy polecenia `npm start`
+## Usage
 
-### Wykorzystanie działającej instancji
-- instalacja [aplikacji GitHub](https://github.com/apps/czujnikownia) wewnątrz organizacji
-- [skonfigurowanie](#konfiguracja) ustawień
+### Creating and Running a new instance
+- install the [Node](https://nodejs.org/download/release/v18.19.0/) environment
+- run the following commands inside the source code directory:
+  - `npm install` - [install all necessary packages](https://docs.npmjs.com/cli/v8/commands/npm-install#description)
+  - `npm run build` - transpile TypeScript code to JavaScript
+  - `npm start` - start the server handling the GitHub application
+- [register the GitHub application](https://probot.github.io/docs/development/#configuring-a-github-app)
+- install within the organization
+- restart using the command `npm start`
 
-## Konfiguracja
-Konfiguracja aplikacji na poziomie organizacji możliwa jest poprzez dodanie pliku `.github/czujnikownia-org.yml` do repozytorium `.github-private` lub `.github` wewnątrz organizacji.
+### Using a running instance
+- Install the [GitHub application](https://github.com/apps/czujnikownia) within the organization
+- [Configure](#Configuration) the settings
 
-Przechowywanie pliku konfiguracyjnego w repozytorium `.github-private` wymaga udzielenia aplikacji dostępu do tego repozytorium w ustawieniach organizacji – https://github.com/organizations/TWOJA-ORGANIZACJA/settings/installations 
+## Configuration
+The application's organization-level configuration can be done by adding a `.github/czujnikownia-org.yml` file to the `.github-private` or `.github` repository within the organization.
 
-Przykładowa konfiguracja `czujnikownia-org.yml`:
+Storing the configuration file in the `.github-private` repository requires granting the application access to this repository in the organization's settings – https://github.com/organizations/TWOJA-ORGANIZACJA/settings/installations 
+
+Sample configuration `czujnikownia-org.yml`:
 ```yml
 keywordConfigs:
   - teamNameTrigger: "20"
@@ -37,14 +40,12 @@ keywordConfigs:
     projectTitlePrefix: "sensor-"
 ```
 
-- `keywordConfigs` - zbiór ustawień dla poszczególnych słów kluczowych
-- `teamNameTrigger` - słowo kluczowe wyszukiwane w nazwie utworzonego zespołu, które wyzwala tworzenie nowego projektu w organizacji
-- `projectTitlePrefix` - przedrostek tytułu tworzonego projektu
-- `projectTemplateNumber` - numer istniejącego projektu w organizacji, który wykorzystywany zostanie jako wzór dla nowo tworzonego projektu. Jeżeli nie ustawiono, to nowo tworzony projekt będzie pusty.
-- `openPullRequestDateProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana data utworzenia *żądania ściągnięcia* przez użytkownika, który jest członkiem zespołu o nazwie zawierającej słowo kluczowe. Repozytorium, w którym utworzono żądanie, musi być powiązane z zespołem. Parametr opcjonalny.
-- `lastReviewSubmitDateProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana data przesłania ostatniej recenzji *żądania ściągnięcia* przez użytkownika, który jest członkiem zespołu o nazwie zawierającej słowo kluczowe. Parametr opcjonalny.
-- `firstReviewSubmitDateProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana data przesłania pierwszej recenzji *żądania ściągnięcia* przez użytkownika, który jest członkiem zespołu o nazwie zawierającej słowo kluczowe. Parametr opcjonalny.
-- `lastApprovedReviewSubmitDateProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana data przesłania ostatniej pozytywnej recenzji *żądania ściągnięcia* przez użytkownika, który jest członkiem zespołu o nazwie zawierającej słowo kluczowe. Parametr opcjonalny.
-- `reviewIterationNumberProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana ilość obecnie wykonanych recenzji *żądania ściągnięcia*. Parametr opcjonalny.
-
-Konfguracje dotyczące repozytorium można umieścić w jego zawartości pod nazwą `.github/czujnikownia-repo.yml` lub wewnątrz repozytorium `.github` jeżeli chcemy nadpisać domyślną konfigurację.
+- `keywordConfigs` - a set of settings for specific keywords
+- `teamNameTrigger` - keyword searched in the name of the created team, which triggers the creation of a new project in the organization
+- `projectTitlePrefix` - the prefix of the created project title
+- `projectTemplateNumber` - the number of an existing project in the organization that will be used as a template for the newly created project. If not set, the newly created project will be empty.
+- `openPullRequestDateProjectFieldName` - the name of the field column where the creation date of a *pull request* by a user who is a member of a team containing the keyword in its name will be entered. The repository in which the *pull request* was created must be linked to the team. Optional parameter.
+- `lastReviewSubmitDateProjectFieldName` - the name of the field column where the date of the last *pull request* review submission by a user who is a member of a team containing the keyword in its name will be entered. Optional parameter.
+- `firstReviewSubmitDateProjectFieldName` - the name of the field column where the date of the first *pull request* review submission by a user who is a member of a team containing the keyword in its name will be entered. Optional parameter.
+- `lastApprovedReviewSubmitDateProjectFieldName` - the name of the field column where the date of the last positive *pull request* review submission by a user who is a member of a team containing the keyword in its name will be entered. Optional parameter.
+- `reviewIterationNumberProjectFieldName` - the name of the field column where the number of currently completed *pull request* reviews will be entered. Optional parameter.
