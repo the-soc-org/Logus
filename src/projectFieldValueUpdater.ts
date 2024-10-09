@@ -1,5 +1,5 @@
 import { OrganizationConfig } from "./organizationConfig";
-import { PRCzujnikowniaContext } from "./czujnikowniaContexts";
+import { CzujnikowniaLog, PRCzujnikowniaContext } from "./czujnikowniaContexts";
 import { addProjectItem, listOpenedProjectsInOrg, listTeamNodesRelatedToRepo,
    ProjectInOrgQueryResultElement, updateItemDate, updateItemNumber } from "./graphql";
 
@@ -11,7 +11,7 @@ export interface ProjectFieldValueUpdater {
 }
 
 export class ProjectFieldValueUpdaterFactory {
-  public static async create(context: PRCzujnikowniaContext, log: any = null): Promise<ProjectFieldValueUpdater> {
+public static async create(context: PRCzujnikowniaContext, log: CzujnikowniaLog | undefined = undefined): Promise<ProjectFieldValueUpdater> {
     const componentUpdaters: BasicProjectFieldValueUpdater[] = [];
 
     const config: OrganizationConfig = await OrganizationConfig.load(context);
@@ -61,10 +61,10 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
   private readonly context: PRCzujnikowniaContext;
   private readonly projects: ProjectInOrgQueryResultElement[];
   private readonly orgConfig: OrganizationConfig;
-  private readonly log: any | null;
+  private readonly log: CzujnikowniaLog | undefined;
 
   public constructor(context: PRCzujnikowniaContext,
-    projects: ProjectInOrgQueryResultElement[], orgConfig: OrganizationConfig, log: any) {
+    projects: ProjectInOrgQueryResultElement[], orgConfig: OrganizationConfig, log: CzujnikowniaLog | undefined) {
 
     this.context = context;
     this.projects = projects;
@@ -76,7 +76,7 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
     condition: (currentFieldVal: string) => boolean = (_c) => true) {
       
     await this.updateField(fieldNameSelector, async (proj, item, fieldId) => {
-      if(condition(item.fieldValue)) {
+      if(condition(item.fieldValue.toString())) {
         await updateItemDate(this.context, proj.id, item.itemId, fieldId, newFieldValue as string, this.log);
         this.log?.info(`Field ${fieldId} updated in ${proj.title} project to value ${newFieldValue}.`);
       }
@@ -93,7 +93,7 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
 
   private async updateField(
     fieldNameSelector: (s: OrganizationConfig) => string | undefined,
-    action: (proj: ProjectInOrgQueryResultElement, item: {itemId: string, fieldValue: any}, fieldId: string) => Promise<void>) {
+    action: (proj: ProjectInOrgQueryResultElement, item: {itemId: string, fieldValue: number | string | Date}, fieldId: string) => Promise<void>) {
 
     for (const proj of this.projects) {
       const fieldName: string = fieldNameSelector(this.orgConfig)!;

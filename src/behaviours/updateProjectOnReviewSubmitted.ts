@@ -1,7 +1,7 @@
 import { Context, Probot } from "probot";
 import { PRCzujnikowniaContext } from "../czujnikowniaContexts";
 import { ProjectFieldValueUpdater, ProjectFieldValueUpdaterFactory } from "../projectFieldValueUpdater";
-import Behaviour from "./behaviour";
+import { Behaviour } from "./behaviour";
 
 export default class UpdateProjectOnReviewSubmitted implements Behaviour {
 
@@ -21,13 +21,13 @@ export default class UpdateProjectOnReviewSubmitted implements Behaviour {
           .create(context as PRCzujnikowniaContext, agent.log);
         await fieldUpdater.updateDate(s => s.lastReviewSubmitDateProjectFieldName, reviewDate);
     
-        if(context.payload.review.state == "approved")
+        if(context.payload.review.state === "approved")
           await fieldUpdater.updateDate(s => s.lastApprovedReviewSubmitDateProjectFieldName, reviewDate);
     
         await fieldUpdater.increment(s => s.reviewIterationNumberProjectFieldName);
 
         await fieldUpdater.updateDate(s => s.firstReviewSubmitDateProjectFieldName, reviewDate, 
-          (val: String) => {
+          (val: string) => {
             if(val)
               return false;
             return true;

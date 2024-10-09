@@ -1,7 +1,7 @@
 import { CzujnikowniaOrgConfigContext } from "./czujnikowniaContexts";
 
 export class OrganizationConfig {
-    [key: string]: any;
+    [key: string]: unknown;
     
     private static readonly configFileName: string = 'czujnikownia.yml';
 
@@ -14,7 +14,7 @@ export class OrganizationConfig {
     readonly projectTemplateNumber?: Number;
     readonly addPullRequestAuthorAsAssignee: boolean = false;
 
-    constructor(keywordConfig: OrganizationConfig | null = null) {
+    constructor(keywordConfig: OrganizationConfig | undefined = undefined) {
         if(keywordConfig)
             for(const key in keywordConfig)
                 this[key] = keywordConfig[key];

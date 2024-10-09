@@ -26,3 +26,9 @@ export declare type PRCzujnikowniaContext = {octokit: CzujnikowniaOctokit}
                 organization: NonNullable<Context<"pull_request">["payload"]["organization"]>
             } 
     }
+
+export interface CzujnikowniaLog
+{
+    info(message: string): void;
+    debug(message: string): void;
+}

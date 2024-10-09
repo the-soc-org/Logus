@@ -1,7 +1,7 @@
 import { Context, Probot } from "probot";
 import { PRCzujnikowniaContext } from "../czujnikowniaContexts";
 import { ProjectFieldValueUpdater, ProjectFieldValueUpdaterFactory } from "../projectFieldValueUpdater";
-import Behaviour from "./behaviour";
+import { Behaviour } from "./behaviour";
 
 export default class UpdateProjectOnPullRequestOpened implements Behaviour {
 
