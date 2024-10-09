@@ -1,7 +1,7 @@
-import { CzujnikowniaContext } from "../../czujnikowniaContexts";
+import { CzujnikowniaContext, CzujnikowniaLog } from "../../czujnikowniaContexts";
 import { updateItemNumberMutation, UpdateItemNumberResult } from "./updateItemNumberGenerated";
 
-export async function updateItemNumber(context: CzujnikowniaContext, projectId: string, itemId: string, fieldId: string, number: number, log?: any): Promise<string>
+export async function updateItemNumber(context: CzujnikowniaContext, projectId: string, itemId: string, fieldId: string, number: number, log?: CzujnikowniaLog): Promise<string>
 {
   const result: UpdateItemNumberResult = await context.octokit.graphql(updateItemNumberMutation, {
     projectId,

@@ -1,5 +1,5 @@
 import { Probot } from "probot";
 
-export default interface Behaviour {
+export interface Behaviour {
     register(agent: Probot) : void;
 }

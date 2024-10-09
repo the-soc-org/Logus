@@ -46,3 +46,9 @@ export interface ScheduleContext {
         }
     }
 }
+
+export interface CzujnikowniaLog
+{
+    info(message: string): void;
+    debug(message: string): void;
+}

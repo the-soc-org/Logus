@@ -1,5 +1,5 @@
 import { KeywordConfiguration, OrganizationConfig } from "./organizationConfig";
-import { PRCzujnikowniaContext } from "./czujnikowniaContexts";
+import { CzujnikowniaLog, PRCzujnikowniaContext } from "./czujnikowniaContexts";
 import { addProjectItem, listOpenedProjectsInOrg, listUserTeamsInOrgRelatedToRepo,
    ProjectInOrgQueryResultElement, updateItemDate, updateItemNumber } from "./graphql";
 
@@ -12,7 +12,7 @@ export interface ProjectFieldValueUpdater {
 
 export class ProjectFieldValueUpdaterFactory {
 
-  public static async createBasicUpdater(context: PRCzujnikowniaContext, log: any = null): Promise<ProjectFieldValueUpdater> {
+  public static async createBasicUpdater(context: PRCzujnikowniaContext, log: CzujnikowniaLog | undefined = undefined): Promise<ProjectFieldValueUpdater> {
     const userTeams: Promise<string[]> = listUserTeamsInOrgRelatedToRepo(context);
     const projects: Promise<ProjectInOrgQueryResultElement[]> = listOpenedProjectsInOrg(context);
     const organizationConfig: Promise<OrganizationConfig> = OrganizationConfig.load(context);
@@ -20,7 +20,7 @@ export class ProjectFieldValueUpdaterFactory {
     return new BasicProjectFieldValueUpdater(context, await userTeams, await projects, (await organizationConfig).keywordConfigs, log);
   }
 
-  public static async create(context: PRCzujnikowniaContext, log: any = null): Promise<ProjectFieldValueUpdater> {
+  public static async create(context: PRCzujnikowniaContext, log: CzujnikowniaLog | undefined = undefined): Promise<ProjectFieldValueUpdater> {
     const globalConfig: OrganizationConfig = await OrganizationConfig.load(context);
     const componentUpdaters: BasicProjectFieldValueUpdater[] = [];
 
@@ -67,10 +67,10 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
   private readonly userTeams: string[];
   private readonly projects: ProjectInOrgQueryResultElement[];
   private readonly keywordConfigs: KeywordConfiguration[];
-  private readonly log: any | null;
+  private readonly log: CzujnikowniaLog | undefined;
 
   public constructor(context: PRCzujnikowniaContext,
-    userTeams: string[], projects: ProjectInOrgQueryResultElement[], keywordConfigs: KeywordConfiguration[], log: any) {
+    userTeams: string[], projects: ProjectInOrgQueryResultElement[], keywordConfigs: KeywordConfiguration[], log: CzujnikowniaLog | undefined) {
     this.context = context;
     this.userTeams = userTeams;
     this.projects = projects;
@@ -81,7 +81,7 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
   public async updateDate(fieldNameSelector: (s: KeywordConfiguration) => string | undefined, newFieldValue: string,
     condition: (currentFieldVal: string) => boolean = (_c) => true) {
     await this.updateField(fieldNameSelector, async (proj, item, fieldId) => {
-      if(condition(item.fieldValue)) {
+      if(condition(item.fieldValue.toString())) {
         await updateItemDate(this.context, proj.id, item.itemId, fieldId, newFieldValue as string, this.log);
         this.log?.info(`Field ${fieldId} updated in ${proj.title} project to value ${newFieldValue}.`);
       }
@@ -98,7 +98,7 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
 
   private async updateField(
     fieldNameSelector: (s: KeywordConfiguration) => string | undefined,
-    action: (proj: ProjectInOrgQueryResultElement, item: {itemId: string, fieldValue: any}, fieldId: string) => Promise<void>) 
+    action: (proj: ProjectInOrgQueryResultElement, item: {itemId: string, fieldValue: number | string | Date}, fieldId: string) => Promise<void>) 
   {
     for (const teamName of this.userTeams) {
       const config: KeywordConfiguration | undefined = this.keywordConfigs

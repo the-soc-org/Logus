@@ -1,7 +1,7 @@
-import { CzujnikowniaContext } from "../../czujnikowniaContexts";
+import { CzujnikowniaContext, CzujnikowniaLog } from "../../czujnikowniaContexts";
 import { closeProjectMutation, CloseProjectResult } from "./closeProjectGenerated";
 
-export async function closeProject(context: CzujnikowniaContext, projectId: string, log?: any) : Promise<string>
+export async function closeProject(context: CzujnikowniaContext, projectId: string, log?: CzujnikowniaLog) : Promise<string>
 {
   const result: CloseProjectResult = await context.octokit.graphql(closeProjectMutation, {
     projectId

@@ -18,7 +18,7 @@ export async function listUserTeamsInOrgRelatedToRepo(context: PRCzujnikowniaCon
   
     return userTeamsData.user.organization.teams.edges
         .filter((n: WithoutNullableKeys<TeamEdge>) => n.node.repositories.edges
-            .some((nn: WithoutNullableKeys<TeamRepositoryEdge>) => nn.node.id == repoId))
+            .some((nn: WithoutNullableKeys<TeamRepositoryEdge>) => nn.node.id === repoId))
         .map((n: WithoutNullableKeys<TeamEdge>) => n.node.name as string);
   }
   

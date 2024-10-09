@@ -1,7 +1,7 @@
-import { CzujnikowniaContext } from "../../czujnikowniaContexts";
+import { CzujnikowniaContext, CzujnikowniaLog } from "../../czujnikowniaContexts";
 import { copyProjectMutation, CopyProjectResult } from "../mutation_copyProject/copyProjectGenerated";
 
-export async function copyProject(context: CzujnikowniaContext, newProjectTitle: string, templateProjectNumber: string, log?: any) 
+export async function copyProject(context: CzujnikowniaContext, newProjectTitle: string, templateProjectNumber: string, log?: CzujnikowniaLog) 
 : Promise<string> {
 
   const projectCreateArgs = {

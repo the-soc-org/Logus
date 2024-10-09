@@ -1,10 +1,10 @@
-import { CzujnikowniaContext } from "../../czujnikowniaContexts";
+import { CzujnikowniaContext, CzujnikowniaLog } from "../../czujnikowniaContexts";
 import { createProjectMutation, CreateProjectResult } from "./createProjectGenerated";
 
-export async function createProject(context: CzujnikowniaContext, title: string, log?: any)
+export async function createProject(context: CzujnikowniaContext, title: string, log?: CzujnikowniaLog)
 : Promise<string>
 {
-  const projectCreateArgs: any = {
+  const projectCreateArgs = {
       ownerId: context.payload.organization.node_id,
       title: title,
     };

@@ -1,7 +1,7 @@
 import { Probot } from "probot";
 import { CzujnikowniaOrgConfigContext, ScheduleContext } from "../czujnikowniaContexts";
 import { ReminderConfig, RepoConfig } from "../repoConfig";
-import Behaviour from "./behaviour";
+import { Behaviour } from "./behaviour";
 
 import { addComment, ListOpenedPullRequestsResult, listRepoPullRequests } from "../graphql";
 import { PullRequest } from "../graphql/query_listOpenedPullRequests/listOpenedPullRequestsGenerated";
@@ -98,7 +98,7 @@ export default class SendRemindersOnSchedule implements Behaviour {
             const body: string = this.prepereReminderBody(config, pullRequest);
             await addComment(context, pullRequest.id, body);
 
-            agent.log?.debug(`The reminder has been sent in PR #${pullRequest.id}, ${context.payload.repository.name}.`);
+            agent.log.debug(`The reminder has been sent in PR #${pullRequest.id}, ${context.payload.repository.name}.`);
         }
     }
 

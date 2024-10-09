@@ -1,7 +1,7 @@
 import { Context, Probot } from "probot";
 import { closeProject, listOpenedProjectsInOrg, ProjectInOrgQueryResultElement } from "../graphql";
 import { KeywordConfiguration } from "../organizationConfig";
-import Behaviour from "./behaviour";
+import { Behaviour } from "./behaviour";
 
 export default class CloseProjectOnTeamDeleted implements Behaviour {
     register(agent: Probot): void {

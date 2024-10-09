@@ -1,6 +1,6 @@
 import { Probot } from "probot";
 
-import Behaviour from "./behaviours/behaviour";
+import { Behaviour } from "./behaviours/behaviour";
 import CreateProjectOnTeamCreated from "./behaviours/createProjectOnTeamCreated";
 import CloseProjectOnTeamDeleted from "./behaviours/closeProjectOnTeamDeleted";
 import UpdateProjectOnPullRequestOpened from "./behaviours/updateProjectOnPullRequestOpened";

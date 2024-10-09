@@ -1,13 +1,13 @@
 import { CzujnikowniaOrgConfigContext } from "./czujnikowniaContexts";
 
 export class OrganizationConfig {
-    [key: string]: any;
+    [key: string]: unknown;
     
     private static readonly configFileName: string = 'czujnikownia-org.yml';
 
     readonly keywordConfigs: KeywordConfiguration[] = [];
 
-    constructor(organizationConfig: OrganizationConfig | null = null) {
+    constructor(organizationConfig: OrganizationConfig | undefined = undefined) {
         if(organizationConfig)
             for(const ks of organizationConfig.keywordConfigs)
                 this.keywordConfigs.push(new KeywordConfiguration(ks));
@@ -31,7 +31,7 @@ export class OrganizationConfig {
 
 export class KeywordConfiguration
 {
-    [key: string]: any;
+    [key: string]: unknown;
 
     readonly teamNameTrigger: string = "-";
     readonly projectTitlePrefix: string = "monitor-";
@@ -40,13 +40,13 @@ export class KeywordConfiguration
     readonly firstReviewSubmitDateProjectFieldName?: string;
     readonly lastApprovedReviewSubmitDateProjectFieldName?: string;
     readonly reviewIterationNumberProjectFieldName?: string;
-    readonly projectTemplateNumber?: Number;
+    readonly projectTemplateNumber?: number;
 
     public getProjectTitle(teamName: string): string {
         return this.projectTitlePrefix + teamName;
     }
 
-    constructor(keywordConfig: KeywordConfiguration | null = null) {
+    constructor(keywordConfig: KeywordConfiguration | undefined = undefined) {
         if(keywordConfig)
             for(const key in keywordConfig)
                 this[key] = keywordConfig[key];
