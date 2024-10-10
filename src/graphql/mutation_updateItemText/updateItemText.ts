@@ -1,7 +1,8 @@
-import { CzujnikowniaContext } from "../../czujnikowniaContexts";
-import { updateItemTextMutation, UpdateItemTextResult } from "./updateItemTextGenerated";
+import type { CzujnikowniaContext, CzujnikowniaLog } from "../../czujnikowniaContexts";
+import type { UpdateItemTextResult } from "./updateItemTextGenerated";
+import { updateItemTextMutation } from "./updateItemTextGenerated";
 
-export async function updateItemText(context: CzujnikowniaContext, projectId: string, itemId: string, fieldId: string, text: string, log?: any): Promise<string>
+export async function updateItemText(context: CzujnikowniaContext, projectId: string, itemId: string, fieldId: string, text: string, log: CzujnikowniaLog | undefined = undefined): Promise<string>
 {
   const result: UpdateItemTextResult = await context.octokit.graphql(updateItemTextMutation, {
     projectId,

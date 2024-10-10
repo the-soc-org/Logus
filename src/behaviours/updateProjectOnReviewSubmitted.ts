@@ -1,7 +1,8 @@
-import { Context, Probot } from "probot";
-import { PRCzujnikowniaContext } from "../czujnikowniaContexts";
-import { ProjectFieldValueUpdater, ProjectFieldValueUpdaterFactory } from "../projectFieldValueUpdater";
-import { Behaviour } from "./behaviour";
+import type { Context, Probot } from "probot";
+import type { Behaviour } from "./behaviour";
+import type { PRCzujnikowniaContext } from "../czujnikowniaContexts";
+import type { ProjectFieldValueUpdater } from "../projectFieldValueUpdater";
+import { ProjectFieldValueUpdaterFactory } from "../projectFieldValueUpdater";
 
 export default class UpdateProjectOnReviewSubmitted implements Behaviour {
 

@@ -1,5 +1,6 @@
-import { CzujnikowniaContext, CzujnikowniaLog } from "../../czujnikowniaContexts";
-import { addProjectItemMutation, AddProjectItemResult, ProjectV2Item } from "./addProjectItemGenerated";
+import type { CzujnikowniaContext, CzujnikowniaLog } from "../../czujnikowniaContexts";
+import type { AddProjectItemResult, ProjectV2Item } from "./addProjectItemGenerated";
+import { addProjectItemMutation } from "./addProjectItemGenerated";
 
 export async function addProjectItem(context: CzujnikowniaContext, projectId: string, contentId: string, fieldName: string, log?: CzujnikowniaLog)
 : Promise<{itemId: string, fieldValue: number | string}>

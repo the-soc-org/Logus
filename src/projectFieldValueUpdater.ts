@@ -1,5 +1,5 @@
 import { OrganizationConfig } from "./organizationConfig";
-import { CzujnikowniaLog, PRCzujnikowniaContext } from "./czujnikowniaContexts";
+import type { CzujnikowniaLog, PRCzujnikowniaContext } from "./czujnikowniaContexts";
 import { addProjectItem, listOpenedProjectsInOrg, listTeamNodesRelatedToRepo,
    ProjectInOrgQueryResultElement, updateItemDate, updateItemNumber } from "./graphql";
 

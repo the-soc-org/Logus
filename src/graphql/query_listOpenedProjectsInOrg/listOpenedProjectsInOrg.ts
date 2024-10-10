@@ -1,5 +1,6 @@
-import { CzujnikowniaContext } from "../../czujnikowniaContexts";
-import { listOpenedProjectsInOrgQuery, ListOpenedProjectsInOrgResult, ProjectV2, ProjectV2FieldConfiguration } from "./listOpenedProjectsInOrgGenerated";
+import type { CzujnikowniaContext } from "../../czujnikowniaContexts";
+import type { ListOpenedProjectsInOrgResult, ProjectV2, ProjectV2FieldConfiguration, ProjectV2FieldConfigurationEdge } from "./listOpenedProjectsInOrgGenerated";
+import { listOpenedProjectsInOrgQuery } from "./listOpenedProjectsInOrgGenerated";
 
 export async function listOpenedProjectsInOrg(context: CzujnikowniaContext, projectQuery: string = ""): Promise<ProjectInOrgQueryResultElement[]>
 {
@@ -17,7 +18,7 @@ export async function listOpenedProjectsInOrg(context: CzujnikowniaContext, proj
 export class ProjectInOrgQueryResultElement
 {
   id: string ;
-  number: Number;
+  number: number;
   title: string;
   closed: boolean = false;
   fields: ProjectV2FieldConfiguration[] = [];
@@ -29,6 +30,6 @@ export class ProjectInOrgQueryResultElement
     this.title = node.title;
     this.closed = node.closed;
     if(node.fields.edges)
-      this.fields = node.fields.edges.map((n: any) => n.node as ProjectV2FieldConfiguration);
+      this.fields = node.fields.edges.map((n: ProjectV2FieldConfigurationEdge | null) => n?.node as ProjectV2FieldConfiguration);
   }
 }

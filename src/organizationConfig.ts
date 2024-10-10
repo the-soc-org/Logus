@@ -1,4 +1,4 @@
-import { CzujnikowniaOrgConfigContext } from "./czujnikowniaContexts";
+import type { CzujnikowniaOrgConfigContext } from "./czujnikowniaContexts";
 
 export class OrganizationConfig {
     [key: string]: unknown;
@@ -11,7 +11,7 @@ export class OrganizationConfig {
     readonly firstReviewSubmitDateProjectFieldName?: string;
     readonly lastApprovedReviewSubmitDateProjectFieldName?: string;
     readonly reviewIterationNumberProjectFieldName?: string;
-    readonly projectTemplateNumber?: Number;
+    readonly projectTemplateNumber?: number;
     readonly addPullRequestAuthorAsAssignee: boolean = false;
 
     constructor(keywordConfig: OrganizationConfig | undefined = undefined) {

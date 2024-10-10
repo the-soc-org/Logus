@@ -1,5 +1,6 @@
-import { CzujnikowniaContext, CzujnikowniaLog } from "../../czujnikowniaContexts";
-import { updateItemNumberMutation, UpdateItemNumberResult } from "./updateItemNumberGenerated";
+import type { CzujnikowniaContext, CzujnikowniaLog } from "../../czujnikowniaContexts";
+import type { UpdateItemNumberResult } from "./updateItemNumberGenerated";
+import { updateItemNumberMutation } from "./updateItemNumberGenerated";
 
 export async function updateItemNumber(context: CzujnikowniaContext, projectId: string, itemId: string, fieldId: string, number: number, log?: CzujnikowniaLog): Promise<string>
 {

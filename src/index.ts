@@ -1,6 +1,6 @@
 import { Probot } from "probot";
 
-import { Behaviour } from "./behaviours/behaviour";
+import type { Behaviour } from "./behaviours/behaviour";
 import UpdateProjectOnPullRequestOpened from "./behaviours/updateProjectOnPullRequestOpened";
 import UpdateProjectOnReviewSubmitted from "./behaviours/updateProjectOnReviewSubmitted";
 import LogDebugOnAny from "./behaviours/logDebugOnAny";

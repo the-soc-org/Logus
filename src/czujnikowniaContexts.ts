@@ -1,4 +1,4 @@
-import { Context } from "probot";
+import type { Context } from "probot";
 
 export declare type CzujnikowniaOctokit = Pick<Context["octokit"], "graphql" | "rest" | "config" | "pulls" | "repos">
 

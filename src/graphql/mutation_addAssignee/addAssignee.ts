@@ -1,7 +1,9 @@
-import { CzujnikowniaOctokit } from "../../czujnikowniaContexts";
-import { addAssigneeMutation, AddAssigneeResult } from "./addAssigneeGenerated";
+import type { CzujnikowniaLog, CzujnikowniaOctokit } from "../../czujnikowniaContexts";
+import type { AddAssigneeResult } from "./addAssigneeGenerated";
+import { addAssigneeMutation } from "./addAssigneeGenerated";
 
-export async function addAssignee(context: {octokit: CzujnikowniaOctokit}, pullRequestId: string, assigneeId: string, log?: any) : Promise<string>
+
+export async function addAssignee(context: {octokit: CzujnikowniaOctokit}, pullRequestId: string, assigneeId: string, log: CzujnikowniaLog) : Promise<string>
 {
   const result: AddAssigneeResult = await context.octokit.graphql(addAssigneeMutation, {
     pullRequestId,   
