@@ -21,31 +21,25 @@ A GitHub application based on the [Probot](https://github.com/probot/probot) lib
 - [Configure](#Configuration) the settings
 
 ## Configuration
-The application's organization-level configuration can be done by adding a `.github/czujnikownia-org.yml` file to the `.github-private` or `.github` repository within the organization.
+The application's organization-level configuration can be done by adding a `.github/czujnikownia.yml` file to the `.github-private` or `.github` repository within the organization.
 
 Storing the configuration file in the `.github-private` repository requires granting the application access to this repository in the organization's settings – https://github.com/organizations/TWOJA-ORGANIZACJA/settings/installations 
 
-Sample configuration `czujnikownia-org.yml`:
+Sample configuration `czujnikownia.yml`:
 ```yml
-keywordConfigs:
-  - teamNameTrigger: "20"
-    projectTitlePrefix: "monitor-"
-    projectTemplateNumber: 6
-    openPullRequestDateProjectFieldName: "Open Date"
-    firstReviewSubmitDateProjectFieldName: "First Review Date"
-    lastReviewSubmitDateProjectFieldName: "Last Review Date"
-    lastApprovedReviewSubmitDateProjectFieldName: "Last Approve Review Date"
-    reviewIterationNumberProjectFieldName : "Review Iteration"
-  - teamNameTrigger: "24"
-    projectTitlePrefix: "sensor-"
+projectTitlePrefix: "monitor-"
+openPullRequestDateProjectFieldName: "Open Date"
+firstReviewSubmitDateProjectFieldName: "First Review Date"
+lastReviewSubmitDateProjectFieldName: "Last Review Date"
+lastApprovedReviewSubmitDateProjectFieldName: "Last Approve Review Date"
+reviewIterationNumberProjectFieldName: "Review Iteration"
+addPullRequestAuthorAsAssignee: false
 ```
 
-- `keywordConfigs` - a set of settings for specific keywords
-- `teamNameTrigger` - keyword searched in the name of the created team, which triggers the creation of a new project in the organization
-- `projectTitlePrefix` - the prefix of the created project title
-- `projectTemplateNumber` - the number of an existing project in the organization that will be used as a template for the newly created project. If not set, the newly created project will be empty.
-- `openPullRequestDateProjectFieldName` - the name of the field column where the creation date of a *pull request* by a user who is a member of a team containing the keyword in its name will be entered. The repository in which the *pull request* was created must be linked to the team. Optional parameter.
-- `lastReviewSubmitDateProjectFieldName` - the name of the field column where the date of the last *pull request* review submission by a user who is a member of a team containing the keyword in its name will be entered. Optional parameter.
-- `firstReviewSubmitDateProjectFieldName` - the name of the field column where the date of the first *pull request* review submission by a user who is a member of a team containing the keyword in its name will be entered. Optional parameter.
-- `lastApprovedReviewSubmitDateProjectFieldName` - the name of the field column where the date of the last positive *pull request* review submission by a user who is a member of a team containing the keyword in its name will be entered. Optional parameter.
-- `reviewIterationNumberProjectFieldName` - the name of the field column where the number of currently completed *pull request* reviews will be entered. Optional parameter.
+- `projectTitlePrefix` - the prefix of the project title where the information will be entered.
+- `openPullRequestDateProjectFieldName` - the name of the field column where the creation date of a *pull request* by a user who is a member of a team with a name containing the keyword will be entered. The repository in which the request was created must be linked to the team. Optional parameter.
+- `lastReviewSubmitDateProjectFieldName` - the name of the field column where the date of the last *pull request* review submission will be entered. Optional parameter.
+- `firstReviewSubmitDateProjectFieldName` - the name of the field column where the date of the first *pull request* review submission will be entered. Optional parameter.
+- `lastApprovedReviewSubmitDateProjectFieldName` - the name of the field column where the date of the last positive *pull request* review submission will be entered. Optional parameter.
+- `reviewIterationNumberProjectFieldName` - the name of the field column where the number of currently completed pull *request reviews* will be entered. Optional parameter.
+- `addPullRequestAuthorAsAssignee` - a parameter that determines whether the author of the pull request should be automatically assigned as an *Assignee*. Default is `false`.

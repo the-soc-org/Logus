@@ -1,0 +1,15 @@
+mutation addAssignee($pullRequestId: ID!, $assignee: ID!) {
+  addAssigneesToAssignable(input:
+    {
+      assignableId: $pullRequestId,
+    	assigneeIds: [
+      	$assignee
+    	]
+    }) {
+    assignable {
+      ... on PullRequest {
+        id
+      }
+    }
+  }
+}

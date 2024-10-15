@@ -1,0 +1,24 @@
+query listTeamsInOrg($organizationLogin: String!, $repoQuery: String!, $teamQuery: String){  
+organization(login: $organizationLogin) {
+     	login,
+      teams(first: 100, query: $teamQuery) {
+          nodes {
+            id,
+            name,
+            projectsV2(first: 100) {
+              nodes {
+                id,
+                title,
+                closed,
+              }
+            },
+            repositories(first: 100, query: $repoQuery) {
+              nodes {
+                id,
+                name,
+              }
+            }
+          }
+      }
+    }
+}

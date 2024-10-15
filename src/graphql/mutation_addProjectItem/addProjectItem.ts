@@ -1,8 +1,9 @@
-import { CzujnikowniaContext } from "../../czujnikowniaContexts";
-import { addProjectItemMutation, AddProjectItemResult, ProjectV2Item } from "./addProjectItemGenerated";
+import type { CzujnikowniaContext, CzujnikowniaLog } from "../../czujnikowniaContexts";
+import type { AddProjectItemResult, ProjectV2Item } from "./addProjectItemGenerated";
+import { addProjectItemMutation } from "./addProjectItemGenerated";
 
-export async function addProjectItem(context: CzujnikowniaContext, projectId: string, contentId: string, fieldName: string, log?: any)
-: Promise<{itemId: string, fieldValue: any}>
+export async function addProjectItem(context: CzujnikowniaContext, projectId: string, contentId: string, fieldName: string, log?: CzujnikowniaLog)
+: Promise<{itemId: string, fieldValue: number | string}>
 {
   const result: AddProjectItemResult = await context.octokit.graphql(addProjectItemMutation, {
     projectId,

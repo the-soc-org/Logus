@@ -1,18 +1,15 @@
 import { Probot } from "probot";
 
-import Behaviour from "./behaviours/behaviour";
-import CreateProjectOnTeamCreated from "./behaviours/createProjectOnTeamCreated";
-import CloseProjectOnTeamDeleted from "./behaviours/closeProjectOnTeamDeleted";
+import type { Behaviour } from "./behaviours/behaviour";
 import UpdateProjectOnPullRequestOpened from "./behaviours/updateProjectOnPullRequestOpened";
 import UpdateProjectOnReviewSubmitted from "./behaviours/updateProjectOnReviewSubmitted";
 import LogDebugOnAny from "./behaviours/logDebugOnAny";
+import AddAssigneeOnPullRequestOpened from "./behaviours/addAssigneeOnPullRequestOpened";
 
 const behaviours: Behaviour[] = [
-  new CreateProjectOnTeamCreated,
-  new CloseProjectOnTeamDeleted,
   new UpdateProjectOnPullRequestOpened,
+  new AddAssigneeOnPullRequestOpened,
   new UpdateProjectOnReviewSubmitted,
-  // new SendRemindersOnSchedule,
   new LogDebugOnAny,
 ];
 
