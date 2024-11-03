@@ -1,5 +1,5 @@
-import { Probot } from "probot";
-import Behaviour from "./behaviour";
+import type { Probot } from "probot";
+import type { Behaviour } from "./behaviour";
 
 export default class LogDebugOnAny implements Behaviour {
     register(agent: Probot): void {

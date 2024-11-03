@@ -1,4 +1,4 @@
-import { Context } from "probot";
+import type { Context } from "probot";
 
 export declare type CzujnikowniaOctokit = Pick<Context["octokit"], "graphql" | "rest" | "config" | "pulls" | "repos">
 
@@ -27,22 +27,8 @@ export declare type PRCzujnikowniaContext = {octokit: CzujnikowniaOctokit}
             } 
     }
 
-export interface ScheduleContext {
-    octokit: CzujnikowniaOctokit;
-    payload: {
-        repository: {
-            node_id: string;
-            name: string;
-            open_issues: number;
-            owner: {
-                node_id: string;
-                login: string;
-            }
-        },
-        installation: {
-            account: {
-                login: string;
-            }
-        }
-    }
+export interface CzujnikowniaLog
+{
+    info(message: string): void;
+    debug(message: string): void;
 }
