@@ -1,28 +1,63 @@
 {
-   "data": {
-     "user": {
-       "organization": {
-         "login": "Mikimak-Test-Organization",
-         "teams": {
-           "edges": [
-             {
-               "node": {
-                 "name": "test-2-2023",
-                 "repositories": {
-                   "edges": [
-                     {
-                       "node": {
-                         "id": "R_kgDOJWgzKA",
-                         "name": "repo-1"
-                       }
-                     }
-                   ]
-                 }
-               }
-             }
-           ]
-         }
-       }
-     }
-   }
- }
+  "data": {
+    "organization": {
+      "login": "test-czujnikownia",
+      "teams": {
+        "nodes": [
+          {
+            "id": "T_kwDOCzSoN84AsYxW",
+            "name": "team-1",
+            "projectsV2": {
+              "nodes": [
+                {
+                  "id": "PVT_kwDOCzSoN84AtAzg",
+                  "title": "monitor-Project 1",
+                  "closed": false
+                }
+              ]
+            },
+            "repositories": {
+              "nodes": [
+                {
+                  "id": "R_kgDONUNffA",
+                  "name": "repo-1"
+                }
+              ]
+            }
+          },
+          {
+            "id": "T_kwDOCzSoN84AsY6q",
+            "name": "team-2",
+            "projectsV2": {
+              "nodes": []
+            },
+            "repositories": {
+              "nodes": []
+            }
+          },
+          {
+            "id": "T_kwDOCzSoN84AsWt2",
+            "name": "Zajęcia-2024",
+            "projectsV2": {
+              "nodes": [
+                {
+                  "id": "PVT_kwDOCzSoN84AtBTo",
+                  "title": "monitor-Zajecia-2024",
+                  "closed": false
+                },
+                {
+                  "id": "PVT_kwDOCzSoN84As5lQ",
+                  "title": "monitor-Zajęcia-2024",
+                  "closed": true
+                }
+              ]
+            },
+            "repositories": {
+              "nodes": []
+            }
+          }
+        ]
+      }
+    }
+  }
+}
