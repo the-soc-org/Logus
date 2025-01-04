@@ -204,14 +204,14 @@ describe("Czujnikownia nock app tests", () => {
       })
       .reply(200, responseAddItemToProj)
 
-      /*.post("/graphql", (body) => {
+      .post("/graphql", (body) => {
         expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg")
         expect(body.variables.itemId).toEqual("PVTI_lADOCzSoN84AtAzgzgVMgOQ")
-        expect(body.variables.fieldId).toEqual("PVTF_lADOCzSoN84AtAzgzgj2WIE")
+        expect(body.variables.fieldId).toEqual("PVTF_lADOCzSoN84AtAzgzgj2VuM")
         expect(body.variables.date).toEqual("2024-11-27T19:03:19Z")
         return true;
       })
-      .reply(200, responseUpdateDateField)*/
+      .reply(200, responseUpdateDateField)
       
     await probot.receive({ name: "pull_request_review.submitted", payload: payloadPRApproved });
     expect(mock.pendingMocks()).toStrictEqual([]);
