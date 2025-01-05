@@ -8,6 +8,7 @@ import payloadPullRequestOpened from "./fixtures/payloads/pull_request.opened.js
 import payloadPRRequestChanges from "./fixtures/payloads/pr_review.submitted.changes_requested.json"
 import payloadPRApproved from "./fixtures/payloads/pr_review.submitted.approved.json"
 
+import responseProjectInOrg from "./fixtures/api_responses/graphql_queries/projectInOrg.json"
 import responseProjectsInOrg from "./fixtures/api_responses/graphql_queries/projectsInOrg.json"
 import responseUserTeamsInOrg from "./fixtures/api_responses/graphql_queries/userTeamsInOrg.json"
 
@@ -82,6 +83,81 @@ describe("Czujnikownia nock app tests", () => {
       .reply(200)
     // Load our app into probot
     probot.load(myProbotApp);
+  });
+
+  test("Testing loading application's organization-level configuration from .github-private folder", async () => {
+    const mock = nock("https://api.github.com")
+      .get(`/repos/${payloadPRApproved.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`)
+      .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/configs/only-config-loading.yml"), "utf-8"))
+
+      .post("/graphql", (body) => {
+        expect(body.variables.organizationLogin).toEqual(payloadPRApproved.organization.login)
+        expect(body.variables.repoQuery).toEqual(payloadPRApproved.repository.name)
+        return true;
+      })
+      .reply(200, responseUserTeamsInOrg)
+
+      .post("/graphql", (body) => {
+        expect(body.variables.organizationLogin).toEqual(payloadPRApproved.organization.login)
+        expect(body.variables.projectQuery).toEqual("is:open prefix-Project 1")
+        return true;
+      })
+      .reply(200, responseProjectInOrg)
+
+    await probot.receive({ name: "pull_request_review.submitted", payload: payloadPRApproved });
+    expect(mock.pendingMocks()).toStrictEqual([]);
+  });
+
+  test("Testing loading application's organization-level configuration from .github folder", async () => {
+    const mock = nock("https://api.github.com")
+      .get(`/repos/${payloadPRApproved.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`)
+      .reply(404)
+
+      .get(`/repos/${payloadPRApproved.organization.login}/.github/contents/${encodeURIComponent(".github/czujnikownia.yml")}`)
+      .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/configs/only-config-loading.yml"), "utf-8"))
+
+      .post("/graphql", (body) => {
+        expect(body.variables.organizationLogin).toEqual(payloadPRApproved.organization.login)
+        expect(body.variables.repoQuery).toEqual(payloadPRApproved.repository.name)
+        return true;
+      })
+      .reply(200, responseUserTeamsInOrg)
+
+      .post("/graphql", (body) => {
+        expect(body.variables.organizationLogin).toEqual(payloadPRApproved.organization.login)
+        expect(body.variables.projectQuery).toEqual("is:open prefix-Project 1")
+        return true;
+      })
+      .reply(200, responseProjectInOrg)
+
+    await probot.receive({ name: "pull_request_review.submitted", payload: payloadPRApproved });
+    expect(mock.pendingMocks()).toStrictEqual([]);
+  });
+
+  test("Testing loading application's default configuration", async () => {
+    const mock = nock("https://api.github.com")
+      .get(`/repos/${payloadPRApproved.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`)
+      .reply(404)
+
+      .get(`/repos/${payloadPRApproved.organization.login}/.github/contents/${encodeURIComponent(".github/czujnikownia.yml")}`)
+      .reply(404)
+
+      .post("/graphql", (body) => {
+        expect(body.variables.organizationLogin).toEqual(payloadPRApproved.organization.login)
+        expect(body.variables.repoQuery).toEqual(payloadPRApproved.repository.name)
+        return true;
+      })
+      .reply(200, responseUserTeamsInOrg)
+
+      .post("/graphql", (body) => {
+        expect(body.variables.organizationLogin).toEqual(payloadPRApproved.organization.login)
+        expect(body.variables.projectQuery).toEqual("is:open monitor-Project 1")
+        return true;
+      })
+      .reply(200, responseProjectsInOrg)
+
+    await probot.receive({ name: "pull_request_review.submitted", payload: payloadPRApproved });
+    expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
   test("Add assignee and update project - pull request opened", async () => {

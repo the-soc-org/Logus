@@ -1,0 +1,109 @@
+{
+  "data": {
+    "organization": {
+      "projectsV2": {
+        "edges": [
+          {
+            "node": {
+              "id": "PVT_kwDOCzSoN84AveaY",
+              "number": 17,
+              "title": "prefix-Project 1",
+              "closed": false,
+              "fields": {
+                "edges": [
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AveaYzgl5aL0",
+                      "name": "Title",
+                      "dataType": "TITLE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AveaYzgl5aL8",
+                      "name": "Assignees",
+                      "dataType": "ASSIGNEES"
+                    }
+                  },
+                  {
+                    "node": {}
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AveaYzgl5aMI",
+                      "name": "Labels",
+                      "dataType": "LABELS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AveaYzgl5aMQ",
+                      "name": "Linked pull requests",
+                      "dataType": "LINKED_PULL_REQUESTS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AveaYzgl5aMY",
+                      "name": "Milestone",
+                      "dataType": "MILESTONE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AveaYzgl5aMk",
+                      "name": "Repository",
+                      "dataType": "REPOSITORY"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AveaYzgl5aNA",
+                      "name": "Reviewers",
+                      "dataType": "REVIEWERS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AveaYzgl5aOE",
+                      "name": "Open Date",
+                      "dataType": "DATE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AveaYzgl5aOI",
+                      "name": "First Review Date",
+                      "dataType": "DATE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AveaYzgl5aOM",
+                      "name": "Review Iteration",
+                      "dataType": "NUMBER"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AveaYzgl5aOQ",
+                      "name": "Last Review Date",
+                      "dataType": "DATE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AveaYzgl5aOU",
+                      "name": "Last Approve Review Date",
+                      "dataType": "DATE"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
