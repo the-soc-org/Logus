@@ -14,6 +14,7 @@ import responseUserTeamsInOrg from "./fixtures/api_responses/graphql_queries/use
 
 import responseAssignUserToPullRequest from "./fixtures/api_responses/graphql_mutations/assignUserToPullRequest.json"
 import responseAddItemToProj from "./fixtures/api_responses/graphql_mutations/addItemToProj.json"
+import responseAddItemToProjWithFieldValue from "./fixtures/api_responses/graphql_mutations/addItemToProjWithFieldValue.json"
 import responseUpdateDateField from "./fixtures/api_responses/graphql_mutations/updateItemDateField.json"
 
 import fs from "fs";
@@ -160,7 +161,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Add assignee and update project - pull request opened", async () => {
+  test("Testing adding assignee and updating 'openPullRequestDateProjectFieldName' on event 'pull request opened'", async () => {
     const mock = nock("https://api.github.com")
       .post(new RegExp("app\/installations.*"))
       .reply(200)
@@ -211,7 +212,50 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Incrementing 'review iteration' project field value - pull request review submitted", async () => {
+  test("Testing that assignee is not added on event 'pull request opened' as configured", async () => {
+    const mock = nock("https://api.github.com")
+      .post(new RegExp("app\/installations.*"))
+      .reply(200)
+
+      .get(`/repos/${payloadPullRequestOpened.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`)
+      .times(2)
+      .reply(200, fs.readFileSync(path.join(__dirname, "fixtures/configs/without-adding-assignee.yml"), "utf-8"))
+
+      .post("/graphql", (body) => {
+        expect(body.variables.organizationLogin).toEqual(payloadPullRequestOpened.organization.login)
+        expect(body.variables.repoQuery).toEqual(payloadPullRequestOpened.repository.name)
+        return true;
+      })
+      .reply(200, responseUserTeamsInOrg)
+
+      .post("/graphql", (body) => {
+        expect(body.variables.organizationLogin).toEqual(payloadPullRequestOpened.organization.login)
+        return true;
+      })
+      .reply(200, responseProjectsInOrg)
+
+      .post("/graphql", (body) => {
+        expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg")
+        expect(body.variables.contentId).toEqual("PR_kwDONUNffM6C84g3")
+        expect(body.variables.fieldName).toEqual("Open Date")
+        return true;
+      })
+      .reply(200, responseAddItemToProj)
+
+      .post("/graphql", (body) => {
+        expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg")
+        expect(body.variables.itemId).toEqual("PVTI_lADOCzSoN84AtAzgzgVMgOQ")
+        expect(body.variables.fieldId).toEqual("PVTF_lADOCzSoN84AtAzgzgj2VmM")
+        expect(body.variables.date).toEqual("2024-11-24T22:01:22Z")
+        return true;
+      })
+      .reply(200, responseUpdateDateField)
+
+    await probot.receive({ name: "pull_request.opened", payload: payloadPullRequestOpened });
+    expect(mock.pendingMocks()).toStrictEqual([]);
+  });
+
+  test("Testing incrementing 'reviewIterationNumberProjectFieldName' on event 'pull request review submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(nock("https://api.github.com"), payloadPRRequestChanges, "fixtures/configs/only-field-increment.yml")
 
       .post("/graphql", (body) => {
@@ -235,8 +279,8 @@ describe("Czujnikownia nock app tests", () => {
       expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Updating project fields - pull request approved", async () => {
-    const mock = TestProjectFieldValueUpdaterInitialize(nock("https://api.github.com"), payloadPRApproved, "fixtures/configs/without-field-increment.yml")
+  test("Testing updating 'lastReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
+    const mock = TestProjectFieldValueUpdaterInitialize(nock("https://api.github.com"), payloadPRApproved, "fixtures/configs/only-last-review.yml")
 
       .post("/graphql", (body) => {
         expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg")
@@ -255,6 +299,13 @@ describe("Czujnikownia nock app tests", () => {
       })
       .reply(200, responseUpdateDateField)
 
+    await probot.receive({ name: "pull_request_review.submitted", payload: payloadPRApproved });
+    expect(mock.pendingMocks()).toStrictEqual([]);
+  });
+
+  test("Testing updating 'lastApprovedReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
+    const mock = TestProjectFieldValueUpdaterInitialize(nock("https://api.github.com"), payloadPRApproved, "fixtures/configs/only-last-approved-review.yml")
+
       .post("/graphql", (body) => {
         expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg")
         expect(body.variables.contentId).toEqual("PR_kwDONUNffM6C84g3")
@@ -272,6 +323,13 @@ describe("Czujnikownia nock app tests", () => {
       })
       .reply(200, responseUpdateDateField)
 
+    await probot.receive({ name: "pull_request_review.submitted", payload: payloadPRApproved });
+    expect(mock.pendingMocks()).toStrictEqual([]);
+  });
+
+  test("Testing updating 'firstReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
+    const mock = TestProjectFieldValueUpdaterInitialize(nock("https://api.github.com"), payloadPRApproved, "fixtures/configs/only-first-review.yml")
+
       .post("/graphql", (body) => {
         expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg")
         expect(body.variables.contentId).toEqual("PR_kwDONUNffM6C84g3")
@@ -288,8 +346,32 @@ describe("Czujnikownia nock app tests", () => {
         return true;
       })
       .reply(200, responseUpdateDateField)
-      
+
     await probot.receive({ name: "pull_request_review.submitted", payload: payloadPRApproved });
+    expect(mock.pendingMocks()).toStrictEqual([]);
+  });
+
+  test("Testing that 'lastApprovedReviewSubmitDateProjectFieldName' is not updated if pull request review is not approved", async () => {
+    const mock = TestProjectFieldValueUpdaterInitialize(nock("https://api.github.com"), payloadPRRequestChanges, "fixtures/configs/only-last-approved-review.yml")
+
+      // Nothing here, because nothing should be updated in the 'lastApprovedReviewSubmitDateProjectFieldName' field  when the pull request is not approved.
+
+      await probot.receive({ name: "pull_request_review.submitted", payload: payloadPRRequestChanges });
+      expect(mock.pendingMocks()).toStrictEqual([]);
+  });
+
+  test("Testing that 'firstReviewSubmitDateProjectFieldName' is not updated if it has already been set", async () => {
+    const mock = TestProjectFieldValueUpdaterInitialize(nock("https://api.github.com"), payloadPRApproved, "fixtures/configs/only-first-review.yml")
+
+      .post("/graphql", (body) => {
+        expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg")
+        expect(body.variables.contentId).toEqual("PR_kwDONUNffM6C84g3")
+        expect(body.variables.fieldName).toEqual("First Review Date")
+        return true;
+      })
+      .reply(200, responseAddItemToProjWithFieldValue)
+
+    await probot.receive({ name: "pull_request_review.submitted", payload: payloadPRRequestChanges });
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
