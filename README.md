@@ -1,7 +1,7 @@
 # Czujnikownia
 [![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/IS-UMK/Czujnikownia/blob/master/README.md)
 [![pl](https://img.shields.io/badge/lang-pl-red.svg)](https://github.com/IS-UMK/Czujnikownia/blob/master/README.pl.md)
-[![Build and Test](https://github.com/SebastianSzt/Czujnikownia/actions/workflows/BuildAndTest.yml/badge.svg)](https://github.com/SebastianSzt/Czujnikownia/actions/workflows/BuildAndTest.yml)
+[![Build and Test](https://github.com/IS-UMK/Czujnikownia/actions/workflows/BuildAndTest.yml/badge.svg)](https://github.com/IS-UMK/Czujnikownia/actions/workflows/BuildAndTest.yml)
 
 A GitHub application based on the [Probot](https://github.com/probot/probot) library for automating the collection of information in projects related to pull request events. Designed for installation within an organization.
 
