@@ -3,13 +3,10 @@ name: Build and Test Czujnikownia
 on:
   push:
     branches:
-      - master
-      - simplified
+      - '**'
   pull_request:
     branches:
-      - master
-      - simplified
-
+      - '**'
 
 jobs:
   build:
