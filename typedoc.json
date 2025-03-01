@@ -1,0 +1,19 @@
+{
+    "entryPoints": ["src/index.ts"],
+    "out": "docs",
+    "exclude": [
+        "**/.github/**",
+        "**/.vscode/**",
+        "**/lib/**",
+        "**/node_modules/**",
+        "**/scripts/**",
+        "**/test/**",
+        "**/*.d.ts",
+        "**/*.js.map"
+    ],
+    "includeVersion": true,
+    "excludeInternal": false,
+    "excludePrivate": false,
+    "readme": "README.md",
+    "theme": "default"
+}
