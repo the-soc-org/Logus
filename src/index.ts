@@ -7,7 +7,6 @@ import LogDebugOnAny from "./behaviours/logDebugOnAny";
 import AddAssigneeOnPullRequestOpened from "./behaviours/addAssigneeOnPullRequestOpened";
 
 /**
- * @internal
  * Array of behaviours to be registered with the Probot agent.
  */
 const behaviours: Behaviour[] = [
