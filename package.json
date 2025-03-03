@@ -16,7 +16,7 @@
     "start": "probot run ./lib/index.js",
     "test": "jest",
     "generate-types": "node ./scripts/generate-types.js",
-    "docs": "typedoc --out docs src"
+    "docs": "typedoc"
   },
   "dependencies": {
     "probot": "^12.2.4"
