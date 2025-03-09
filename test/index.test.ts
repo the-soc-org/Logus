@@ -38,6 +38,13 @@ const privateKey = fs.readFileSync(
   "utf-8"
 );
 
+/**
+ * Initializes the mock for ProjectFieldValueUpdater tests.
+ * @param mock - The nock scope.
+ * @param payload - The payload containing repository and organization information.
+ * @param configRelPath - The relative path to the configuration file.
+ * @returns The initialized nock scope.
+ */
 function TestProjectFieldValueUpdaterInitialize(mock: nock.Scope, 
   payload: {repository: {name: string}, organization: {login: string}}, 
   configRelPath = "fixtures/configs/czujnikownia.yml"): nock.Scope 

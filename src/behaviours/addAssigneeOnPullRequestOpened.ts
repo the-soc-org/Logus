@@ -4,11 +4,23 @@ import type { PRCzujnikowniaContext } from "../czujnikowniaContexts";
 import { OrganizationConfig } from "../organizationConfig";
 import { addAssignee, listTeamsInOrgRelatedToRepo } from "../graphql";
 
+/**
+ * Class to add the pull request author as an assignee when a pull request is opened.
+ */
 export default class AddAssigneeOnPullRequestOpened implements Behaviour {
+    /**
+     * Registers the behaviour to the Probot agent.
+     * @param agent - The Probot agent.
+     */
     register(agent: Probot): void {
         agent.on("pull_request.opened", async (context) => this.setAssigneeAction(agent, context));
     }
     
+    /**
+     * Sets the assignee action when a pull request is opened.
+     * @param agent - The Probot agent.
+     * @param context - The context of the pull request opened event.
+     */
     private async setAssigneeAction(agent: Probot, context: Context<"pull_request.opened">): Promise<void> {
         const prContext: PRCzujnikowniaContext = context as PRCzujnikowniaContext;
 
