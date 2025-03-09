@@ -3,7 +3,7 @@ name: Generate Documentation
 on:
   push:
     branches:
-      - '**'
+      - master
 
 jobs:
   build:
@@ -24,12 +24,12 @@ jobs:
     - name: Generate documentation
       run: npm run docs
 
-    - name: Commit and push changes
-      run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add docs
-        git commit -m 'Update documentation' || echo "No changes to commit"
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Deploy documentation
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs
+        publish_branch: documentation
+        user_name: 'github-actions[bot]'
+        user_email: 'github-actions[bot]@users.noreply.github.com'
+        commit_message: "Update documentation #${{ github.event.head_commit.message }}"
