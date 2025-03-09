@@ -2,6 +2,7 @@
     "entryPoints": ["src"],
     "entryPointStrategy": "expand",
     "out": "docs",
+    "plugin": ["@zamiell/typedoc-plugin-not-exported"],
     "exclude": [
         "**/.github/**",
         "**/.vscode/**",
@@ -11,6 +12,7 @@
         "**/test/**",
     ],
     "includeVersion": true,
+    "excludePrivate": false,
     "readme": "README.md",
     "theme": "default"
 }
