@@ -1,4 +1,4 @@
-name: Build and Test Czujnikownia
+name: Build and test Czujnikownia
 
 on:
   push:
