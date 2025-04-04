@@ -24,7 +24,11 @@ public static async create(context: PRCzujnikowniaContext, log: CzujnikowniaLog 
 
     for(const projTitle of uniqueTitles) {
       const projects = await listOpenedProjectsInOrg(context, projTitle);
-      componentUpdaters.push(new BasicProjectFieldValueUpdater(context, projects, config, log));
+      // Filters projects to avoid duplicates in case of Polish characters.
+      const filteredProjects = projects.filter(project => project.title === projTitle);
+      if (filteredProjects.length > 0) {
+        componentUpdaters.push(new BasicProjectFieldValueUpdater(context, filteredProjects, config, log));
+      }
     }
 
     return new ProjectFieldUpdaterGroup(componentUpdaters);

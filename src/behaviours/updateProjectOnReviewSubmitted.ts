@@ -29,7 +29,7 @@ export default class UpdateProjectOnReviewSubmitted implements Behaviour {
 
         await fieldUpdater.updateDate(s => s.firstReviewSubmitDateProjectFieldName, reviewDate, 
           (val: string) => {
-            if(val)
+            if(val && val !== '0')
               return false;
             return true;
           });

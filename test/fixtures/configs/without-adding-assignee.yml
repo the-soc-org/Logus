@@ -1,0 +1,3 @@
+projectTitlePrefix: "monitor-"
+openPullRequestDateProjectFieldName: "Open Date"
+addPullRequestAuthorAsAssignee: false

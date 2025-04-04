@@ -13,11 +13,17 @@ export default class AddAssigneeOnPullRequestOpened implements Behaviour {
         const prContext: PRCzujnikowniaContext = context as PRCzujnikowniaContext;
 
         const config: OrganizationConfig = await OrganizationConfig.load(prContext);
+
+        if (!config.addPullRequestAuthorAsAssignee) {
+            agent.log.info(`Adding assignee is disabled in the configuration.`);
+            return;
+        }
+
         const teams = await listTeamsInOrgRelatedToRepo(prContext, config.projectTitlePrefix);
         
         if(teams.length !== 0) {
             await addAssignee(context, context.payload.pull_request.node_id, context.payload.sender.node_id, agent.log);
-            agent.log.info(`User ${context.payload.sender.name} added as assignee on PR ${context.payload.pull_request.number}`)
+            agent.log.info(`User ${context.payload.sender.login} added as assignee on PR ${context.payload.pull_request.number}`)
             return;
         }   
     }

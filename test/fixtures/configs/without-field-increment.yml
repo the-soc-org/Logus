@@ -1,5 +1,0 @@
-keywordConfigs:
-  - teamNameTrigger: "20"
-    projectTitlePrefix: "monitor-"
-    lastReviewSubmitDateProjectFieldName: "Last Review Date"
-    lastApprovedReviewSubmitDateProjectFieldName: "Last Approve Review Date"
