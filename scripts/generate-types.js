@@ -1,6 +1,6 @@
-const { exec } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+import { exec } from 'child_process';
+import fs from 'fs';
+import path from 'path';
 
 const graphqlFolder = path.join('src', 'graphql');
 const githubSchema = path.join(graphqlFolder, 'github.gqlschema');
@@ -32,7 +32,7 @@ fs.readdir(graphqlFolder, (err, members) => {
                     + ` -t ${queryName}RawResult -s graphql --graphql-schema ${githubSchema} --no-runtime-typecheck`
                     + ` --src ${gqlSource}`;
                 
-                exec(command, (error, _) => {
+                exec(command, (error) => {
                     if(error) {
                         console.error(`Błąd komendy `, error);
                     }

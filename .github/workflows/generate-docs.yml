@@ -6,7 +6,8 @@ on:
       - master
 
 jobs:
-  build:
+  generate-docs:
+    name: Generate Documentation
     runs-on: ubuntu-latest
 
     steps:

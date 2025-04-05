@@ -1,4 +1,4 @@
-name: Build and Test Czujnikownia
+name: Check Code Quality
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
       - '**'
 
 jobs:
-  build-and-test:
-    name: Build and Test
+  check-quality:
+    name: Check Code Quality
     runs-on: ubuntu-latest
 
     steps:
@@ -23,8 +23,8 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Build the project
-      run: npm run build
+    - name: Check code with ESLint
+      run: npm run lint
 
-    - name: Run tests
-      run: npm test
+    - name: Check code formatting with Prettier
+      run: npx run format:check

@@ -22,8 +22,8 @@ import path from "path";
 import pino from "pino";
 import Stream from "stream";
 
-let testOutput: any[] = []
-const fullOutput: any[] = []
+let testOutput: unknown[] = []
+const fullOutput: unknown[] = []
 
 const streamLogsToOutput = new Stream.Writable({ objectMode: true });
 streamLogsToOutput._write = (object, _, done) => {
@@ -85,9 +85,9 @@ describe("Czujnikownia nock app tests", () => {
       log: pino(streamLogsToOutput)
     });
     nock('https://api.github.com')
-      .get(new RegExp("app\/installations.*"))
+      .get(new RegExp("app/installations.*"))
       .reply(200)
-      .post(new RegExp("app\/installations.*"))
+      .post(new RegExp("app/installations.*"))
       .reply(200)
     // Load our app into probot
     probot.load(myProbotApp);
@@ -170,7 +170,7 @@ describe("Czujnikownia nock app tests", () => {
 
   test("Testing adding assignee and updating 'openPullRequestDateProjectFieldName' on event 'pull request opened'", async () => {
     const mock = nock("https://api.github.com")
-      .post(new RegExp("app\/installations.*"))
+      .post(new RegExp("app/installations.*"))
       .reply(200)
 
       .get(`/repos/${payloadPullRequestOpened.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`)
@@ -221,7 +221,7 @@ describe("Czujnikownia nock app tests", () => {
 
   test("Testing that assignee is not added on event 'pull request opened' as configured", async () => {
     const mock = nock("https://api.github.com")
-      .post(new RegExp("app\/installations.*"))
+      .post(new RegExp("app/installations.*"))
       .reply(200)
 
       .get(`/repos/${payloadPullRequestOpened.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`)
