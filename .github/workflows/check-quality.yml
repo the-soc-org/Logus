@@ -27,4 +27,8 @@ jobs:
       continue-on-error: true
 
     - name: Check code formatting with Prettier
-      run: npx run format:check
+      run: npm run format:check
+
+    - name: Mark workflow as failed if issues are found
+      if: failure()
+      run: exit 1
