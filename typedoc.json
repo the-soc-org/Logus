@@ -1,18 +1,18 @@
 {
-    "entryPoints": ["src"],
-    "entryPointStrategy": "expand",
-    "out": "docs",
-    "plugin": ["@zamiell/typedoc-plugin-not-exported"],
-    "exclude": [
-        "**/.github/**",
-        "**/.vscode/**",
-        "**/lib/**",
-        "**/node_modules/**",
-        "**/scripts/**",
-        "**/test/**",
-    ],
-    "includeVersion": true,
-    "excludePrivate": false,
-    "readme": "README.md",
-    "theme": "default"
+  "entryPoints": ["src"],
+  "entryPointStrategy": "expand",
+  "out": "docs",
+  "plugin": ["@zamiell/typedoc-plugin-not-exported"],
+  "exclude": [
+    "**/.github/**",
+    "**/.vscode/**",
+    "**/lib/**",
+    "**/node_modules/**",
+    "**/scripts/**",
+    "**/test/**"
+  ],
+  "includeVersion": true,
+  "excludePrivate": false,
+  "readme": "README.md",
+  "theme": "default"
 }
