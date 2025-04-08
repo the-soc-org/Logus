@@ -10,13 +10,13 @@
             "projectsV2": {
               "nodes": [
                 {
-                  "id": "PVT_kwDOCzSoN84AtAzg",
-                  "title": "monitor-Project 1",
+                  "id": "PVT_kwDOCzSoN84AveaY",
+                  "title": "prefix-Project 1",
                   "closed": false
                 },
                 {
-                  "id": "PVT_kwDOCzSoN84AveaY",
-                  "title": "prefix-Project 1",
+                  "id": "PVT_kwDOCzSoN84AtAzg",
+                  "title": "monitor-Project 1",
                   "closed": false
                 }
               ]
@@ -41,10 +41,31 @@
             }
           },
           {
+            "id": "T_kwDOCzSoN84AwhGw",
+            "name": "team3",
+            "projectsV2": {
+              "nodes": [
+                {
+                  "id": "PVT_kwDOCzSoN84A2Eb_",
+                  "title": "monitor-project",
+                  "closed": false
+                }
+              ]
+            },
+            "repositories": {
+              "nodes": []
+            }
+          },
+          {
             "id": "T_kwDOCzSoN84AsWt2",
             "name": "Zajęcia-2024",
             "projectsV2": {
               "nodes": [
+                {
+                  "id": "PVT_kwDOCzSoN84AvUO3",
+                  "title": "monitor-test",
+                  "closed": true
+                },
                 {
                   "id": "PVT_kwDOCzSoN84AtBTo",
                   "title": "monitor-Zajecia-2024",
@@ -59,6 +80,36 @@
             },
             "repositories": {
               "nodes": []
+            }
+          },
+          {
+            "id": "T_kwDOCzSoN84AwisW",
+            "name": "Zespół-8-2025",
+            "projectsV2": {
+              "nodes": [
+                {
+                  "id": "PVT_kwDOCzSoN84A2JmH",
+                  "title": "Projekt zajęć",
+                  "closed": false
+                },
+                {
+                  "id": "PVT_kwDOCzSoN84A2Jlz",
+                  "title": "monitor-Zajęcia 2025",
+                  "closed": false
+                }
+              ]
+            },
+            "repositories": {
+              "nodes": [
+                {
+                  "id": "R_kgDOOVcCjQ",
+                  "name": "Zadanie-1"
+                },
+                {
+                  "id": "R_kgDOOVcCdi",
+                  "name": "Zadanie-2"
+                }
+              ]
             }
           }
         ]

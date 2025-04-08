@@ -1,7 +1,6 @@
 {
   "name": "czujnikownia",
   "version": "1.0.0",
-  "type": "module",
   "private": true,
   "description": "Aplikacja GitHub bazująca na bibliotece Probot przeznaczona do automatyzacji wybranych procesów. Stworzona na potrzeby prowadzenia zajęć dydaktycznych w ramach organizacji Informatyka Stosowana UMK.",
   "author": "Mikołaj Makowski",
