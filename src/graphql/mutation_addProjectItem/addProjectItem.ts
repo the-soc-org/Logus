@@ -2,6 +2,15 @@ import type { CzujnikowniaContext, CzujnikowniaLog } from "../../czujnikowniaCon
 import type { AddProjectItemResult, ProjectV2Item } from "./addProjectItemGenerated";
 import { addProjectItemMutation } from "./addProjectItemGenerated";
 
+/**
+ * Adds an item to a project.
+ * @param context - The context object containing necessary information.
+ * @param projectId - The ID of the project.
+ * @param contentId - The ID of the content to add.
+ * @param fieldName - The name of the field to add.
+ * @param log - Optional logger instance.
+ * @returns A promise that resolves to an object containing the item ID and field value.
+ */
 export async function addProjectItem(context: CzujnikowniaContext, projectId: string, contentId: string, fieldName: string, log?: CzujnikowniaLog)
 : Promise<{itemId: string, fieldValue: number | string}>
 {

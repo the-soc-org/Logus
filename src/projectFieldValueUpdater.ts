@@ -3,15 +3,39 @@ import type { CzujnikowniaLog, PRCzujnikowniaContext } from "./czujnikowniaConte
 import { addProjectItem, listOpenedProjectsInOrg, listTeamNodesRelatedToRepo,
    ProjectInOrgQueryResultElement, updateItemDate, updateItemNumber } from "./graphql";
 
+/**
+ * Interface for updating project field values.
+ */
 export interface ProjectFieldValueUpdater {
+  /**
+   * Updates the date field in the project.
+   * @param fieldNameSelector - Function to select the field name from the organization config.
+   * @param newFieldValue - The new value to set for the field.
+   * @param condition - Optional condition to check before updating the field.
+   */
   updateDate(fieldNameSelector: (s: OrganizationConfig) => string | undefined, newFieldValue: string,
     condition?: (currentFieldVal: string) => boolean): Promise<void>;
+
+  /**
+   * Increments the number field in the project.
+   * @param fieldNameSelector - Function to select the field name from the organization config.
+   * @param condition - Optional condition to check before incrementing the field.
+   */
   increment(fieldNameSelector: (s: OrganizationConfig) => string | undefined,
     condition?: (currentFieldVal: string) => boolean): Promise<void>;
 }
 
+/**
+ * Factory class for creating ProjectFieldValueUpdater instances.
+ */
 export class ProjectFieldValueUpdaterFactory {
-public static async create(context: PRCzujnikowniaContext, log: CzujnikowniaLog | undefined = undefined): Promise<ProjectFieldValueUpdater> {
+  /**
+   * Creates a ProjectFieldValueUpdater instance.
+   * @param context - The context of the pull request.
+   * @param log - Optional logger instance.
+   * @returns A ProjectFieldValueUpdater instance.
+   */
+  public static async create(context: PRCzujnikowniaContext, log: CzujnikowniaLog | undefined = undefined): Promise<ProjectFieldValueUpdater> {
     const componentUpdaters: BasicProjectFieldValueUpdater[] = [];
 
     const config: OrganizationConfig = await OrganizationConfig.load(context);
@@ -35,13 +59,27 @@ public static async create(context: PRCzujnikowniaContext, log: CzujnikowniaLog 
   }
 }
 
+/**
+ * Class for updating multiple project fields.
+ * @notExported
+ */
 class ProjectFieldUpdaterGroup implements ProjectFieldValueUpdater {
   fieldUpdaters: BasicProjectFieldValueUpdater[];
 
+  /**
+   * Constructor for ProjectFieldUpdaterGroup.
+   * @param fieldUpdaters - Array of BasicProjectFieldValueUpdater instances.
+   */
   public constructor(fieldUpdaters: BasicProjectFieldValueUpdater[]) {
     this.fieldUpdaters = fieldUpdaters;
   }
 
+  /**
+   * Updates the date field in all projects.
+   * @param fieldNameSelector - Function to select the field name from the organization config.
+   * @param newFieldValue - The new value to set for the field.
+   * @param condition - Optional condition to check before updating the field.
+   */
   public async updateDate(fieldNameSelector: (s: OrganizationConfig) => string | undefined, newFieldValue: string,
     condition: (currentFieldVal: string) => boolean = (_c) => true) {
     const promises: Promise<void>[] = [];
@@ -51,6 +89,10 @@ class ProjectFieldUpdaterGroup implements ProjectFieldValueUpdater {
       await Promise.all(promises);
   }
 
+  /**
+   * Increments the number field in all projects.
+   * @param fieldNameSelector - Function to select the field name from the organization config.
+   */
   public async increment(fieldNameSelector: (s: OrganizationConfig) => string | undefined) {
     const promises: Promise<void>[] = [];
     for(const updater of this.fieldUpdaters)
@@ -60,6 +102,10 @@ class ProjectFieldUpdaterGroup implements ProjectFieldValueUpdater {
   }
 }
 
+/**
+ * Class for updating a single project's field values.
+ * @notExported
+ */
 class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
 
   private readonly context: PRCzujnikowniaContext;
@@ -67,6 +113,13 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
   private readonly orgConfig: OrganizationConfig;
   private readonly log: CzujnikowniaLog | undefined;
 
+  /**
+   * Constructor for BasicProjectFieldValueUpdater.
+   * @param context - The context of the pull request.
+   * @param projects - Array of projects to update.
+   * @param orgConfig - The organization configuration.
+   * @param log - Optional logger instance.
+   */
   public constructor(context: PRCzujnikowniaContext,
     projects: ProjectInOrgQueryResultElement[], orgConfig: OrganizationConfig, log: CzujnikowniaLog | undefined) {
 
@@ -76,6 +129,12 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
     this.log = log;
   }
 
+  /**
+   * Updates the date field in the project.
+   * @param fieldNameSelector - Function to select the field name from the organization config.
+   * @param newFieldValue - The new value to set for the field.
+   * @param condition - Optional condition to check before updating the field.
+   */
   public async updateDate(fieldNameSelector: (s: OrganizationConfig) => string | undefined, newFieldValue: string,
     condition: (currentFieldVal: string) => boolean = (_c) => true) {
       
@@ -87,6 +146,10 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
     });
   }
 
+  /**
+   * Increments the number field in the project.
+   * @param fieldNameSelector - Function to select the field name from the organization config.
+   */
   public async increment(fieldNameSelector: (s: OrganizationConfig) => string | undefined) {
     await this.updateField(fieldNameSelector, async (proj, item, fieldId) => {
       const newFieldValue: number = (item.fieldValue as number) + 1;
@@ -95,6 +158,11 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
     });
   }
 
+  /**
+   * Updates the specified field in the project.
+   * @param fieldNameSelector - Function to select the field name from the organization config.
+   * @param action - Function to perform the update action.
+   */
   private async updateField(
     fieldNameSelector: (s: OrganizationConfig) => string | undefined,
     action: (proj: ProjectInOrgQueryResultElement, item: {itemId: string, fieldValue: number | string | Date}, fieldId: string) => Promise<void>) {
@@ -111,6 +179,12 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
     }
   }
 
+  /**
+   * Compares two strings for equality, ignoring case and accents.
+   * @param firstString - The first string to compare.
+   * @param secondString - The second string to compare.
+   * @returns True if the strings are equal, false otherwise.
+   */
   private caseInsensiviteEqual(firstString: string | undefined, secondString: string): boolean {
     return firstString?.localeCompare(secondString, undefined, { sensitivity: 'accent' }) === 0;
   }

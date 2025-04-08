@@ -2,6 +2,16 @@ import type { CzujnikowniaContext, CzujnikowniaLog } from "../../czujnikowniaCon
 import type { UpdateItemTextResult } from "./updateItemTextGenerated";
 import { updateItemTextMutation } from "./updateItemTextGenerated";
 
+/**
+ * Updates the text field of an item in a project.
+ * @param context - The context object containing necessary information.
+ * @param projectId - The ID of the project.
+ * @param itemId - The ID of the item to update.
+ * @param fieldId - The ID of the field to update.
+ * @param text - The new text value to set.
+ * @param log - Optional logger instance.
+ * @returns A promise that resolves to the ID of the updated item.
+ */
 export async function updateItemText(context: CzujnikowniaContext, projectId: string, itemId: string, fieldId: string, text: string, log: CzujnikowniaLog | undefined = undefined): Promise<string>
 {
   const result: UpdateItemTextResult = await context.octokit.graphql(updateItemTextMutation, {

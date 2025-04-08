@@ -123,15 +123,9 @@
         "site_admin": false
       }
     ],
-    "requested_reviewers": [
-
-    ],
-    "requested_teams": [
-
-    ],
-    "labels": [
-
-    ],
+    "requested_reviewers": [],
+    "requested_teams": [],
+    "labels": [],
     "milestone": null,
     "draft": false,
     "commits_url": "https://api.github.com/repos/test-czujnikownia/repo-1/pulls/3/commits",
@@ -258,9 +252,7 @@
         "allow_forking": true,
         "is_template": false,
         "web_commit_signoff_required": false,
-        "topics": [
-
-        ],
+        "topics": [],
         "visibility": "private",
         "forks": 0,
         "open_issues": 0,
@@ -398,9 +390,7 @@
         "allow_forking": true,
         "is_template": false,
         "web_commit_signoff_required": false,
-        "topics": [
-
-        ],
+        "topics": [],
         "visibility": "private",
         "forks": 1,
         "open_issues": 1,
@@ -543,17 +533,13 @@
     "allow_forking": true,
     "is_template": false,
     "web_commit_signoff_required": false,
-    "topics": [
-
-    ],
+    "topics": [],
     "visibility": "private",
     "forks": 1,
     "open_issues": 1,
     "watchers": 0,
     "default_branch": "main",
-    "custom_properties": {
-
-    }
+    "custom_properties": {}
   },
   "organization": {
     "login": "test-czujnikownia",
