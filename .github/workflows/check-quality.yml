@@ -2,6 +2,8 @@ name: Check Code Quality
 
 on:
   push:
+    branches:
+      - "**"
   pull_request:
     branches:
       - "**"

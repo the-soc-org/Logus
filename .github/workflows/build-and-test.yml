@@ -2,6 +2,8 @@ name: Build and Test Czujnikownia
 
 on:
   push:
+    branches:
+      - "**"
   pull_request:
     branches:
       - "**"
