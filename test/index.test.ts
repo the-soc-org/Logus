@@ -105,7 +105,7 @@ describe("Czujnikownia nock app tests", () => {
     probot.load(myProbotApp);
   });
 
-  test("Testing loading application's organization-level configuration from .github-private folder", async () => {
+  test("1. Testing loading application's organization-level configuration from .github-private folder", async () => {
     const mock = nock("https://api.github.com")
       .get(
         `/repos/${payloadPRApproved.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
@@ -146,7 +146,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Testing loading application's organization-level configuration from .github folder", async () => {
+  test("2. Testing loading application's organization-level configuration from .github folder", async () => {
     const mock = nock("https://api.github.com")
       .get(
         `/repos/${payloadPRApproved.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
@@ -192,7 +192,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Testing loading application's default configuration", async () => {
+  test("3. Testing loading application's default configuration", async () => {
     const mock = nock("https://api.github.com")
       .get(
         `/repos/${payloadPRApproved.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
@@ -234,7 +234,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Testing adding assignee and updating 'openPullRequestDateProjectFieldName' on event 'pull request opened'", async () => {
+  test("4. Testing adding assignee and updating 'openPullRequestDateProjectFieldName' on event 'pull request opened'", async () => {
     const mock = nock("https://api.github.com")
       .post(new RegExp("app/installations.*"))
       .reply(200)
@@ -310,7 +310,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Testing that assignee is not added on event 'pull request opened' as configured", async () => {
+  test("5. Testing that assignee is not added on event 'pull request opened' as configured", async () => {
     const mock = nock("https://api.github.com")
       .post(new RegExp("app/installations.*"))
       .reply(200)
@@ -374,7 +374,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Testing adding date 'lastReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
+  test("6. Testing adding date 'lastReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRRequestChanges,
@@ -404,7 +404,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Testing updating date 'lastReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
+  test("7. Testing updating date 'lastReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRApproved,
@@ -434,7 +434,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Testing adding number 'reviewIterationNumberProjectFieldName' on event 'pull request review submitted'", async () => {
+  test("8. Testing adding number 'reviewIterationNumberProjectFieldName' on event 'pull request review submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRRequestChanges,
@@ -464,7 +464,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Testing updating number 'reviewIterationNumberProjectFieldName' on event 'pull request review submitted'", async () => {
+  test("9. Testing updating number 'reviewIterationNumberProjectFieldName' on event 'pull request review submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRApproved,
@@ -494,7 +494,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Testing adding date 'lastApprovedReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
+  test("10. Testing adding date 'lastApprovedReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRApproved,
@@ -524,7 +524,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Testing updating date 'lastApprovedReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
+  test("11. Testing updating date 'lastApprovedReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRApproved,
@@ -554,7 +554,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Testing that 'lastApprovedReviewSubmitDateProjectFieldName' is not updated if pull request review is not approved", async () => {
+  test("12. Testing that 'lastApprovedReviewSubmitDateProjectFieldName' is not updated if pull request review is not approved", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRRequestChanges,
@@ -570,7 +570,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Testing adding date 'firstReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
+  test("13. Testing adding date 'firstReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRRequestChanges,
@@ -600,7 +600,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Testing that 'firstReviewSubmitDateProjectFieldName' is not updated if it has already been set", async () => {
+  test("14. Testing that 'firstReviewSubmitDateProjectFieldName' is not updated if it has already been set", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRApproved,
@@ -621,7 +621,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Testing adding and updating multiple fields on event 'pull request review submitted'", async () => {
+  test("15. Testing adding and updating multiple fields on event 'pull request review submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRApproved,
@@ -693,7 +693,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("Testing that no action is taken when field name in project is incorrect", async () => {
+  test("16. Testing that no action is taken when field name in project is incorrect", async () => {
     const mock = nock("https://api.github.com")
       .get(
         `/repos/${payloadPRCommented.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
