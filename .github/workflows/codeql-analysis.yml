@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - master
-    branches-ignore:
-      - dependabot/*
   pull_request:
     branches:
       - master
@@ -14,6 +12,7 @@ on:
 
 jobs:
   codeql-analysis:
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     permissions:
       actions: read
