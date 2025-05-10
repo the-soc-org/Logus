@@ -107,9 +107,13 @@ describe("Czujnikownia nock app tests", () => {
 
   test("1. Testing loading application's organization-level configuration from .github-private folder", async () => {
     const mock = nock("https://api.github.com")
+      .post(new RegExp("app/installations.*"))
+      .reply(200)
+
       .get(
-        `/repos/${payloadPRApproved.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
+        `/repos/${payloadPullRequestOpened.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
       )
+      .times(2)
       .reply(
         200,
         fs.readFileSync(
@@ -120,10 +124,10 @@ describe("Czujnikownia nock app tests", () => {
 
       .post("/graphql", (body) => {
         expect(body.variables.organizationLogin).toEqual(
-          payloadPRApproved.organization.login,
+          payloadPullRequestOpened.organization.login,
         );
         expect(body.variables.repoQuery).toEqual(
-          payloadPRApproved.repository.name,
+          payloadPullRequestOpened.repository.name,
         );
         expect(body.variables.teamQuery).toEqual("");
         return true;
@@ -132,7 +136,7 @@ describe("Czujnikownia nock app tests", () => {
 
       .post("/graphql", (body) => {
         expect(body.variables.organizationLogin).toEqual(
-          payloadPRApproved.organization.login,
+          payloadPullRequestOpened.organization.login,
         );
         expect(body.variables.projectQuery).toEqual("is:open prefix-Project 1");
         return true;
@@ -140,22 +144,27 @@ describe("Czujnikownia nock app tests", () => {
       .reply(200, responseProjectInOrg);
 
     await probot.receive({
-      name: "pull_request_review.submitted",
-      payload: payloadPRApproved,
+      name: "pull_request.opened",
+      payload: payloadPullRequestOpened,
     });
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
   test("2. Testing loading application's organization-level configuration from .github folder", async () => {
     const mock = nock("https://api.github.com")
+      .post(new RegExp("app/installations.*"))
+      .reply(200)
+
       .get(
-        `/repos/${payloadPRApproved.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
+        `/repos/${payloadPullRequestOpened.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
       )
+      .times(2)
       .reply(404)
 
       .get(
-        `/repos/${payloadPRApproved.organization.login}/.github/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
+        `/repos/${payloadPullRequestOpened.organization.login}/.github/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
       )
+      .times(2)
       .reply(
         200,
         fs.readFileSync(
@@ -166,10 +175,10 @@ describe("Czujnikownia nock app tests", () => {
 
       .post("/graphql", (body) => {
         expect(body.variables.organizationLogin).toEqual(
-          payloadPRApproved.organization.login,
+          payloadPullRequestOpened.organization.login,
         );
         expect(body.variables.repoQuery).toEqual(
-          payloadPRApproved.repository.name,
+          payloadPullRequestOpened.repository.name,
         );
         expect(body.variables.teamQuery).toEqual("");
         return true;
@@ -178,7 +187,7 @@ describe("Czujnikownia nock app tests", () => {
 
       .post("/graphql", (body) => {
         expect(body.variables.organizationLogin).toEqual(
-          payloadPRApproved.organization.login,
+          payloadPullRequestOpened.organization.login,
         );
         expect(body.variables.projectQuery).toEqual("is:open prefix-Project 1");
         return true;
@@ -186,8 +195,8 @@ describe("Czujnikownia nock app tests", () => {
       .reply(200, responseProjectInOrg);
 
     await probot.receive({
-      name: "pull_request_review.submitted",
-      payload: payloadPRApproved,
+      name: "pull_request.opened",
+      payload: payloadPullRequestOpened,
     });
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
@@ -234,7 +243,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("4. Testing adding assignee and updating 'openPullRequestDateProjectFieldName' on event 'pull request opened'", async () => {
+  test("4. Testing that assignee is added on event 'pull request opened'", async () => {
     const mock = nock("https://api.github.com")
       .post(new RegExp("app/installations.*"))
       .reply(200)
@@ -246,7 +255,7 @@ describe("Czujnikownia nock app tests", () => {
       .reply(
         200,
         fs.readFileSync(
-          path.join(__dirname, "fixtures/configs/czujnikownia.yml"),
+          path.join(__dirname, "fixtures/configs/only-adding-assignee.yml"),
           "utf-8",
         ),
       )
@@ -284,24 +293,7 @@ describe("Czujnikownia nock app tests", () => {
         );
         return true;
       })
-      .reply(200, responseAssignUserToPullRequest)
-
-      .post("/graphql", (body) => {
-        expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg");
-        expect(body.variables.contentId).toEqual("PR_kwDONUNffM6C84g3");
-        expect(body.variables.fieldName).toEqual("Open Date");
-        return true;
-      })
-      .reply(200, responseAddProjectItem)
-
-      .post("/graphql", (body) => {
-        expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg");
-        expect(body.variables.itemId).toEqual("PVTI_lADOCzSoN84AtAzgzgVMgOQ");
-        expect(body.variables.fieldId).toEqual("PVTF_lADOCzSoN84AtAzgzgj2VmM");
-        expect(body.variables.date).toEqual("2024-11-24T22:01:22Z");
-        return true;
-      })
-      .reply(200, responseUpdateItemField);
+      .reply(200, responseAssignUserToPullRequest);
 
     await probot.receive({
       name: "pull_request.opened",
@@ -348,6 +340,53 @@ describe("Czujnikownia nock app tests", () => {
         );
         return true;
       })
+      .reply(200, responseProjectsInOrg);
+
+    await probot.receive({
+      name: "pull_request.opened",
+      payload: payloadPullRequestOpened,
+    });
+    expect(mock.pendingMocks()).toStrictEqual([]);
+  });
+
+  test("6. Testing that 'openPullRequestDateProjectFieldName' date is updated on event 'pull request opened'", async () => {
+    const mock = nock("https://api.github.com")
+      .post(new RegExp("app/installations.*"))
+      .reply(200)
+
+      .get(
+        `/repos/${payloadPullRequestOpened.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
+      )
+      .times(2)
+      .reply(
+        200,
+        fs.readFileSync(
+          path.join(__dirname, "fixtures/configs/only-open-date.yml"),
+          "utf-8",
+        ),
+      )
+
+      .post("/graphql", (body) => {
+        expect(body.variables.organizationLogin).toEqual(
+          payloadPullRequestOpened.organization.login,
+        );
+        expect(body.variables.repoQuery).toEqual(
+          payloadPullRequestOpened.repository.name,
+        );
+        expect(body.variables.teamQuery).toEqual("");
+        return true;
+      })
+      .reply(200, responseUserTeamsInOrg)
+
+      .post("/graphql", (body) => {
+        expect(body.variables.organizationLogin).toEqual(
+          payloadPullRequestOpened.organization.login,
+        );
+        expect(body.variables.projectQuery).toEqual(
+          "is:open monitor-Project 1",
+        );
+        return true;
+      })
       .reply(200, responseProjectsInOrg)
 
       .post("/graphql", (body) => {
@@ -374,7 +413,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("6. Testing adding date 'lastReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
+  test("7. Testing that 'lastReviewSubmitDateProjectFieldName' date is added on event 'pull request review submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRRequestChanges,
@@ -404,7 +443,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("7. Testing updating date 'lastReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
+  test("8. Testing that 'lastReviewSubmitDateProjectFieldName' date is updated on event 'pull request review submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRApproved,
@@ -434,7 +473,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("8. Testing adding number 'reviewIterationNumberProjectFieldName' on event 'pull request review submitted'", async () => {
+  test("9. Testing that 'reviewIterationNumberProjectFieldName' number is added on event 'pull request review submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRRequestChanges,
@@ -464,7 +503,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("9. Testing updating number 'reviewIterationNumberProjectFieldName' on event 'pull request review submitted'", async () => {
+  test("10. Testing that 'reviewIterationNumberProjectFieldName' number is updated on event 'pull request review submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRApproved,
@@ -494,7 +533,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("10. Testing adding date 'lastApprovedReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
+  test("11. Testing that 'lastApprovedReviewSubmitDateProjectFieldName' date is added on event 'pull request review submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRApproved,
@@ -524,7 +563,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("11. Testing updating date 'lastApprovedReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
+  test("12. Testing that 'lastApprovedReviewSubmitDateProjectFieldName' date is updated on event 'pull request review submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRApproved,
@@ -554,7 +593,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("12. Testing that 'lastApprovedReviewSubmitDateProjectFieldName' is not updated if pull request review is not approved", async () => {
+  test("13. Testing that 'lastApprovedReviewSubmitDateProjectFieldName' date is not updated on event 'pull request review submitted' if pull request review is not approved", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRRequestChanges,
@@ -570,7 +609,7 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("13. Testing adding date 'firstReviewSubmitDateProjectFieldName' on event 'pull request review submitted'", async () => {
+  test("14. Testing that 'firstReviewSubmitDateProjectFieldName' date is added on event 'pull request review submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRRequestChanges,
@@ -600,84 +639,12 @@ describe("Czujnikownia nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("14. Testing that 'firstReviewSubmitDateProjectFieldName' is not updated if it has already been set", async () => {
+  test("15. Testing that 'firstReviewSubmitDateProjectFieldName' date is not updated on event 'pull request review submitted' if it has already been set", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRApproved,
       "fixtures/configs/only-first-review.yml",
     )
-      .post("/graphql", (body) => {
-        expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg");
-        expect(body.variables.contentId).toEqual("PR_kwDONUNffM6C84g3");
-        expect(body.variables.fieldName).toEqual("First Review Date");
-        return true;
-      })
-      .reply(200, responseAddProjectItemWithDate);
-
-    await probot.receive({
-      name: "pull_request_review.submitted",
-      payload: payloadPRApproved,
-    });
-    expect(mock.pendingMocks()).toStrictEqual([]);
-  });
-
-  test("15. Testing adding and updating multiple fields on event 'pull request review submitted'", async () => {
-    const mock = TestProjectFieldValueUpdaterInitialize(
-      nock("https://api.github.com"),
-      payloadPRApproved,
-      "fixtures/configs/czujnikownia.yml",
-    )
-      .post("/graphql", (body) => {
-        expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg");
-        expect(body.variables.contentId).toEqual("PR_kwDONUNffM6C84g3");
-        expect(body.variables.fieldName).toEqual("Last Review Date");
-        return true;
-      })
-      .reply(200, responseAddProjectItemWithDate)
-
-      .post("/graphql", (body) => {
-        expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg");
-        expect(body.variables.itemId).toEqual("PVTI_lADOCzSoN84AtAzgzgVMgOQ");
-        expect(body.variables.fieldId).toEqual("PVTF_lADOCzSoN84AtAzgzgj2WEo");
-        expect(body.variables.date).toEqual("2024-11-27T19:03:19Z");
-        return true;
-      })
-      .reply(200, responseUpdateItemField)
-
-      .post("/graphql", (body) => {
-        expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg");
-        expect(body.variables.contentId).toEqual("PR_kwDONUNffM6C84g3");
-        expect(body.variables.fieldName).toEqual("Last Approve Review Date");
-        return true;
-      })
-      .reply(200, responseAddProjectItem)
-
-      .post("/graphql", (body) => {
-        expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg");
-        expect(body.variables.itemId).toEqual("PVTI_lADOCzSoN84AtAzgzgVMgOQ");
-        expect(body.variables.fieldId).toEqual("PVTF_lADOCzSoN84AtAzgzgj2WIE");
-        expect(body.variables.date).toEqual("2024-11-27T19:03:19Z");
-        return true;
-      })
-      .reply(200, responseUpdateItemField)
-
-      .post("/graphql", (body) => {
-        expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg");
-        expect(body.variables.contentId).toEqual("PR_kwDONUNffM6C84g3");
-        expect(body.variables.fieldName).toEqual("Review Iteration");
-        return true;
-      })
-      .reply(200, responseAddProjectItemWithValue)
-
-      .post("/graphql", (body) => {
-        expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg");
-        expect(body.variables.itemId).toEqual("PVTI_lADOCzSoN84AtAzgzgVMgOQ");
-        expect(body.variables.fieldId).toEqual("PVTF_lADOCzSoN84AtAzgzgj2VyY");
-        expect(body.variables.number).toEqual(2);
-        return true;
-      })
-      .reply(200, responseUpdateItemField)
-
       .post("/graphql", (body) => {
         expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg");
         expect(body.variables.contentId).toEqual("PR_kwDONUNffM6C84g3");
