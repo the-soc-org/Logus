@@ -1,4 +1,4 @@
-## [1.1.0] - 2025-05-27
+# [1.1.0] (2025-05-27)
 
 ### Added
 
@@ -14,6 +14,9 @@
 - Added GitHub Action for CodeQL code analysis
 - Added Prettier and ESLint for code quality enforcement
 - Added GitHub Action to run Prettier and ESLint
+- Added semantic-release with required plugins and configuration
+- Added GitHub Actions workflow to trigger semantic-release on push to master
+- Added badge for semantic-release
 
 ### Changed
 
