@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/SebastianSzt/Czujnikownia/compare/v1.1.0...v1.1.1) (2025-05-27)
+
+
+### Bug Fixes
+
+* **ci:** update node version in GitHub Action workflows ([b35c403](https://github.com/SebastianSzt/Czujnikownia/commit/b35c40395b9c52ede78d77795a8de4d0f599cd2d))
+
 # [1.1.0] (2025-05-27)
 
 ### Added
