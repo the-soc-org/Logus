@@ -22,10 +22,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Get short SHA of the last commit
-        id: commit
-        run: echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
       - name: Generate documentation
         run: npm run docs
 
@@ -37,4 +33,4 @@ jobs:
           publish_branch: documentation
           user_name: "github-actions[bot]"
           user_email: "github-actions[bot]@users.noreply.github.com"
-          commit_message: "Update documentation: commit ${{ steps.commit.outputs.sha }}"
+          commit_message: "Automated documentation update for the latest commit"
