@@ -2,9 +2,9 @@
 
 [![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/IS-UMK/Czujnikownia/blob/master/README.md)
 [![pl](https://img.shields.io/badge/lang-pl-red.svg)](https://github.com/IS-UMK/Czujnikownia/blob/master/README.pl.md)
-[![Build and Test](https://github.com/IS-UMK/Czujnikownia/actions/workflows/BuildAndTest.yml/badge.svg)](https://github.com/IS-UMK/Czujnikownia/actions/workflows/BuildAndTest.yml)
+[![Build and Test](https://github.com/IS-UMK/Czujnikownia/actions/workflows/BuildAndTest.yml/badge.svg)](https://github.com/SebastianSzt/Czujnikownia/actions/workflows/build-and-test.yml)
 [![Documentation](https://img.shields.io/badge/docs-online-blue.svg)](https://sebastianszt.github.io/Czujnikownia/)
-[![Semantic Release](https://img.shields.io/badge/semantic--release-enabled-brightgreen.svg?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
+[![Semantic Release](https://img.shields.io/badge/semantic--release-enabled-brightgreen.svg?logo=semantic-release)](https://github.com/SebastianSzt/Czujnikownia/actions/workflows/release.yml)
 
 A GitHub application based on the [Probot](https://github.com/probot/probot) library for automating the collection of information in projects related to pull request events. Designed for installation within an organization.
 
@@ -12,7 +12,7 @@ A GitHub application based on the [Probot](https://github.com/probot/probot) lib
 
 ### Creating and Running a new instance
 
-- install the [Node](https://nodejs.org/download/release/v18.19.0/) environment
+- install the [Node](https://nodejs.org/download/release/v20.19.2/) environment
 - run the following commands inside the source code directory:
   - `npm install` - [install all necessary packages](https://docs.npmjs.com/cli/v8/commands/npm-install#description)
   - `npm run build` - transpile TypeScript code to JavaScript
