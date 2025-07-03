@@ -51,3 +51,7 @@ addPullRequestAuthorAsAssignee: false
 - `lastApprovedReviewSubmitDateProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana data przesłania ostatniej pozytywnej recenzji _żądania ściągnięcia_.
 - `reviewIterationNumberProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana ilość obecnie wykonanych recenzji _żądania ściągnięcia_. Parametr opcjonalny.
 - `addPullRequestAuthorAsAssignee` - parametr decydujący czy autor _żądania ściągnięcia_ ma zostać automatycznie przypisany jako _Assignee_. Domyślnie `false`.
+
+## Kontrybuowanie
+
+Zachęcamy do współpracy! Przeczytaj nasz [Przewodnik](CONTRIBUTING.md), aby dowiedzieć się o naszym procesie rozwoju i jak proponować zmiany.

@@ -30,7 +30,7 @@ A GitHub application based on the [Probot](https://github.com/probot/probot) lib
 
 The application's organization-level configuration can be done by adding a `.github/czujnikownia.yml` file to the `.github-private` or `.github` repository within the organization.
 
-Storing the configuration file in the `.github-private` repository requires granting the application access to this repository in the organization's settings – https://github.com/organizations/TWOJA-ORGANIZACJA/settings/installations
+Storing the configuration file in the `.github-private` repository requires granting the application access to this repository in the organization's settings – https://github.com/organizations/YOUR-ORGANIZATION/settings/installations
 
 Sample configuration `czujnikownia.yml`:
 
@@ -51,3 +51,7 @@ addPullRequestAuthorAsAssignee: false
 - `lastApprovedReviewSubmitDateProjectFieldName` - the name of the field column where the date of the last positive _pull request_ review submission will be entered. Optional parameter.
 - `reviewIterationNumberProjectFieldName` - the name of the field column where the number of currently completed pull _request reviews_ will be entered. Optional parameter.
 - `addPullRequestAuthorAsAssignee` - a parameter that determines whether the author of the pull request should be automatically assigned as an _Assignee_. Default is `false`.
+
+## Contributing
+
+We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) to learn about our development process and how to propose changes.
