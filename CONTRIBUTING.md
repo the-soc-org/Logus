@@ -38,7 +38,7 @@ The project uses **Prettier** for automatic code formatting. Available commands:
 
 - `npm run format` - formats all files in the project
 - `npm run format:check` - checks if code is formatted
-- `npx prettier --write filename.ts` - formats a specific file
+- `npm run format:file filename.ts` - formats a specific file
 
 Formatting is automatically checked in GitHub Actions.
 
