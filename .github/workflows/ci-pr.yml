@@ -1,0 +1,71 @@
+name: CI — Pull Request (checks)
+
+on:
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  pr-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.19.2"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the project
+        run: npm run build
+
+      - name: Run tests
+        run: npm test
+
+      - name: Chceck tools
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Prettier:"
+          echo "------------------------------------------------------------"
+          echo "Version:"
+          npx prettier --version
+          echo "Dependency list:"
+          npm list prettier
+          echo "Test run..."
+          npx prettier --check package.json
+
+          echo "============================================================"
+          echo "ESLint"
+          echo "------------------------------------------------------------"
+          echo "Version:"
+          npx eslint --version
+          echo "Dependency list:"
+          npm list eslint
+          echo "Test run..."
+          npx eslint package.json --quiet
+
+          echo "============================================================"
+          echo "TypeDoc:"
+          echo "------------------------------------------------------------"
+          echo "Version:"
+          npx typedoc --version
+          echo "Dependency list:"
+          npm list typedoc
+          echo "Test run..."
+          npx typedoc
+
+          echo "============================================================"
+          echo "semantic-release:"
+          echo "------------------------------------------------------------"
+          echo "Version:"
+          npx semantic-release --version
+          echo "Dependency list:"
+          npm list semantic-release
+          echo "Test run..."
+          npx semantic-release --dry-run

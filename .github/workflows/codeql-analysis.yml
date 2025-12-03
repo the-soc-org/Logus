@@ -12,7 +12,6 @@ on:
 
 jobs:
   codeql-analysis:
-    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     permissions:
       actions: read

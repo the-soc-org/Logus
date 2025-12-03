@@ -1,9 +1,13 @@
 name: Release
 
 on:
-  push:
+  workflow_run:
+    workflows:
+      - "CI — Push (build & test)"
+    types:
+      - completed
     branches:
-      - master
+      - "master"
 
 jobs:
   release:
@@ -14,6 +18,13 @@ jobs:
       pull-requests: write
 
     steps:
+      - name: Check CI workflow result
+        run: |
+          if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
+            echo "Skipping release as the CI workflow failed. Release cannot proceed."
+            exit 1
+          fi
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
