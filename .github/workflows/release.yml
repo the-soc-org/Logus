@@ -1,4 +1,5 @@
 name: Release
+run-name: "Release — ${{ github.event.workflow_run.head_commit.message }}"
 
 on:
   workflow_run:
@@ -7,7 +8,7 @@ on:
     types:
       - completed
     branches:
-      - "master"
+      - master
 
 jobs:
   release:

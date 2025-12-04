@@ -27,7 +27,7 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Chceck tools
+      - name: Check tools
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
