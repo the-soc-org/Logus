@@ -1,3 +1,11 @@
+## [1.1.2](https://github.com/IS-UMK/Czujnikownia/compare/v1.1.1...v1.1.2) (2025-12-22)
+
+
+### Bug Fixes
+
+* **ci:** include package-lock.json in release assets ([ff2272c](https://github.com/IS-UMK/Czujnikownia/commit/ff2272c59ecb4f42bf910835929a998bc537802c))
+* **docs:** update badge links in README files to point to the correct CI workflows ([eed9c99](https://github.com/IS-UMK/Czujnikownia/commit/eed9c99867ef4d3244fb058014d0b0a40cc29c10))
+
 ## [1.1.1](https://github.com/SebastianSzt/Czujnikownia/compare/v1.1.0...v1.1.1) (2025-05-27)
 
 
