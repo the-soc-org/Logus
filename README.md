@@ -2,9 +2,9 @@
 
 [![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/IS-UMK/Czujnikownia/blob/master/README.md)
 [![pl](https://img.shields.io/badge/lang-pl-red.svg)](https://github.com/IS-UMK/Czujnikownia/blob/master/README.pl.md)
-[![Build and Test](https://github.com/IS-UMK/Czujnikownia/actions/workflows/BuildAndTest.yml/badge.svg)](https://github.com/SebastianSzt/Czujnikownia/actions/workflows/build-and-test.yml)
-[![Documentation](https://img.shields.io/badge/docs-online-blue.svg)](https://sebastianszt.github.io/Czujnikownia/)
-[![Semantic Release](https://img.shields.io/badge/semantic--release-enabled-brightgreen.svg?logo=semantic-release)](https://github.com/SebastianSzt/Czujnikownia/actions/workflows/release.yml)
+[![Build and Test](https://github.com/IS-UMK/Czujnikownia/actions/workflows/ci-push.yml/badge.svg?branch=master)](https://github.com/IS-UMK/Czujnikownia/actions/workflows/ci-push.yml)
+[![Documentation](https://img.shields.io/badge/docs-online-blue.svg)](https://is-umk.github.io/Czujnikownia/)
+[![Semantic Release](https://img.shields.io/badge/semantic--release-enabled-brightgreen.svg?logo=semantic-release)](https://github.com/IS-UMK/Czujnikownia/actions/workflows/release.yml)
 
 A GitHub application based on the [Probot](https://github.com/probot/probot) library for automating the collection of information in projects related to pull request events. Designed for installation within an organization.
 
