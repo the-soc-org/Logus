@@ -1,0 +1,49 @@
+name: Check Code Quality
+
+on:
+  push:
+    branches:
+      - "**"
+    paths-ignore:
+      - "package.json"
+      - "package-lock.json"
+  pull_request:
+    branches:
+      - "**"
+    paths-ignore:
+      - "package.json"
+      - "package-lock.json"
+
+jobs:
+  check-quality:
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.19.2"
+
+      - name: Install dependencies
+        run: npm install
+
+      - id: prettier_check
+        name: Check code formatting with Prettier
+        run: npm run format:check
+        continue-on-error: true
+
+      - id: eslint_check
+        name: Check code with ESLint
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Fail if any check failed
+        run: |
+          if [ "${{ steps.prettier_check.outcome }}" = "failure" ] || [ "${{ steps.eslint_check.outcome }}" = "failure" ]; then
+            echo "One or more checks found issues, errors or warnings."
+            exit 1
+          fi

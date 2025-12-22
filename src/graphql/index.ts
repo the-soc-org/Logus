@@ -8,6 +8,10 @@ export * from './mutation_updateItemNumber/updateItemNumber'
 export * from './mutation_updateItemText/updateItemText'
 export * from './mutation_addAssignee/addAssignee'
 
+/**
+ * Utility type to remove nullable keys from a type.
+ * @template Type - The type to remove nullable keys from.
+ */
 export type WithoutNullableKeys<Type> = {
     [Key in keyof Type]-?: WithoutNullableKeys<NonNullable<Type[Key]>>;
-  };
+};

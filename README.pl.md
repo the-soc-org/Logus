@@ -1,14 +1,18 @@
 # Czujnikownia
+
 [![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/IS-UMK/Czujnikownia/blob/master/README.md)
 [![pl](https://img.shields.io/badge/lang-pl-red.svg)](https://github.com/IS-UMK/Czujnikownia/blob/master/README.pl.md)
-[![Build and Test](https://github.com/IS-UMK/Czujnikownia/actions/workflows/BuildAndTest.yml/badge.svg)](https://github.com/IS-UMK/Czujnikownia/actions/workflows/BuildAndTest.yml)
+[![Build and Test](https://github.com/IS-UMK/Czujnikownia/actions/workflows/BuildAndTest.yml/badge.svg)](https://github.com/SebastianSzt/Czujnikownia/actions/workflows/build-and-test.yml)
+[![Documentation](https://img.shields.io/badge/docs-online-blue.svg)](https://sebastianszt.github.io/Czujnikownia/)
+[![Semantic Release](https://img.shields.io/badge/semantic--release-enabled-brightgreen.svg?logo=semantic-release)](https://github.com/SebastianSzt/Czujnikownia/actions/workflows/release.yml)
 
-Aplikacja GitHub oparta na bibliotece [Probot](https://github.com/probot/probot) służąca do automatyzacji zbierania informacji w *projektach* o zdarzeniach dotyczących żądań ściągnięć. Przeznaczona do instalowania wewnątrz organizacji.
+Aplikacja GitHub oparta na bibliotece [Probot](https://github.com/probot/probot) służąca do automatyzacji zbierania informacji w _projektach_ o zdarzeniach dotyczących żądań ściągnięć. Przeznaczona do instalowania wewnątrz organizacji.
 
 ## Użycie
 
 ### Tworzenie i uruchamianie nowej instancji
-- instalacja środowiska [Node](https://nodejs.org/download/release/v18.19.0/)
+
+- instalacja środowiska [Node](https://nodejs.org/download/release/v20.19.2/)
 - wykonanie poleceń wewnątrz folderu z kodem źródłowym:
   - `npm install` - [instalacja wszystkich niezbędnych pakietów](https://docs.npmjs.com/cli/v8/commands/npm-install#description)
   - `npm run build` - transpilacja kodu TypeScript do JavaScript
@@ -18,15 +22,18 @@ Aplikacja GitHub oparta na bibliotece [Probot](https://github.com/probot/probot)
 - ponowne uruchomienie przy pomocy polecenia `npm start`
 
 ### Wykorzystanie działającej instancji
+
 - instalacja [aplikacji GitHub](https://github.com/apps/czujnikownia) wewnątrz organizacji
 - [skonfigurowanie](#konfiguracja) ustawień
 
 ## Konfiguracja
+
 Konfiguracja aplikacji na poziomie organizacji możliwa jest poprzez dodanie pliku `.github/czujnikownia.yml` do repozytorium `.github-private` lub `.github` wewnątrz organizacji.
 
-Przechowywanie pliku konfiguracyjnego w repozytorium `.github-private` wymaga udzielenia aplikacji dostępu do tego repozytorium w ustawieniach organizacji – https://github.com/organizations/TWOJA-ORGANIZACJA/settings/installations 
+Przechowywanie pliku konfiguracyjnego w repozytorium `.github-private` wymaga udzielenia aplikacji dostępu do tego repozytorium w ustawieniach organizacji – https://github.com/organizations/TWOJA-ORGANIZACJA/settings/installations
 
 Przykładowa konfiguracja `czujnikownia.yml`:
+
 ```yml
 projectTitlePrefix: "monitor-"
 openPullRequestDateProjectFieldName: "Open Date"
@@ -38,9 +45,13 @@ addPullRequestAuthorAsAssignee: false
 ```
 
 - `projectTitlePrefix` - przedrostek tytułu projektu, do którego wpisywane będą informacje
-- `openPullRequestDateProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana data utworzenia *żądania ściągnięcia* przez użytkownika, który jest członkiem zespołu o nazwie zawierającej słowo kluczowe. Repozytorium, w którym utworzono żądanie, musi być powiązane z zespołem. Parametr opcjonalny.
-- `lastReviewSubmitDateProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana data przesłania ostatniej recenzji *żądania ściągnięcia*.
-- `firstReviewSubmitDateProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana data przesłania pierwszej recenzji *żądania ściągnięcia*.
-- `lastApprovedReviewSubmitDateProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana data przesłania ostatniej pozytywnej recenzji *żądania ściągnięcia*.
-- `reviewIterationNumberProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana ilość obecnie wykonanych recenzji *żądania ściągnięcia*. Parametr opcjonalny.
-- `addPullRequestAuthorAsAssignee` - parametr decydujący czy autor *żądania ściągnięcia* ma zostać automatycznie przypisany jako *Assignee*. Domyślnie `false`.
+- `openPullRequestDateProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana data utworzenia _żądania ściągnięcia_ przez użytkownika, który jest członkiem zespołu o nazwie zawierającej słowo kluczowe. Repozytorium, w którym utworzono żądanie, musi być powiązane z zespołem. Parametr opcjonalny.
+- `lastReviewSubmitDateProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana data przesłania ostatniej recenzji _żądania ściągnięcia_.
+- `firstReviewSubmitDateProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana data przesłania pierwszej recenzji _żądania ściągnięcia_.
+- `lastApprovedReviewSubmitDateProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana data przesłania ostatniej pozytywnej recenzji _żądania ściągnięcia_.
+- `reviewIterationNumberProjectFieldName` - nazwa kolumny pola, do którego zostanie wpisana ilość obecnie wykonanych recenzji _żądania ściągnięcia_. Parametr opcjonalny.
+- `addPullRequestAuthorAsAssignee` - parametr decydujący czy autor _żądania ściągnięcia_ ma zostać automatycznie przypisany jako _Assignee_. Domyślnie `false`.
+
+## Kontrybuowanie
+
+Zachęcamy do współpracy! Przeczytaj nasz [Przewodnik](CONTRIBUTING.md), aby dowiedzieć się o naszym procesie rozwoju i jak proponować zmiany.

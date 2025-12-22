@@ -1,0 +1,349 @@
+{
+  "data": {
+    "organization": {
+      "projectsV2": {
+        "edges": [
+          {
+            "node": {
+              "id": "PVT_kwDOCzSoN84A2Jlz",
+              "number": 19,
+              "title": "monitor-Zajęcia 2025",
+              "closed": false,
+              "fields": {
+                "edges": [
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84A2JlzzgrgOcA",
+                      "name": "Title",
+                      "dataType": "TITLE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84A2JlzzgrgOcE",
+                      "name": "Assignees",
+                      "dataType": "ASSIGNEES"
+                    }
+                  },
+                  {
+                    "node": {}
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84A2JlzzgrgOcM",
+                      "name": "Labels",
+                      "dataType": "LABELS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84A2JlzzgrgOcQ",
+                      "name": "Linked pull requests",
+                      "dataType": "LINKED_PULL_REQUESTS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84A2JlzzgrgOcU",
+                      "name": "Milestone",
+                      "dataType": "MILESTONE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84A2JlzzgrgOcY",
+                      "name": "Repository",
+                      "dataType": "REPOSITORY"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84A2JlzzgrgOco",
+                      "name": "Reviewers",
+                      "dataType": "REVIEWERS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84A2JlzzgrgOcs",
+                      "name": "Parent issue",
+                      "dataType": "PARENT_ISSUE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84A2JlzzgrgOcw",
+                      "name": "Sub-issues progress",
+                      "dataType": "SUB_ISSUES_PROGRESS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84A2JlzzgrgOpo",
+                      "name": "Open Date",
+                      "dataType": "DATE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84A2JlzzgrgOps",
+                      "name": "First Review Date",
+                      "dataType": "DATE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84A2JlzzgrgOpw",
+                      "name": "Review Iteration",
+                      "dataType": "NUMBER"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84A2JlzzgrgOp0",
+                      "name": "Last Review Data",
+                      "dataType": "DATE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84A2JlzzgrgOp4",
+                      "name": "Last Approve Review Date",
+                      "dataType": "DATE"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "PVT_kwDOCzSoN84AtBTo",
+              "number": 10,
+              "title": "monitor-Zajecia-2024",
+              "closed": false,
+              "fields": {
+                "edges": [
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTozgj2W9k",
+                      "name": "Title",
+                      "dataType": "TITLE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTozgj2W9o",
+                      "name": "Assignees",
+                      "dataType": "ASSIGNEES"
+                    }
+                  },
+                  {
+                    "node": {}
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTozgj2W9w",
+                      "name": "Labels",
+                      "dataType": "LABELS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTozgj2W90",
+                      "name": "Linked pull requests",
+                      "dataType": "LINKED_PULL_REQUESTS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTozgj2W94",
+                      "name": "Milestone",
+                      "dataType": "MILESTONE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTozgj2W98",
+                      "name": "Repository",
+                      "dataType": "REPOSITORY"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTozgj2W-M",
+                      "name": "Reviewers",
+                      "dataType": "REVIEWERS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTozgj2W-Q",
+                      "name": "Parent issue",
+                      "dataType": "PARENT_ISSUE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTozgj2W-U",
+                      "name": "Sub-issues progress",
+                      "dataType": "SUB_ISSUES_PROGRESS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTozgj2XBo",
+                      "name": "Open Date",
+                      "dataType": "DATE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTozgj2XBs",
+                      "name": "First Review Date",
+                      "dataType": "DATE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTozgj2XBw",
+                      "name": "Review Iteration",
+                      "dataType": "NUMBER"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTozgj2XB0",
+                      "name": "Last Review Date",
+                      "dataType": "DATE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTozgj2XB4",
+                      "name": "Last Approve Review Date",
+                      "dataType": "DATE"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "PVT_kwDOCzSoN84AtBTT",
+              "number": 9,
+              "title": "monitor-Zajecia-2023",
+              "closed": false,
+              "fields": {
+                "edges": [
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTTzgj2Wq4",
+                      "name": "Title",
+                      "dataType": "TITLE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTTzgj2Wq8",
+                      "name": "Assignees",
+                      "dataType": "ASSIGNEES"
+                    }
+                  },
+                  {
+                    "node": {}
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTTzgj2WrE",
+                      "name": "Labels",
+                      "dataType": "LABELS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTTzgj2WrI",
+                      "name": "Linked pull requests",
+                      "dataType": "LINKED_PULL_REQUESTS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTTzgj2WrM",
+                      "name": "Milestone",
+                      "dataType": "MILESTONE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTTzgj2WrQ",
+                      "name": "Repository",
+                      "dataType": "REPOSITORY"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTTzgj2Wrg",
+                      "name": "Reviewers",
+                      "dataType": "REVIEWERS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTTzgj2Wrk",
+                      "name": "Parent issue",
+                      "dataType": "PARENT_ISSUE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTTzgj2Wro",
+                      "name": "Sub-issues progress",
+                      "dataType": "SUB_ISSUES_PROGRESS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTTzgj2W1w",
+                      "name": "Open Date",
+                      "dataType": "DATE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTTzgj2W10",
+                      "name": "First Review Date",
+                      "dataType": "DATE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTTzgj2W18",
+                      "name": "Review Iteration",
+                      "dataType": "NUMBER"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTTzgj2W2A",
+                      "name": "Last Review Date",
+                      "dataType": "DATE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtBTTzgj2W2E",
+                      "name": "Last Approve Review Date",
+                      "dataType": "DATE"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

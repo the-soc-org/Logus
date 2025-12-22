@@ -6,15 +6,29 @@ import UpdateProjectOnReviewSubmitted from "./behaviours/updateProjectOnReviewSu
 import LogDebugOnAny from "./behaviours/logDebugOnAny";
 import AddAssigneeOnPullRequestOpened from "./behaviours/addAssigneeOnPullRequestOpened";
 
+/**
+ * Array of behaviours to be registered with the Probot agent.
+ */
 const behaviours: Behaviour[] = [
-  new UpdateProjectOnPullRequestOpened,
-  new AddAssigneeOnPullRequestOpened,
-  new UpdateProjectOnReviewSubmitted,
-  new LogDebugOnAny,
+  new UpdateProjectOnPullRequestOpened(),
+  new AddAssigneeOnPullRequestOpened(),
+  new UpdateProjectOnReviewSubmitted(),
+  new LogDebugOnAny(),
 ];
 
+/**
+ * Main entry point for the Probot application.
+ * 
+ * This function registers all predefined behaviours with the Probot agent.
+ * 
+ * @param agent - The Probot agent instance.
+ * 
+ * @remarks
+ * The function iterates through the `behaviours` array and calls the `register` method 
+ * on each behaviour instance to bind it to the agent.
+ */
 export = (agent: Probot) => {
-
-  for(const behavior of behaviours)
+  for (const behavior of behaviours) {
     behavior.register(agent);
+  }
 };
