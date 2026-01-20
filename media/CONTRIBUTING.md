@@ -14,7 +14,7 @@ Following these guidelines will help us all collaborate more efficiently. Thanks
 2. **Install dependencies**: `npm install`
 3. **Build the project**: `npm run build`
 
-## Change Introduction Process
+## How to Propose Changes
 
 1. Make changes to the code
 2. Test functionality locally
