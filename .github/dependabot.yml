@@ -10,10 +10,13 @@ updates:
     commit-message:
       prefix: "chore(deps)"
     groups:
-      eslint-stack:
+      eslint:
         patterns:
+          - "eslint"
+          - "@eslint/js"
           - "@typescript-eslint/*"
           - "typescript-eslint"
+          - "eslint-config-prettier"
 
   - package-ecosystem: "github-actions"
     directory: "/"
