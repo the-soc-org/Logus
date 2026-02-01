@@ -1,6 +1,6 @@
-# Contributing to Czujnikownia
+# Contributing to Logus
 
-Thank you for your interest in contributing to the Czujnikownia project! This guide will help you understand the collaboration process and standards that apply to the project.
+Thank you for your interest in contributing to the Logus project! This guide will help you understand the collaboration process and standards that apply to the project.
 
 ### Why is it worth reading this guide?
 
