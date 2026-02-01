@@ -1,6 +1,6 @@
 {
   "name": "logus",
-  "version": "1.1.2",
+  "version": "2.0.0-development",
   "private": true,
   "description": "A GitHub application based on the Probot library designed to automate selected processes. Created for the purpose of conducting educational classes within the Informatyka Stosowana UMK organization.",
   "author": "Mikołaj Makowski",
@@ -29,8 +29,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
     "@types/jest": "^29.5.14",
     "@types/node": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^8.53.1",

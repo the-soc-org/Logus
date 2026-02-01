@@ -11,8 +11,9 @@
     "**/scripts/**",
     "**/test/**"
   ],
-  "includeVersion": true,
+  "includeVersion": false,
   "excludePrivate": false,
   "readme": "README.md",
-  "theme": "default"
+  "theme": "default",
+  "name": "Logus"
 }
