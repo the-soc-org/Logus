@@ -84,7 +84,6 @@ The project uses **Semantic Release** for automatic version management and relea
 
 ⚠️ **Important**:
 
-- DO NOT change versions manually in `package.json`
 - DO NOT run `npm run release` yourself
 - Semantic Release is automatically run by GitHub Actions
 
