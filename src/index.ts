@@ -18,13 +18,13 @@ const behaviours: Behaviour[] = [
 
 /**
  * Main entry point for the Probot application.
- * 
+ *
  * This function registers all predefined behaviours with the Probot agent.
- * 
+ *
  * @param agent - The Probot agent instance.
- * 
+ *
  * @remarks
- * The function iterates through the `behaviours` array and calls the `register` method 
+ * The function iterates through the `behaviours` array and calls the `register` method
  * on each behaviour instance to bind it to the agent.
  */
 export = (agent: Probot) => {

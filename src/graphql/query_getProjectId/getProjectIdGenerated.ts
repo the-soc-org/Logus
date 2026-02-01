@@ -1,4 +1,4 @@
-export const getProjectIdQuery: string =`
+export const getProjectIdQuery: string = `
 query getProjectId($organizationLogin: String!, $projectNumber: Int!) {
   organization(login: $organizationLogin) {
     projectV2(number: $projectNumber) {
@@ -6,7 +6,7 @@ query getProjectId($organizationLogin: String!, $projectNumber: Int!) {
     }
   }
 }`;
-export type GetProjectIdResult = Data
+export type GetProjectIdResult = Data;
 // To parse this data:
 //
 //   import { Convert, GetProjectIDRawResult } from "./file";
@@ -14,33 +14,35 @@ export type GetProjectIdResult = Data
 //   const getProjectIDRawResult = Convert.toGetProjectIDRawResult(json);
 
 export interface GetProjectIDRawResult {
-    data:    Data | null;
-    errors?: Error[];
+  data: Data | null;
+  errors?: Error[];
 }
 
 export interface Data {
-    organization: Organization | null;
+  organization: Organization | null;
 }
 
 export interface Organization {
-    projectV2: ProjectV2 | null;
+  projectV2: ProjectV2 | null;
 }
 
 export interface ProjectV2 {
-    id: string;
+  id: string;
 }
 
 export interface Error {
-    message: string;
+  message: string;
 }
 
 // Converts JSON strings to/from your types
 export class Convert {
-    public static toGetProjectIDRawResult(json: string): GetProjectIDRawResult {
-        return JSON.parse(json);
-    }
+  public static toGetProjectIDRawResult(json: string): GetProjectIDRawResult {
+    return JSON.parse(json);
+  }
 
-    public static getProjectIDRawResultToJson(value: GetProjectIDRawResult): string {
-        return JSON.stringify(value);
-    }
+  public static getProjectIDRawResultToJson(
+    value: GetProjectIDRawResult,
+  ): string {
+    return JSON.stringify(value);
+  }
 }

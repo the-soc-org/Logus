@@ -1,8 +1,8 @@
-# Czujnikownia
+# Logus
 
-[![Build and Test](https://github.com/IS-UMK/Czujnikownia/actions/workflows/ci-push.yml/badge.svg?branch=master)](https://github.com/IS-UMK/Czujnikownia/actions/workflows/ci-push.yml)
-[![Documentation](https://img.shields.io/badge/docs-online-blue.svg)](https://is-umk.github.io/Czujnikownia/)
-[![Semantic Release](https://img.shields.io/badge/semantic--release-enabled-brightgreen.svg?logo=semantic-release)](https://github.com/IS-UMK/Czujnikownia/actions/workflows/release.yml)
+[![Build and Test](https://github.com/IS-UMK/Logus/actions/workflows/ci-push.yml/badge.svg?branch=master)](https://github.com/IS-UMK/Logus/actions/workflows/ci-push.yml)
+[![Documentation](https://img.shields.io/badge/docs-online-blue.svg)](https://is-umk.github.io/Logus/)
+[![Semantic Release](https://img.shields.io/badge/semantic--release-enabled-brightgreen.svg?logo=semantic-release)](https://github.com/IS-UMK/Logus/actions/workflows/release.yml)
 
 A GitHub application based on the [Probot](https://github.com/probot/probot) library for automating the collection of information in projects related to pull request events. Designed for installation within an organization.
 
@@ -21,16 +21,16 @@ A GitHub application based on the [Probot](https://github.com/probot/probot) lib
 
 ### Using a running instance
 
-- Install the [GitHub application](https://github.com/apps/czujnikownia) within the organization
+- Install the [GitHub application](https://github.com/apps/logus) within the organization
 - [Configure](#Configuration) the settings
 
 ## Configuration
 
-The application's organization-level configuration can be done by adding a `.github/czujnikownia.yml` file to the `.github-private` or `.github` repository within the organization.
+The application's organization-level configuration can be done by adding a `.github/logus.yml` file to the `.github-private` or `.github` repository within the organization.
 
 Storing the configuration file in the `.github-private` repository requires granting the application access to this repository in the organization's settings – https://github.com/organizations/YOUR-ORGANIZATION/settings/installations
 
-Sample configuration `czujnikownia.yml`:
+Sample configuration `logus.yml`:
 
 ```yml
 projectTitlePrefix: "monitor-"

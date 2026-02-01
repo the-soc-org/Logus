@@ -1,5 +1,8 @@
-import type { CzujnikowniaContext, CzujnikowniaLog } from "../../czujnikowniaContexts";
-import type { AddProjectItemResult, ProjectV2Item } from "./addProjectItemGenerated";
+import type { LogusContext, LogusLog } from "../../logusContexts";
+import type {
+  AddProjectItemResult,
+  ProjectV2Item,
+} from "./addProjectItemGenerated";
 import { addProjectItemMutation } from "./addProjectItemGenerated";
 
 /**
@@ -11,21 +14,32 @@ import { addProjectItemMutation } from "./addProjectItemGenerated";
  * @param log - Optional logger instance.
  * @returns A promise that resolves to an object containing the item ID and field value.
  */
-export async function addProjectItem(context: CzujnikowniaContext, projectId: string, contentId: string, fieldName: string, log?: CzujnikowniaLog)
-: Promise<{itemId: string, fieldValue: number | string}>
-{
-  const result: AddProjectItemResult = await context.octokit.graphql(addProjectItemMutation, {
-    projectId,
-    contentId,
-    fieldName,
-  });
+export async function addProjectItem(
+  context: LogusContext,
+  projectId: string,
+  contentId: string,
+  fieldName: string,
+  log?: LogusLog,
+): Promise<{ itemId: string; fieldValue: number | string }> {
+  const result: AddProjectItemResult = await context.octokit.graphql(
+    addProjectItemMutation,
+    {
+      projectId,
+      contentId,
+      fieldName,
+    },
+  );
 
-  log?.debug(`addItemToProjIfNotExist mutation result:\n${JSON.stringify(result)}`);
+  log?.debug(
+    `addItemToProjIfNotExist mutation result:\n${JSON.stringify(result)}`,
+  );
 
-  const item: ProjectV2Item | null | undefined = result?.addProjectV2ItemById?.item;
+  const item: ProjectV2Item | null | undefined =
+    result?.addProjectV2ItemById?.item;
 
   return {
     itemId: item?.id ?? "",
-    fieldValue: item?.fieldValueByName?.number ?? item?.fieldValueByName?.date ?? 0,
+    fieldValue:
+      item?.fieldValueByName?.number ?? item?.fieldValueByName?.date ?? 0,
   };
 }

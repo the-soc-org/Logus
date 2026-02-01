@@ -1,5 +1,10 @@
-import type { CzujnikowniaContext } from "../../czujnikowniaContexts";
-import type { ListOpenedProjectsInOrgResult, ProjectV2, ProjectV2FieldConfiguration, ProjectV2FieldConfigurationEdge } from "./listOpenedProjectsInOrgGenerated";
+import type { LogusContext } from "../../logusContexts";
+import type {
+  ListOpenedProjectsInOrgResult,
+  ProjectV2,
+  ProjectV2FieldConfiguration,
+  ProjectV2FieldConfigurationEdge,
+} from "./listOpenedProjectsInOrgGenerated";
 import { listOpenedProjectsInOrgQuery } from "./listOpenedProjectsInOrgGenerated";
 
 /**
@@ -8,24 +13,27 @@ import { listOpenedProjectsInOrgQuery } from "./listOpenedProjectsInOrgGenerated
  * @param projectQuery - The query string to filter projects.
  * @returns A promise that resolves to an array of ProjectInOrgQueryResultElement.
  */
-export async function listOpenedProjectsInOrg(context: CzujnikowniaContext, projectQuery: string = ""): Promise<ProjectInOrgQueryResultElement[]>
-{
-  const projectsInOrgData: ListOpenedProjectsInOrgResult 
-    = await context.octokit.graphql(listOpenedProjectsInOrgQuery, {
+export async function listOpenedProjectsInOrg(
+  context: LogusContext,
+  projectQuery: string = "",
+): Promise<ProjectInOrgQueryResultElement[]> {
+  const projectsInOrgData: ListOpenedProjectsInOrgResult =
+    await context.octokit.graphql(listOpenedProjectsInOrgQuery, {
       organizationLogin: context.payload.organization.login,
-      projectQuery: `is:open ${projectQuery}`
+      projectQuery: `is:open ${projectQuery}`,
     });
 
-    return projectsInOrgData?.organization?.projectsV2?.edges?.map((edge) => {
+  return (
+    projectsInOrgData?.organization?.projectsV2?.edges?.map((edge) => {
       return new ProjectInOrgQueryResultElement(edge?.node!);
-    }) ?? [];
+    }) ?? []
+  );
 }
 
 /**
  * Class representing a project in an organization query result.
  */
-export class ProjectInOrgQueryResultElement
-{
+export class ProjectInOrgQueryResultElement {
   /**
    * The ID of the project.
    */
@@ -55,13 +63,15 @@ export class ProjectInOrgQueryResultElement
    * Constructor for ProjectInOrgQueryResultElement.
    * @param node - The project node from the query result.
    */
-  constructor(node: ProjectV2)
-  {
+  constructor(node: ProjectV2) {
     this.id = node.id;
     this.number = node.number;
     this.title = node.title;
     this.closed = node.closed;
-    if(node.fields.edges)
-      this.fields = node.fields.edges.map((n: ProjectV2FieldConfigurationEdge | null) => n?.node as ProjectV2FieldConfiguration);
+    if (node.fields.edges)
+      this.fields = node.fields.edges.map(
+        (n: ProjectV2FieldConfigurationEdge | null) =>
+          n?.node as ProjectV2FieldConfiguration,
+      );
   }
 }

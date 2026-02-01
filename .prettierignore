@@ -3,3 +3,4 @@ lib
 package.json
 package-lock.json
 CHANGELOG.md
+**/*.gql

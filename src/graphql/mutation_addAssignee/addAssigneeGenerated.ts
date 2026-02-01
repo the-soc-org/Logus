@@ -1,4 +1,4 @@
-export const addAssigneeMutation: string =`
+export const addAssigneeMutation: string = `
 mutation addAssignee($pullRequestId: ID!, $assignee: ID!) {
   addAssigneesToAssignable(input:
     {
@@ -14,7 +14,7 @@ mutation addAssignee($pullRequestId: ID!, $assignee: ID!) {
     }
   }
 }`;
-export type AddAssigneeResult = Data
+export type AddAssigneeResult = Data;
 // To parse this data:
 //
 //   import { Convert, AddAssigneeRawResult } from "./file";
@@ -22,33 +22,35 @@ export type AddAssigneeResult = Data
 //   const addAssigneeRawResult = Convert.toAddAssigneeRawResult(json);
 
 export interface AddAssigneeRawResult {
-    data:    Data | null;
-    errors?: Error[];
+  data: Data | null;
+  errors?: Error[];
 }
 
 export interface Data {
-    addAssigneesToAssignable: AddAssigneesToAssignablePayload | null;
+  addAssigneesToAssignable: AddAssigneesToAssignablePayload | null;
 }
 
 export interface AddAssigneesToAssignablePayload {
-    assignable: Assignable | null;
+  assignable: Assignable | null;
 }
 
 export interface Assignable {
-    id?: string;
+  id?: string;
 }
 
 export interface Error {
-    message: string;
+  message: string;
 }
 
 // Converts JSON strings to/from your types
 export class Convert {
-    public static toAddAssigneeRawResult(json: string): AddAssigneeRawResult {
-        return JSON.parse(json);
-    }
+  public static toAddAssigneeRawResult(json: string): AddAssigneeRawResult {
+    return JSON.parse(json);
+  }
 
-    public static addAssigneeRawResultToJson(value: AddAssigneeRawResult): string {
-        return JSON.stringify(value);
-    }
+  public static addAssigneeRawResultToJson(
+    value: AddAssigneeRawResult,
+  ): string {
+    return JSON.stringify(value);
+  }
 }

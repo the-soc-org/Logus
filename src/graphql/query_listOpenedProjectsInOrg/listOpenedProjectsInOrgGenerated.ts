@@ -1,4 +1,4 @@
-export const listOpenedProjectsInOrgQuery: string =`
+export const listOpenedProjectsInOrgQuery: string = `
 query listProjectsInOrg($organizationLogin: String!, $projectQuery: String) { 
   organization(login: $organizationLogin) {
     projectsV2(first: 100, query: $projectQuery) {
@@ -24,7 +24,7 @@ query listProjectsInOrg($organizationLogin: String!, $projectQuery: String) {
     }
   }
 }`;
-export type ListOpenedProjectsInOrgResult = Data
+export type ListOpenedProjectsInOrgResult = Data;
 // To parse this data:
 //
 //   import { Convert, ListOpenedProjectsInOrgRawResult } from "./file";
@@ -32,76 +32,80 @@ export type ListOpenedProjectsInOrgResult = Data
 //   const listOpenedProjectsInOrgRawResult = Convert.toListOpenedProjectsInOrgRawResult(json);
 
 export interface ListOpenedProjectsInOrgRawResult {
-    data:    Data | null;
-    errors?: Error[];
+  data: Data | null;
+  errors?: Error[];
 }
 
 export interface Data {
-    organization: Organization | null;
+  organization: Organization | null;
 }
 
 export interface Organization {
-    projectsV2: ProjectV2Connection;
+  projectsV2: ProjectV2Connection;
 }
 
 export interface ProjectV2Connection {
-    edges: Array<ProjectV2Edge | null> | null;
+  edges: Array<ProjectV2Edge | null> | null;
 }
 
 export interface ProjectV2Edge {
-    node: ProjectV2 | null;
+  node: ProjectV2 | null;
 }
 
 export interface ProjectV2 {
-    id:     string;
-    number: number;
-    title:  string;
-    closed: boolean;
-    fields: ProjectV2FieldConfigurationConnection;
+  id: string;
+  number: number;
+  title: string;
+  closed: boolean;
+  fields: ProjectV2FieldConfigurationConnection;
 }
 
 export interface ProjectV2FieldConfigurationConnection {
-    edges: Array<ProjectV2FieldConfigurationEdge | null> | null;
+  edges: Array<ProjectV2FieldConfigurationEdge | null> | null;
 }
 
 export interface ProjectV2FieldConfigurationEdge {
-    node: ProjectV2FieldConfiguration | null;
+  node: ProjectV2FieldConfiguration | null;
 }
 
 export interface ProjectV2FieldConfiguration {
-    id?:       string;
-    name?:     string;
-    dataType?: ProjectV2FieldType;
+  id?: string;
+  name?: string;
+  dataType?: ProjectV2FieldType;
 }
 
 export enum ProjectV2FieldType {
-    Assignees = "ASSIGNEES",
-    Date = "DATE",
-    Iteration = "ITERATION",
-    Labels = "LABELS",
-    LinkedPullRequests = "LINKED_PULL_REQUESTS",
-    Milestone = "MILESTONE",
-    Number = "NUMBER",
-    Repository = "REPOSITORY",
-    Reviewers = "REVIEWERS",
-    SingleSelect = "SINGLE_SELECT",
-    Text = "TEXT",
-    Title = "TITLE",
-    TrackedBy = "TRACKED_BY",
-    Tracks = "TRACKS",
+  Assignees = "ASSIGNEES",
+  Date = "DATE",
+  Iteration = "ITERATION",
+  Labels = "LABELS",
+  LinkedPullRequests = "LINKED_PULL_REQUESTS",
+  Milestone = "MILESTONE",
+  Number = "NUMBER",
+  Repository = "REPOSITORY",
+  Reviewers = "REVIEWERS",
+  SingleSelect = "SINGLE_SELECT",
+  Text = "TEXT",
+  Title = "TITLE",
+  TrackedBy = "TRACKED_BY",
+  Tracks = "TRACKS",
 }
 
 export interface Error {
-    message: string;
+  message: string;
 }
 
 // Converts JSON strings to/from your types
 export class Convert {
-    public static toListOpenedProjectsInOrgRawResult(json: string): ListOpenedProjectsInOrgRawResult {
-        return JSON.parse(json);
-    }
+  public static toListOpenedProjectsInOrgRawResult(
+    json: string,
+  ): ListOpenedProjectsInOrgRawResult {
+    return JSON.parse(json);
+  }
 
-    public static listOpenedProjectsInOrgRawResultToJson(value: ListOpenedProjectsInOrgRawResult): string {
-        return JSON.stringify(value);
-    }
+  public static listOpenedProjectsInOrgRawResultToJson(
+    value: ListOpenedProjectsInOrgRawResult,
+  ): string {
+    return JSON.stringify(value);
+  }
 }

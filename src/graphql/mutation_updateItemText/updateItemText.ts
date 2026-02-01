@@ -1,4 +1,4 @@
-import type { CzujnikowniaContext, CzujnikowniaLog } from "../../czujnikowniaContexts";
+import type { LogusContext, LogusLog } from "../../logusContexts";
 import type { UpdateItemTextResult } from "./updateItemTextGenerated";
 import { updateItemTextMutation } from "./updateItemTextGenerated";
 
@@ -12,16 +12,25 @@ import { updateItemTextMutation } from "./updateItemTextGenerated";
  * @param log - Optional logger instance.
  * @returns A promise that resolves to the ID of the updated item.
  */
-export async function updateItemText(context: CzujnikowniaContext, projectId: string, itemId: string, fieldId: string, text: string, log: CzujnikowniaLog | undefined = undefined): Promise<string>
-{
-  const result: UpdateItemTextResult = await context.octokit.graphql(updateItemTextMutation, {
-    projectId,
-    itemId,
-    fieldId,
-    text,
-  });
+export async function updateItemText(
+  context: LogusContext,
+  projectId: string,
+  itemId: string,
+  fieldId: string,
+  text: string,
+  log: LogusLog | undefined = undefined,
+): Promise<string> {
+  const result: UpdateItemTextResult = await context.octokit.graphql(
+    updateItemTextMutation,
+    {
+      projectId,
+      itemId,
+      fieldId,
+      text,
+    },
+  );
 
   log?.debug(`updateItemText mutation result:\n${JSON.stringify(result)}`);
 
-  return result?.updateProjectV2ItemFieldValue?.projectV2Item?.id ?? '';
+  return result?.updateProjectV2ItemFieldValue?.projectV2Item?.id ?? "";
 }

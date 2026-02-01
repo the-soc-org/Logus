@@ -51,11 +51,11 @@ const privateKey = fs.readFileSync(
 function TestProjectFieldValueUpdaterInitialize(
   mock: nock.Scope,
   payload: { repository: { name: string }; organization: { login: string } },
-  configRelPath = "fixtures/configs/czujnikownia.yml",
+  configRelPath = "fixtures/configs/logus.yml",
 ): nock.Scope {
   mock = mock
     .get(
-      `/repos/${payload.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
+      `/repos/${payload.organization.login}/.github-private/contents/${encodeURIComponent(".github/logus.yml")}`,
     )
     .reply(200, fs.readFileSync(path.join(__dirname, configRelPath), "utf-8"))
 
@@ -81,7 +81,7 @@ function TestProjectFieldValueUpdaterInitialize(
   return mock;
 }
 
-describe("Czujnikownia nock app tests", () => {
+describe("Logus nock app tests", () => {
   let probot: any;
 
   beforeEach(() => {
@@ -111,7 +111,7 @@ describe("Czujnikownia nock app tests", () => {
       .reply(200)
 
       .get(
-        `/repos/${payloadPullRequestOpened.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
+        `/repos/${payloadPullRequestOpened.organization.login}/.github-private/contents/${encodeURIComponent(".github/logus.yml")}`,
       )
       .times(2)
       .reply(
@@ -156,13 +156,13 @@ describe("Czujnikownia nock app tests", () => {
       .reply(200)
 
       .get(
-        `/repos/${payloadPullRequestOpened.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
+        `/repos/${payloadPullRequestOpened.organization.login}/.github-private/contents/${encodeURIComponent(".github/logus.yml")}`,
       )
       .times(2)
       .reply(404)
 
       .get(
-        `/repos/${payloadPullRequestOpened.organization.login}/.github/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
+        `/repos/${payloadPullRequestOpened.organization.login}/.github/contents/${encodeURIComponent(".github/logus.yml")}`,
       )
       .times(2)
       .reply(
@@ -204,12 +204,12 @@ describe("Czujnikownia nock app tests", () => {
   test("3. Testing loading application's default configuration", async () => {
     const mock = nock("https://api.github.com")
       .get(
-        `/repos/${payloadPRApproved.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
+        `/repos/${payloadPRApproved.organization.login}/.github-private/contents/${encodeURIComponent(".github/logus.yml")}`,
       )
       .reply(404)
 
       .get(
-        `/repos/${payloadPRApproved.organization.login}/.github/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
+        `/repos/${payloadPRApproved.organization.login}/.github/contents/${encodeURIComponent(".github/logus.yml")}`,
       )
       .reply(404)
 
@@ -249,7 +249,7 @@ describe("Czujnikownia nock app tests", () => {
       .reply(200)
 
       .get(
-        `/repos/${payloadPullRequestOpened.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
+        `/repos/${payloadPullRequestOpened.organization.login}/.github-private/contents/${encodeURIComponent(".github/logus.yml")}`,
       )
       .times(2)
       .reply(
@@ -308,7 +308,7 @@ describe("Czujnikownia nock app tests", () => {
       .reply(200)
 
       .get(
-        `/repos/${payloadPullRequestOpened.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
+        `/repos/${payloadPullRequestOpened.organization.login}/.github-private/contents/${encodeURIComponent(".github/logus.yml")}`,
       )
       .times(2)
       .reply(
@@ -355,7 +355,7 @@ describe("Czujnikownia nock app tests", () => {
       .reply(200)
 
       .get(
-        `/repos/${payloadPullRequestOpened.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
+        `/repos/${payloadPullRequestOpened.organization.login}/.github-private/contents/${encodeURIComponent(".github/logus.yml")}`,
       )
       .times(2)
       .reply(
@@ -663,7 +663,7 @@ describe("Czujnikownia nock app tests", () => {
   test("16. Testing that no action is taken when field name in project is incorrect", async () => {
     const mock = nock("https://api.github.com")
       .get(
-        `/repos/${payloadPRCommented.organization.login}/.github-private/contents/${encodeURIComponent(".github/czujnikownia.yml")}`,
+        `/repos/${payloadPRCommented.organization.login}/.github-private/contents/${encodeURIComponent(".github/logus.yml")}`,
       )
       .reply(
         200,

@@ -1,4 +1,4 @@
-export const listTeamsInOrgQuery: string =`
+export const listTeamsInOrgQuery: string = `
 query listTeamsInOrg($organizationLogin: String!, $repoQuery: String!, $teamQuery: String){  
 organization(login: $organizationLogin) {
      	login,
@@ -23,7 +23,7 @@ organization(login: $organizationLogin) {
       }
     }
 }`;
-export type ListTeamsInOrgResult = Data
+export type ListTeamsInOrgResult = Data;
 // To parse this data:
 //
 //   import { Convert, ListTeamsInOrgRawResult } from "./file";
@@ -31,60 +31,64 @@ export type ListTeamsInOrgResult = Data
 //   const listTeamsInOrgRawResult = Convert.toListTeamsInOrgRawResult(json);
 
 export interface ListTeamsInOrgRawResult {
-    data:    Data | null;
-    errors?: Error[];
+  data: Data | null;
+  errors?: Error[];
 }
 
 export interface Data {
-    organization: Organization | null;
+  organization: Organization | null;
 }
 
 export interface Organization {
-    login: string;
-    teams: TeamConnection;
+  login: string;
+  teams: TeamConnection;
 }
 
 export interface TeamConnection {
-    nodes: Array<Team | null> | null;
+  nodes: Array<Team | null> | null;
 }
 
 export interface Team {
-    id:           string;
-    name:         string;
-    projectsV2:   ProjectV2Connection;
-    repositories: TeamRepositoryConnection;
+  id: string;
+  name: string;
+  projectsV2: ProjectV2Connection;
+  repositories: TeamRepositoryConnection;
 }
 
 export interface ProjectV2Connection {
-    nodes: Array<ProjectV2 | null> | null;
+  nodes: Array<ProjectV2 | null> | null;
 }
 
 export interface ProjectV2 {
-    id:     string;
-    title:  string;
-    closed: boolean;
+  id: string;
+  title: string;
+  closed: boolean;
 }
 
 export interface TeamRepositoryConnection {
-    nodes: Array<Repository | null> | null;
+  nodes: Array<Repository | null> | null;
 }
 
 export interface Repository {
-    id:   string;
-    name: string;
+  id: string;
+  name: string;
 }
 
 export interface Error {
-    message: string;
+  message: string;
 }
 
 // Converts JSON strings to/from your types
 export class Convert {
-    public static toListTeamsInOrgRawResult(json: string): ListTeamsInOrgRawResult {
-        return JSON.parse(json);
-    }
+  public static toListTeamsInOrgRawResult(
+    json: string,
+  ): ListTeamsInOrgRawResult {
+    return JSON.parse(json);
+  }
 
-    public static listTeamsInOrgRawResultToJson(value: ListTeamsInOrgRawResult): string {
-        return JSON.stringify(value);
-    }
+  public static listTeamsInOrgRawResultToJson(
+    value: ListTeamsInOrgRawResult,
+  ): string {
+    return JSON.stringify(value);
+  }
 }

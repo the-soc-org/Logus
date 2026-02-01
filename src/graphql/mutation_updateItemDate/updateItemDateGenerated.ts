@@ -1,4 +1,4 @@
-export const updateItemDateMutation: string =`
+export const updateItemDateMutation: string = `
 mutation updateItemField($projectId: ID!, $itemId: ID!, $fieldId: ID!, $date: Date){
   updateProjectV2ItemFieldValue(
     input: {
@@ -15,7 +15,7 @@ mutation updateItemField($projectId: ID!, $itemId: ID!, $fieldId: ID!, $date: Da
     }
   }
 }`;
-export type UpdateItemDateResult = Data
+export type UpdateItemDateResult = Data;
 // To parse this data:
 //
 //   import { Convert, UpdateItemDateRawResult } from "./file";
@@ -23,33 +23,37 @@ export type UpdateItemDateResult = Data
 //   const updateItemDateRawResult = Convert.toUpdateItemDateRawResult(json);
 
 export interface UpdateItemDateRawResult {
-    data:    Data | null;
-    errors?: Error[];
+  data: Data | null;
+  errors?: Error[];
 }
 
 export interface Data {
-    updateProjectV2ItemFieldValue: UpdateProjectV2ItemFieldValuePayload | null;
+  updateProjectV2ItemFieldValue: UpdateProjectV2ItemFieldValuePayload | null;
 }
 
 export interface UpdateProjectV2ItemFieldValuePayload {
-    projectV2Item: ProjectV2Item | null;
+  projectV2Item: ProjectV2Item | null;
 }
 
 export interface ProjectV2Item {
-    id: string;
+  id: string;
 }
 
 export interface Error {
-    message: string;
+  message: string;
 }
 
 // Converts JSON strings to/from your types
 export class Convert {
-    public static toUpdateItemDateRawResult(json: string): UpdateItemDateRawResult {
-        return JSON.parse(json);
-    }
+  public static toUpdateItemDateRawResult(
+    json: string,
+  ): UpdateItemDateRawResult {
+    return JSON.parse(json);
+  }
 
-    public static updateItemDateRawResultToJson(value: UpdateItemDateRawResult): string {
-        return JSON.stringify(value);
-    }
+  public static updateItemDateRawResultToJson(
+    value: UpdateItemDateRawResult,
+  ): string {
+    return JSON.stringify(value);
+  }
 }

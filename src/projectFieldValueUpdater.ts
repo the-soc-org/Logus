@@ -1,7 +1,13 @@
 import { OrganizationConfig } from "./organizationConfig";
-import type { CzujnikowniaLog, PRCzujnikowniaContext } from "./czujnikowniaContexts";
-import { addProjectItem, listOpenedProjectsInOrg, listTeamNodesRelatedToRepo,
-   ProjectInOrgQueryResultElement, updateItemDate, updateItemNumber } from "./graphql";
+import type { LogusLog, PRLogusContext } from "./logusContexts";
+import {
+  addProjectItem,
+  listOpenedProjectsInOrg,
+  listTeamNodesRelatedToRepo,
+  ProjectInOrgQueryResultElement,
+  updateItemDate,
+  updateItemNumber,
+} from "./graphql";
 
 /**
  * Interface for updating project field values.
@@ -13,16 +19,21 @@ export interface ProjectFieldValueUpdater {
    * @param newFieldValue - The new value to set for the field.
    * @param condition - Optional condition to check before updating the field.
    */
-  updateDate(fieldNameSelector: (s: OrganizationConfig) => string | undefined, newFieldValue: string,
-    condition?: (currentFieldVal: string) => boolean): Promise<void>;
+  updateDate(
+    fieldNameSelector: (s: OrganizationConfig) => string | undefined,
+    newFieldValue: string,
+    condition?: (currentFieldVal: string) => boolean,
+  ): Promise<void>;
 
   /**
    * Increments the number field in the project.
    * @param fieldNameSelector - Function to select the field name from the organization config.
    * @param condition - Optional condition to check before incrementing the field.
    */
-  increment(fieldNameSelector: (s: OrganizationConfig) => string | undefined,
-    condition?: (currentFieldVal: string) => boolean): Promise<void>;
+  increment(
+    fieldNameSelector: (s: OrganizationConfig) => string | undefined,
+    condition?: (currentFieldVal: string) => boolean,
+  ): Promise<void>;
 }
 
 /**
@@ -35,23 +46,40 @@ export class ProjectFieldValueUpdaterFactory {
    * @param log - Optional logger instance.
    * @returns A ProjectFieldValueUpdater instance.
    */
-  public static async create(context: PRCzujnikowniaContext, log: CzujnikowniaLog | undefined = undefined): Promise<ProjectFieldValueUpdater> {
+  public static async create(
+    context: PRLogusContext,
+    log: LogusLog | undefined = undefined,
+  ): Promise<ProjectFieldValueUpdater> {
     const componentUpdaters: BasicProjectFieldValueUpdater[] = [];
 
     const config: OrganizationConfig = await OrganizationConfig.load(context);
-    const teams = await listTeamNodesRelatedToRepo(context, config.projectTitlePrefix);
+    const teams = await listTeamNodesRelatedToRepo(
+      context,
+      config.projectTitlePrefix,
+    );
 
     const uniqueTitles = new Set<string>();
-    for(const team of teams)
-      for(const proj of team.projectsV2.nodes.filter(n => n.title.startsWith(config.projectTitlePrefix)))
+    for (const team of teams)
+      for (const proj of team.projectsV2.nodes.filter((n) =>
+        n.title.startsWith(config.projectTitlePrefix),
+      ))
         uniqueTitles.add(proj.title);
 
-    for(const projTitle of uniqueTitles) {
+    for (const projTitle of uniqueTitles) {
       const projects = await listOpenedProjectsInOrg(context, projTitle);
       // Filters projects to avoid duplicates in case of Polish characters.
-      const filteredProjects = projects.filter(project => project.title === projTitle);
+      const filteredProjects = projects.filter(
+        (project) => project.title === projTitle,
+      );
       if (filteredProjects.length > 0) {
-        componentUpdaters.push(new BasicProjectFieldValueUpdater(context, filteredProjects, config, log));
+        componentUpdaters.push(
+          new BasicProjectFieldValueUpdater(
+            context,
+            filteredProjects,
+            config,
+            log,
+          ),
+        );
       }
     }
 
@@ -80,25 +108,32 @@ class ProjectFieldUpdaterGroup implements ProjectFieldValueUpdater {
    * @param newFieldValue - The new value to set for the field.
    * @param condition - Optional condition to check before updating the field.
    */
-  public async updateDate(fieldNameSelector: (s: OrganizationConfig) => string | undefined, newFieldValue: string,
-    condition: (currentFieldVal: string) => boolean = (_c) => true) {
+  public async updateDate(
+    fieldNameSelector: (s: OrganizationConfig) => string | undefined,
+    newFieldValue: string,
+    condition: (currentFieldVal: string) => boolean = (_c) => true,
+  ) {
     const promises: Promise<void>[] = [];
-    for(const updater of this.fieldUpdaters)
-      promises.push(updater.updateDate(fieldNameSelector, newFieldValue, condition));
+    for (const updater of this.fieldUpdaters)
+      promises.push(
+        updater.updateDate(fieldNameSelector, newFieldValue, condition),
+      );
 
-      await Promise.all(promises);
+    await Promise.all(promises);
   }
 
   /**
    * Increments the number field in all projects.
    * @param fieldNameSelector - Function to select the field name from the organization config.
    */
-  public async increment(fieldNameSelector: (s: OrganizationConfig) => string | undefined) {
+  public async increment(
+    fieldNameSelector: (s: OrganizationConfig) => string | undefined,
+  ) {
     const promises: Promise<void>[] = [];
-    for(const updater of this.fieldUpdaters)
+    for (const updater of this.fieldUpdaters)
       promises.push(updater.increment(fieldNameSelector));
 
-      await Promise.all(promises);
+    await Promise.all(promises);
   }
 }
 
@@ -107,11 +142,10 @@ class ProjectFieldUpdaterGroup implements ProjectFieldValueUpdater {
  * @notExported
  */
 class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
-
-  private readonly context: PRCzujnikowniaContext;
+  private readonly context: PRLogusContext;
   private readonly projects: ProjectInOrgQueryResultElement[];
   private readonly orgConfig: OrganizationConfig;
-  private readonly log: CzujnikowniaLog | undefined;
+  private readonly log: LogusLog | undefined;
 
   /**
    * Constructor for BasicProjectFieldValueUpdater.
@@ -120,9 +154,12 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
    * @param orgConfig - The organization configuration.
    * @param log - Optional logger instance.
    */
-  public constructor(context: PRCzujnikowniaContext,
-    projects: ProjectInOrgQueryResultElement[], orgConfig: OrganizationConfig, log: CzujnikowniaLog | undefined) {
-
+  public constructor(
+    context: PRLogusContext,
+    projects: ProjectInOrgQueryResultElement[],
+    orgConfig: OrganizationConfig,
+    log: LogusLog | undefined,
+  ) {
     this.context = context;
     this.projects = projects;
     this.orgConfig = orgConfig;
@@ -135,13 +172,24 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
    * @param newFieldValue - The new value to set for the field.
    * @param condition - Optional condition to check before updating the field.
    */
-  public async updateDate(fieldNameSelector: (s: OrganizationConfig) => string | undefined, newFieldValue: string,
-    condition: (currentFieldVal: string) => boolean = (_c) => true) {
-      
+  public async updateDate(
+    fieldNameSelector: (s: OrganizationConfig) => string | undefined,
+    newFieldValue: string,
+    condition: (currentFieldVal: string) => boolean = (_c) => true,
+  ) {
     await this.updateField(fieldNameSelector, async (proj, item, fieldId) => {
-      if(condition(item.fieldValue.toString())) {
-        await updateItemDate(this.context, proj.id, item.itemId, fieldId, newFieldValue as string, this.log);
-        this.log?.info(`Field ${fieldId} updated in ${proj.title} project to value ${newFieldValue}.`);
+      if (condition(item.fieldValue.toString())) {
+        await updateItemDate(
+          this.context,
+          proj.id,
+          item.itemId,
+          fieldId,
+          newFieldValue as string,
+          this.log,
+        );
+        this.log?.info(
+          `Field ${fieldId} updated in ${proj.title} project to value ${newFieldValue}.`,
+        );
       }
     });
   }
@@ -150,11 +198,22 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
    * Increments the number field in the project.
    * @param fieldNameSelector - Function to select the field name from the organization config.
    */
-  public async increment(fieldNameSelector: (s: OrganizationConfig) => string | undefined) {
+  public async increment(
+    fieldNameSelector: (s: OrganizationConfig) => string | undefined,
+  ) {
     await this.updateField(fieldNameSelector, async (proj, item, fieldId) => {
       const newFieldValue: number = (item.fieldValue as number) + 1;
-      await updateItemNumber(this.context, proj.id, item.itemId, fieldId, newFieldValue, this.log);
-      this.log?.info(`Field ${fieldId} updated in ${proj.title} project to value ${newFieldValue}.`);
+      await updateItemNumber(
+        this.context,
+        proj.id,
+        item.itemId,
+        fieldId,
+        newFieldValue,
+        this.log,
+      );
+      this.log?.info(
+        `Field ${fieldId} updated in ${proj.title} project to value ${newFieldValue}.`,
+      );
     });
   }
 
@@ -165,16 +224,27 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
    */
   private async updateField(
     fieldNameSelector: (s: OrganizationConfig) => string | undefined,
-    action: (proj: ProjectInOrgQueryResultElement, item: {itemId: string, fieldValue: number | string | Date}, fieldId: string) => Promise<void>) {
-
+    action: (
+      proj: ProjectInOrgQueryResultElement,
+      item: { itemId: string; fieldValue: number | string | Date },
+      fieldId: string,
+    ) => Promise<void>,
+  ) {
     for (const proj of this.projects) {
       const fieldName: string = fieldNameSelector(this.orgConfig)!;
 
-      const fieldId: string | undefined = proj.fields.find(f => this.caseInsensiviteEqual(f.name, fieldName))?.id;
-      if (fieldId === undefined)
-        continue;
+      const fieldId: string | undefined = proj.fields.find((f) =>
+        this.caseInsensiviteEqual(f.name, fieldName),
+      )?.id;
+      if (fieldId === undefined) continue;
 
-      const item = await addProjectItem(this.context, proj.id, this.context.payload.pull_request.node_id, fieldName, this.log);
+      const item = await addProjectItem(
+        this.context,
+        proj.id,
+        this.context.payload.pull_request.node_id,
+        fieldName,
+        this.log,
+      );
       await action(proj, item, fieldId);
     }
   }
@@ -185,7 +255,14 @@ class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
    * @param secondString - The second string to compare.
    * @returns True if the strings are equal, false otherwise.
    */
-  private caseInsensiviteEqual(firstString: string | undefined, secondString: string): boolean {
-    return firstString?.localeCompare(secondString, undefined, { sensitivity: 'accent' }) === 0;
+  private caseInsensiviteEqual(
+    firstString: string | undefined,
+    secondString: string,
+  ): boolean {
+    return (
+      firstString?.localeCompare(secondString, undefined, {
+        sensitivity: "accent",
+      }) === 0
+    );
   }
 }

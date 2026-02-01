@@ -1,5 +1,5 @@
 import type { WithoutNullableKeys } from "..";
-import type { CzujnikowniaContext } from "../../czujnikowniaContexts";
+import type { LogusContext } from "../../logusContexts";
 import type { GetProjectIdResult } from "./getProjectIdGenerated";
 import { getProjectIdQuery } from "./getProjectIdGenerated";
 
@@ -9,10 +9,14 @@ import { getProjectIdQuery } from "./getProjectIdGenerated";
  * @param projectNumber - The number of the project to retrieve the ID for.
  * @returns A promise that resolves to the ID of the project.
  */
-export async function getProjectV2Id(context: CzujnikowniaContext, projectNumber: number): Promise<string> {
-    const result: WithoutNullableKeys<GetProjectIdResult> = await context.octokit.graphql(getProjectIdQuery, {
-        organizationLogin: context.payload.organization.login,
-        projectNumber: projectNumber,
+export async function getProjectV2Id(
+  context: LogusContext,
+  projectNumber: number,
+): Promise<string> {
+  const result: WithoutNullableKeys<GetProjectIdResult> =
+    await context.octokit.graphql(getProjectIdQuery, {
+      organizationLogin: context.payload.organization.login,
+      projectNumber: projectNumber,
     });
-    return result.organization.projectV2.id;
+  return result.organization.projectV2.id;
 }

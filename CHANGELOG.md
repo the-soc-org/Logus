@@ -1,17 +1,17 @@
-## [1.1.2](https://github.com/IS-UMK/Czujnikownia/compare/v1.1.1...v1.1.2) (2025-12-22)
+## [1.1.2](https://github.com/IS-UMK/Logus/compare/v1.1.1...v1.1.2) (2025-12-22)
 
 
 ### Bug Fixes
 
-* **ci:** include package-lock.json in release assets ([ff2272c](https://github.com/IS-UMK/Czujnikownia/commit/ff2272c59ecb4f42bf910835929a998bc537802c))
-* **docs:** update badge links in README files to point to the correct CI workflows ([eed9c99](https://github.com/IS-UMK/Czujnikownia/commit/eed9c99867ef4d3244fb058014d0b0a40cc29c10))
+* **ci:** include package-lock.json in release assets ([ff2272c](https://github.com/IS-UMK/Logus/commit/ff2272c59ecb4f42bf910835929a998bc537802c))
+* **docs:** update badge links in README files to point to the correct CI workflows ([eed9c99](https://github.com/IS-UMK/Logus/commit/eed9c99867ef4d3244fb058014d0b0a40cc29c10))
 
-## [1.1.1](https://github.com/SebastianSzt/Czujnikownia/compare/v1.1.0...v1.1.1) (2025-05-27)
+## [1.1.1](https://github.com/SebastianSzt/Logus/compare/v1.1.0...v1.1.1) (2025-05-27)
 
 
 ### Bug Fixes
 
-* **ci:** update node version in GitHub Action workflows ([b35c403](https://github.com/SebastianSzt/Czujnikownia/commit/b35c40395b9c52ede78d77795a8de4d0f599cd2d))
+* **ci:** update node version in GitHub Action workflows ([b35c403](https://github.com/SebastianSzt/Logus/commit/b35c40395b9c52ede78d77795a8de4d0f599cd2d))
 
 # [1.1.0] (2025-05-27)
 
