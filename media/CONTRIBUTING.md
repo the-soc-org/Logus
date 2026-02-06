@@ -22,6 +22,10 @@ Following these guidelines will help us all collaborate more efficiently. Thanks
 4. Format code according to standards
 5. Create a pull request to the indicated branch
 
+## Pull Requests
+
+When opening a pull request, please use the provided **pull request template** and fill it out as completely as possible.
+
 # Testing
 
 Code and program functionality is tested using **Jest**. To run tests:
@@ -84,7 +88,7 @@ The project uses **Semantic Release** for automatic version management and relea
 
 ⚠️ **Important**:
 
-- DO NOT run `npm run release` yourself
+- Do NOT trigger Semantic Release manually
 - Semantic Release is automatically run by GitHub Actions
 
 # Commit Message Conventions
