@@ -2,7 +2,7 @@
 
 ### Description
 
-Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context.
+Please include a summary of the change and relevant context.
 
 ### Type of change
 
@@ -12,6 +12,18 @@ Please delete options that are not relevant.
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] Documentation update
+
+### Breaking Change
+
+<!--  Remove this section if not applicable. -->
+
+Describe breaking changes.
+
+### Related Issues
+
+<!-- Remove this section if not applicable. -->
+
+Closes #(issue number)
 
 ### Checklist:
 

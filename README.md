@@ -1,8 +1,6 @@
 # Logus
 
 [![Build and Test](https://github.com/IS-UMK/Logus/actions/workflows/ci-push.yml/badge.svg?branch=master)](https://github.com/IS-UMK/Logus/actions/workflows/ci-push.yml)
-[![Documentation](https://img.shields.io/badge/docs-online-blue.svg)](https://is-umk.github.io/Logus/)
-[![Semantic Release](https://img.shields.io/badge/semantic--release-enabled-brightgreen.svg?logo=semantic-release)](https://github.com/IS-UMK/Logus/actions/workflows/release.yml)
 
 A GitHub application based on the [Probot](https://github.com/probot/probot) library for automating the collection of information in projects related to pull request events. Designed for installation within an organization.
 
