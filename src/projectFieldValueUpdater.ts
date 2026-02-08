@@ -38,13 +38,19 @@ export interface ProjectFieldValueUpdater {
 
 /**
  * Factory class for creating ProjectFieldValueUpdater instances.
+ *
+ * @remarks
+ * The {@link ProjectFieldValueUpdaterFactory.create} method builds a
+ * {@link ProjectFieldUpdaterGroup} that aggregates one or more
+ * {@link BasicProjectFieldValueUpdater} instances.
  */
 export class ProjectFieldValueUpdaterFactory {
   /**
    * Creates a ProjectFieldValueUpdater instance.
    * @param context - The context of the pull request.
    * @param log - Optional logger instance.
-   * @returns A ProjectFieldValueUpdater instance.
+   * @returns A {@link ProjectFieldUpdaterGroup} that wraps
+   * one or more {@link BasicProjectFieldValueUpdater} instances.
    */
   public static async create(
     context: PRLogusContext,
@@ -89,9 +95,12 @@ export class ProjectFieldValueUpdaterFactory {
 
 /**
  * Class for updating multiple project fields.
- * @notExported
+ *
+ * @remarks
+ * Created by {@link ProjectFieldValueUpdaterFactory.create} to aggregate
+ * multiple {@link BasicProjectFieldValueUpdater} instances.
  */
-class ProjectFieldUpdaterGroup implements ProjectFieldValueUpdater {
+export class ProjectFieldUpdaterGroup implements ProjectFieldValueUpdater {
   fieldUpdaters: BasicProjectFieldValueUpdater[];
 
   /**
@@ -139,9 +148,12 @@ class ProjectFieldUpdaterGroup implements ProjectFieldValueUpdater {
 
 /**
  * Class for updating a single project's field values.
- * @notExported
+ *
+ * @remarks
+ * Created by {@link ProjectFieldValueUpdaterFactory.create} for each
+ * matching project configuration.
  */
-class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
+export class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
   private readonly context: PRLogusContext;
   private readonly projects: ProjectInOrgQueryResultElement[];
   private readonly orgConfig: OrganizationConfig;

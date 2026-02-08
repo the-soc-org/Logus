@@ -2,7 +2,7 @@
   "entryPoints": ["src"],
   "entryPointStrategy": "expand",
   "out": "docs",
-  "plugin": ["@zamiell/typedoc-plugin-not-exported"],
+  "plugin": ["typedoc-plugin-missing-exports", "typedoc-theme-oxide"],
   "exclude": [
     "**/.github/**",
     "**/.vscode/**",
@@ -11,9 +11,11 @@
     "**/scripts/**",
     "**/test/**"
   ],
-  "includeVersion": false,
   "excludePrivate": false,
+  "excludePrivateClassFields": false,
+  "excludeProtected": false,
+  "excludeNotDocumented": false,
   "readme": "README.md",
-  "theme": "default",
-  "name": "Logus"
+  "name": "Logus",
+  "theme": "oxide"
 }
