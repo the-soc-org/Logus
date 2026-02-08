@@ -41,7 +41,7 @@
     "prettier": "^3.8.0",
     "quicktype": "^23.0.76",
     "semantic-release": "^25.0.2",
-    "smee-client": "^1.2.2",
+    "smee-client": "^5.0.0",
     "ts-jest": "^29.4.6",
     "typedoc": "^0.28.16",
     "typedoc-plugin-missing-exports": "^4.1.2",
