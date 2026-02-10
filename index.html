@@ -4,15 +4,28 @@
 <p><em>A structured record of collaborative pull request activity</em></p>
 <p>Logus records pull request activity as dedicated <strong>Project items</strong> in <strong>GitHub Projects</strong>, creating
 a structured log of collaborative activity.</p>
-<p>By combining standard pull request metadata with additional, non-standard <strong>Project fields</strong> that
-store review timestamps and iteration counts, each pull request becomes a persistent, queryable
-Project item that captures its collaboration history within a GitHub Project.</p>
+<p>By combining standard <strong>Project fields</strong> (Title, Assignees, Reviewers, Repository, Status, Labels)
+with configurable, non-standard <strong>Project fields managed by Logus</strong> that store open pull request
+timestamp (Posted Date), review timestamps (First Review Date, Last Review Date, Last Approved
+Review Date) and iteration counts (Review Iteration), each pull request becomes a persistent,
+queryable Project item that captures its collaboration history within a GitHub Project.</p>
+<p><img src="media/monitor_example.png" alt=""></p>
 <h3 id="how-it-works" class="tsd-anchor-link">How It Works<a href="#how-it-works" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul>
-<li>Each pull request is added to a selected GitHub Project as a Project item.</li>
-<li>GitHub automatically makes standard pull request metadata available as Project fields.</li>
-<li>Logus updates additional, non-standard Project fields that capture review dynamics.</li>
+<li>Logus sets the pull request’s <strong>Projects</strong> field, which causes GitHub to add the pull request to
+the selected Project as a Project item.</li>
+<li>GitHub automatically updates values in Project columns with standard fields.</li>
+<li>Logus updates values in Project columns with non-standard fields that capture review dynamics.</li>
 <li>A single Project item is updated incrementally as collaboration unfolds.</li>
+<li>Optionally, Logus assigns the pull request author as an <strong>Assignee</strong> to indicate authorship.</li>
+</ul>
+<p>Logus assumes that target GitHub Projects follow a predefined <strong>structural template</strong>:</p>
+<ul>
+<li>The Project may contain standard and non-standard fields</li>
+<li>Non-standard fields must match those configured in <code>logus.yml</code> (e.g. First Review Date, Review
+Iteration).</li>
+<li>Field types must be compatible with the stored values
+(e.g. <em>Date</em> fields for dates, <em>Number</em> fields for review iterations).</li>
 </ul>
 <p>All data is stored directly in GitHub Projects and can be explored using native views, filters,
 and downloaded in JSON format.</p>
@@ -20,40 +33,36 @@ and downloaded in JSON format.</p>
 <ul>
 <li>Install the <a href="https://github.com/apps/logus">GitHub App</a> within the organization</li>
 <li>Configure the application settings (see <a href="#configuration">Configuration</a>)</li>
-<li>Copy a ready-to-use Project template from:<br>
-<a href="https://github.com/orgs/IS-UMK/projects/45">https://github.com/orgs/IS-UMK/projects/45</a></li>
+<li>Copy a ready-to-use <a href="https://github.com/orgs/IS-UMK/projects/45">Project Template</a></li>
 </ul>
 <hr>
-<h2 id="what-logus-records" class="tsd-anchor-link">What Logus Records<a href="#what-logus-records" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p>For each pull request added to a Project, Logus creates or updates a single Project item
-that reflects the pull request’s progress through review.</p>
-<p>Each Project item may include both <strong>standard pull request metadata</strong> (automatically provided by
-GitHub) and <strong>Logus-managed fields</strong> for review-specific data:</p>
+<h2 id="additional-options-for-automatic-standard-field-updates" class="tsd-anchor-link">Additional Options for Automatic Standard Field Updates<a href="#additional-options-for-automatic-standard-field-updates" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="reviewers-field" class="tsd-anchor-link">Reviewers Field<a href="#reviewers-field" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>The <strong>Reviewers</strong> column can be filled automatically using GitHub’s built-in reviewer assignment
+mechanism. This requires additional configuration:</p>
 <ul>
-<li><strong>Standard fields:</strong> Title, Assignees, Reviewers, Repository, Status, Labels, Projects, Milestone</li>
-<li><strong>Logus fields:</strong> Posted Date, First Review Date, Last Review Date, Last Approved Review Date, Review Iteration</li>
+<li>Add a <code>CODEOWNERS</code> file to the repository (typically in the <code>.github/</code> or <code>.docs/</code> directory).</li>
+<li>Define code owners using the standard CODEOWNERS syntax, for example:
+<code>* @my-organization/my-team</code></li>
+<li>Ensure that team knows the repository and has at least <strong>Write</strong> permissions.</li>
+<li>Enable automatic reviewer assignment in the team settings:
+<strong>Settings → Code Review → Enable Auto Assignment</strong>.</li>
 </ul>
-<p>Logus does not modify standard metadata. It is responsible for:</p>
+<p>Automatic reviewer selection works for organizations using <strong>Team</strong> or <strong>Enterprise</strong>
+licenses. These licenses are paid, but teachers can apply for an educational discount and obtain
+them free of charge.</p>
+<h3 id="status-field" class="tsd-anchor-link">Status Field<a href="#status-field" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Logus does not enforce a specific review process. Instead, the <strong>Status</strong> field of each Project item
+is managed by GitHub Projects workflows, which automatically update the Status in response to pull
+request events.</p>
+<p>Typical workflow actions include (see <a href="https://github.com/orgs/IS-UMK/projects/45/workflows">Project Template Workflows</a>):</p>
 <ul>
-<li>Adding pull requests to selected GitHub Projects, which automatically sets the standard <strong>Projects</strong> field</li>
-<li>Updating configurable, non-standard fields that capture review dynamics</li>
-<li>Optionally assigning the pull request author as an <strong>Assignee</strong> to indicate authorship</li>
+<li>Setting an initial <strong>Status</strong> when a pull request is opened (e.g. Todo)</li>
+<li>Updating <strong>Status</strong> when the first review is submitted (e.g. In Progress)</li>
+<li>Moving the item to an approved or completed <strong>Status</strong> after an approving review (e.g. Reviewed)</li>
 </ul>
-<p>Projects prepared for use with Logus must define the non-standard Project fields managed by the
-application.</p>
-<h2 id="project-template" class="tsd-anchor-link">Project Template<a href="#project-template" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p>Logus assumes that target GitHub Projects follow a predefined <strong>structural template</strong>.</p>
-<p>In particular:</p>
-<ul>
-<li>The Project must contain fields whose names match those configured in <code>logus.yml</code> (e.g. First
-Review Date, Review Iteration).</li>
-<li>Field types must be compatible with the stored values
-(e.g. <em>Date</em> fields for dates, <em>Number</em> fields for review iterations).</li>
-<li>Each pull request is represented by a single Project item, which is incrementally updated as new
-events occur.</li>
-</ul>
-<p>A consistent Project template ensures reliable data synchronization.</p>
-<h2 id="installation-and-running" class="tsd-anchor-link">Installation and Running<a href="#installation-and-running" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<hr>
+<h2 id="self-hosting" class="tsd-anchor-link">Self-hosting<a href="#self-hosting" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <ul>
 <li>Install the <a href="https://nodejs.org/download/release/v20.19.2/">Node</a> environment</li>
 <li>Run the following commands inside the source code directory:
@@ -67,16 +76,6 @@ events occur.</li>
 <li>Install the application within the target organization</li>
 <li>Restart the service using <code>npm start</code></li>
 </ul>
-<h2 id="status-and-workflows" class="tsd-anchor-link">Status and Workflows<a href="#status-and-workflows" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p>Logus does not enforce a specific review process.</p>
-<p>Instead, it works together with <strong>GitHub Projects workflows</strong> to manage the <strong>Status</strong> field of each
-Project item. These workflows automatically update the Status in response to pull request events.</p>
-<p>Typical workflow actions include:</p>
-<ul>
-<li>Setting an initial <strong>Status</strong> when a pull request is opened</li>
-<li>Updating <strong>Status</strong> when the first review is submitted</li>
-<li>Moving the item to an approved or completed <strong>Status</strong> after an approving review</li>
-</ul>
 <hr>
 <h2 id="configuration" class="tsd-anchor-link">Configuration<a href="#configuration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>The application's organization-level configuration can be done by adding a <code>.github/logus.yml</code> file
@@ -86,34 +85,34 @@ repository in the organization's settings.</p>
 <pre><code class="yaml"><span class="hl-0">projectTitlePrefix</span><span class="hl-1">: </span><span class="hl-2">"monitor-"</span><br><span class="hl-0">openPullRequestDateProjectFieldName</span><span class="hl-1">: </span><span class="hl-2">"Posted Date"</span><br><span class="hl-0">firstReviewSubmitDateProjectFieldName</span><span class="hl-1">: </span><span class="hl-2">"First Review Date"</span><br><span class="hl-0">lastReviewSubmitDateProjectFieldName</span><span class="hl-1">: </span><span class="hl-2">"Last Review Date"</span><br><span class="hl-0">lastApprovedReviewSubmitDateProjectFieldName</span><span class="hl-1">: </span><span class="hl-2">"Last Approved Review Date"</span><br><span class="hl-0">reviewIterationNumberProjectFieldName</span><span class="hl-1">: </span><span class="hl-2">"Review Iteration"</span><br><span class="hl-0">addPullRequestAuthorAsAssignee</span><span class="hl-1">: </span><span class="hl-3">true</span>
 </code><button type="button">Copy</button></pre>
 
-<h2 id="configuration-parameters" class="tsd-anchor-link">Configuration Parameters<a href="#configuration-parameters" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="configuration-parameters" class="tsd-anchor-link">Configuration Parameters<a href="#configuration-parameters" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <p>Logus operates only on GitHub Projects explicitly selected by configuration.
 Project selection is based on matching Project titles against a configured prefix.</p>
-<h3 id="" class="tsd-anchor-link"><code>projectTitlePrefix</code></h3>
+<h4 id="" class="tsd-anchor-link"><code>projectTitlePrefix</code></h4>
 <p>Prefix of GitHub Project titles that Logus should target.</p>
 <p>Only Projects whose titles start with this prefix will be scanned and updated.</p>
 <hr>
-<h3 id="-1" class="tsd-anchor-link"><code>openPullRequestDateProjectFieldName</code><a href="#-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<h4 id="-1" class="tsd-anchor-link"><code>openPullRequestDateProjectFieldName</code><a href="#-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <p>Name of the Project field where the pull request posted date will be stored.</p>
 <p>Optional parameter.</p>
 <hr>
-<h3 id="-2" class="tsd-anchor-link"><code>firstReviewSubmitDateProjectFieldName</code><a href="#-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<h4 id="-2" class="tsd-anchor-link"><code>firstReviewSubmitDateProjectFieldName</code><a href="#-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <p>Name of the Project field where the date of the first submitted pull request review will be stored.</p>
 <p>Optional parameter.</p>
 <hr>
-<h3 id="-3" class="tsd-anchor-link"><code>lastReviewSubmitDateProjectFieldName</code><a href="#-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<h4 id="-3" class="tsd-anchor-link"><code>lastReviewSubmitDateProjectFieldName</code><a href="#-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <p>Name of the Project field where the date of the most recent pull request review submission will be stored.</p>
 <p>Optional parameter.</p>
 <hr>
-<h3 id="-4" class="tsd-anchor-link"><code>lastApprovedReviewSubmitDateProjectFieldName</code><a href="#-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<h4 id="-4" class="tsd-anchor-link"><code>lastApprovedReviewSubmitDateProjectFieldName</code><a href="#-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <p>Name of the Project field where the date of the most recent <strong>approved</strong> pull request review will be stored.</p>
 <p>Optional parameter.</p>
 <hr>
-<h3 id="-5" class="tsd-anchor-link"><code>reviewIterationNumberProjectFieldName</code><a href="#-5" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<h4 id="-5" class="tsd-anchor-link"><code>reviewIterationNumberProjectFieldName</code><a href="#-5" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <p>Name of the Project field where the number of completed pull request review iterations will be stored.</p>
 <p>Optional parameter.</p>
 <hr>
-<h3 id="-6" class="tsd-anchor-link"><code>addPullRequestAuthorAsAssignee</code><a href="#-6" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<h4 id="-6" class="tsd-anchor-link"><code>addPullRequestAuthorAsAssignee</code><a href="#-6" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <p>Determines whether the pull request author should be automatically added as an Assignee to the
 corresponding Project item.</p>
 <p>Default value: <code>false</code>.</p>
