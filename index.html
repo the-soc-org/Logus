@@ -5,20 +5,57 @@
 <p>Logus records pull request activity as dedicated <strong>Project items</strong> in <strong>GitHub Projects</strong>, creating
 a structured log of collaborative activity.</p>
 <p>By combining standard <strong>Project fields</strong> (Title, Assignees, Reviewers, Repository, Status, Labels)
-with configurable, non-standard <strong>Project fields managed by Logus</strong> that store open pull request
+with configurable, non-standard <strong>Project fields managed by Logus</strong> that store pull request opening
 timestamp (Posted Date), review timestamps (First Review Date, Last Review Date, Last Approved
 Review Date) and iteration counts (Review Iteration), each pull request becomes a persistent,
 queryable Project item that captures its collaboration history within a GitHub Project.</p>
 <p><img src="media/monitor_example.png" alt=""></p>
 <h3 id="how-it-works" class="tsd-anchor-link">How It Works<a href="#how-it-works" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ol>
+<li>
+<p><strong>Pull request is opened</strong><br>
+When an author creates a pull request in the source repository, GitHub triggers its native
+mechanisms. If automatic reviewer assignment is enabled (see <a href="#reviewers-field">Reviewers
+Field</a>), reviewers are assigned at this stage. Reviewers can also be assigned
+manually at any time.</p>
+</li>
+<li>
+<p><strong>Author assignment (Logus)</strong><br>
+If <code>addPullRequestAuthorAsAssignee: true</code> is set in <code>logus.yml</code>, Logus assigns the pull request
+author as an <strong>Assignee</strong>. The Assignee field may still be modified manually later.</p>
+</li>
+<li>
+<p><strong>Project linking (Logus)</strong><br>
+Logus sets the pull request’s <strong>Projects</strong> field to the configured GitHub Project. As a result,
+GitHub adds the pull request to that Project as a <strong>Project item</strong>.</p>
+</li>
+<li>
+<p><strong>Standard field synchronization (GitHub)</strong><br>
+Once the pull request appears in the Project, GitHub automatically fills the existing standard
+Project fields with the corresponding values, including: <strong>Title, Assignees, Reviewers,
+Repository, Labels</strong>, and <strong>Status</strong>.</p>
+</li>
+<li>
+<p><strong>Status management via workflows (GitHub)</strong><br>
+If GitHub Projects workflows are configured (see <a href="#status-field">Status Field</a>), they
+automatically update the <strong>Status</strong> field in response to pull request events (e.g. <code>Todo</code> when
+opened, <code>In Progress</code> after the first review, <code>Reviewed</code> after approval). The Status field can
+also be set manually.</p>
+</li>
+<li>
+<p><strong>Review dynamics tracking (Logus)</strong><br>
+As collaboration continues, Logus incrementally updates configurable, non-standard Project fields such as:</p>
 <ul>
-<li>Logus sets the pull request’s <strong>Projects</strong> field, which causes GitHub to add the pull request to
-the selected Project as a Project item.</li>
-<li>GitHub automatically updates values in Project columns with standard fields.</li>
-<li>Logus updates values in Project columns with non-standard fields that capture review dynamics.</li>
-<li>A single Project item is updated incrementally as collaboration unfolds.</li>
-<li>Optionally, Logus assigns the pull request author as an <strong>Assignee</strong> to indicate authorship.</li>
+<li>Posted Date</li>
+<li>First Review Date</li>
+<li>Last Review Date</li>
+<li>Last Approved Review Date</li>
+<li>Review Iteration</li>
 </ul>
+</li>
+</ol>
+<p>Over time, a single Project item becomes a structured, queryable record of the pull request’s
+collaboration process.</p>
 <p>Logus assumes that target GitHub Projects follow a predefined <strong>structural template</strong>:</p>
 <ul>
 <li>The Project may contain standard and non-standard fields</li>
@@ -33,7 +70,8 @@ and downloaded in JSON format.</p>
 <ul>
 <li>Install the <a href="https://github.com/apps/logus">GitHub App</a> within the organization</li>
 <li>Configure the application settings (see <a href="#configuration">Configuration</a>)</li>
-<li>Copy a ready-to-use <a href="https://github.com/orgs/IS-UMK/projects/45">Project Template</a></li>
+<li>Copy the ready-to-use <a href="https://github.com/orgs/IS-UMK/projects/45">Project Template</a> with
+preconfigured workflows</li>
 </ul>
 <hr>
 <h2 id="additional-options-for-automatic-standard-field-updates" class="tsd-anchor-link">Additional Options for Automatic Standard Field Updates<a href="#additional-options-for-automatic-standard-field-updates" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
@@ -105,7 +143,7 @@ Project selection is based on matching Project titles against a configured prefi
 <p>Optional parameter.</p>
 <hr>
 <h4 id="-4" class="tsd-anchor-link"><code>lastApprovedReviewSubmitDateProjectFieldName</code><a href="#-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
-<p>Name of the Project field where the date of the most recent <strong>approved</strong> pull request review will be stored.</p>
+<p>Name of the Project field where the date of the most recent approved pull request review will be stored.</p>
 <p>Optional parameter.</p>
 <hr>
 <h4 id="-5" class="tsd-anchor-link"><code>reviewIterationNumberProjectFieldName</code><a href="#-5" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
