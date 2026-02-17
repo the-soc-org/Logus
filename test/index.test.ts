@@ -349,7 +349,7 @@ describe("Logus nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("6. Testing that 'openPullRequestDateProjectFieldName' date is updated on event 'pull request opened'", async () => {
+  test("6. Testing that date is added to project field 'openPullRequestDateProjectFieldName' on event 'pull_request.opened'", async () => {
     const mock = nock("https://api.github.com")
       .post(new RegExp("app/installations.*"))
       .reply(200)
@@ -413,7 +413,7 @@ describe("Logus nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("7. Testing that 'lastReviewSubmitDateProjectFieldName' date is added on event 'pull request review submitted'", async () => {
+  test("7. Testing that date is added to project field 'lastReviewSubmitDateProjectFieldName' on event 'pull_request_review.submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRRequestChanges,
@@ -443,7 +443,7 @@ describe("Logus nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("8. Testing that 'lastReviewSubmitDateProjectFieldName' date is updated on event 'pull request review submitted'", async () => {
+  test("8. Testing that date is updated in project field 'lastReviewSubmitDateProjectFieldName' on event 'pull_request_review.submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRApproved,
@@ -473,7 +473,7 @@ describe("Logus nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("9. Testing that 'reviewIterationNumberProjectFieldName' number is added on event 'pull request review submitted'", async () => {
+  test("9. Testing that review iteration number is added to project field 'reviewIterationNumberProjectFieldName' on event 'pull_request_review.submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRRequestChanges,
@@ -503,7 +503,7 @@ describe("Logus nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("10. Testing that 'reviewIterationNumberProjectFieldName' number is updated on event 'pull request review submitted'", async () => {
+  test("10. Testing that review iteration number is incremented in project field 'reviewIterationNumberProjectFieldName' on event 'pull_request_review.submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRApproved,
@@ -533,7 +533,7 @@ describe("Logus nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("11. Testing that 'lastApprovedReviewSubmitDateProjectFieldName' date is added on event 'pull request review submitted'", async () => {
+  test("11. Testing that date is added to project field 'lastApprovedReviewSubmitDateProjectFieldName' on event 'pull_request_review.submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRApproved,
@@ -563,7 +563,7 @@ describe("Logus nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("12. Testing that 'lastApprovedReviewSubmitDateProjectFieldName' date is updated on event 'pull request review submitted'", async () => {
+  test("12. Testing that date is updated in project field 'lastApprovedReviewSubmitDateProjectFieldName' on event 'pull_request_review.submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRApproved,
@@ -593,7 +593,7 @@ describe("Logus nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("13. Testing that 'lastApprovedReviewSubmitDateProjectFieldName' date is not updated on event 'pull request review submitted' if pull request review is not approved", async () => {
+  test("13. Testing that date is not added to project field 'lastApprovedReviewSubmitDateProjectFieldName' on event 'pull_request_review.submitted' when review is not approved", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRRequestChanges,
@@ -609,7 +609,7 @@ describe("Logus nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("14. Testing that 'firstReviewSubmitDateProjectFieldName' date is added on event 'pull request review submitted'", async () => {
+  test("14. Testing that date is added to project field 'firstReviewSubmitDateProjectFieldName' on event 'pull_request_review.submitted'", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRRequestChanges,
@@ -639,7 +639,7 @@ describe("Logus nock app tests", () => {
     expect(mock.pendingMocks()).toStrictEqual([]);
   });
 
-  test("15. Testing that 'firstReviewSubmitDateProjectFieldName' date is not updated on event 'pull request review submitted' if it has already been set", async () => {
+  test("15. Testing that date is not modified in project field 'firstReviewSubmitDateProjectFieldName' on event 'pull_request_review.submitted' if it has already been set", async () => {
     const mock = TestProjectFieldValueUpdaterInitialize(
       nock("https://api.github.com"),
       payloadPRApproved,
