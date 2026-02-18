@@ -189,7 +189,10 @@ export class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
     newFieldValue: string,
     condition: (currentFieldVal: string) => boolean = (_c) => true,
   ) {
-    await this.updateField(fieldNameSelector, async (proj, item, fieldId) => {
+    const fieldName = fieldNameSelector(this.orgConfig);
+    if (fieldName === undefined || fieldName === null) return;
+
+    await this.updateField(fieldName, async (proj, item, fieldId) => {
       if (condition(item.fieldValue.toString())) {
         await updateItemDate(
           this.context,
@@ -213,7 +216,10 @@ export class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
   public async increment(
     fieldNameSelector: (s: OrganizationConfig) => string | undefined,
   ) {
-    await this.updateField(fieldNameSelector, async (proj, item, fieldId) => {
+    const fieldName = fieldNameSelector(this.orgConfig);
+    if (fieldName === undefined || fieldName === null) return;
+
+    await this.updateField(fieldName, async (proj, item, fieldId) => {
       const newFieldValue: number = (item.fieldValue as number) + 1;
       await updateItemNumber(
         this.context,
@@ -231,11 +237,11 @@ export class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
 
   /**
    * Updates the specified field in the project.
-   * @param fieldNameSelector - Function to select the field name from the organization config.
+   * @param fieldName - The name of the field to update.
    * @param action - Function to perform the update action.
    */
   private async updateField(
-    fieldNameSelector: (s: OrganizationConfig) => string | undefined,
+    fieldName: string,
     action: (
       proj: ProjectInOrgQueryResultElement,
       item: { itemId: string; fieldValue: number | string | Date },
@@ -243,8 +249,6 @@ export class BasicProjectFieldValueUpdater implements ProjectFieldValueUpdater {
     ) => Promise<void>,
   ) {
     for (const proj of this.projects) {
-      const fieldName: string = fieldNameSelector(this.orgConfig)!;
-
       const fieldId: string | undefined = proj.fields.find((f) =>
         this.caseInsensiviteEqual(f.name, fieldName),
       )?.id;
