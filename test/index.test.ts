@@ -9,10 +9,11 @@ import payloadPRCommented from "./fixtures/payloads/pr_review.submitted.commente
 import payloadPRRequestChanges from "./fixtures/payloads/pr_review.submitted.changes_requested.json";
 import payloadPRApproved from "./fixtures/payloads/pr_review.submitted.approved.json";
 
-import responseProjectInOrg from "./fixtures/api_responses/graphql_queries/projectInOrg.json";
-import responseProjectsInOrg from "./fixtures/api_responses/graphql_queries/projectsInOrg.json";
+import responseProjectInOrgMonitor from "./fixtures/api_responses/graphql_queries/projectInOrgMonitor.json";
+import responseProjectInOrgPrefix from "./fixtures/api_responses/graphql_queries/projectInOrgPrefix.json";
+import responseProjectInOrgUnmatched from "./fixtures/api_responses/graphql_queries/projectInOrgUnmatched.json";
 import responseProjectsInOrgIncorrect from "./fixtures/api_responses/graphql_queries/projectsInOrgIncorrect.json";
-import responseUserTeamsInOrg from "./fixtures/api_responses/graphql_queries/userTeamsInOrg.json";
+import responseRepoTeamsInOrg from "./fixtures/api_responses/graphql_queries/repoTeamsInOrg.json";
 
 import responseAssignUserToPullRequest from "./fixtures/api_responses/graphql_mutations/assignUserToPullRequest.json";
 import responseAddProjectItem from "./fixtures/api_responses/graphql_mutations/addProjectItem.json";
@@ -67,7 +68,7 @@ function TestProjectFieldValueUpdaterInitialize(
       expect(body.variables.teamQuery).toEqual("");
       return true;
     })
-    .reply(200, responseUserTeamsInOrg)
+    .reply(200, responseRepoTeamsInOrg)
 
     .post("/graphql", (body) => {
       expect(body.variables.organizationLogin).toEqual(
@@ -76,7 +77,7 @@ function TestProjectFieldValueUpdaterInitialize(
       expect(body.variables.projectQuery).toEqual("is:open monitor-Project 1");
       return true;
     })
-    .reply(200, responseProjectsInOrg);
+    .reply(200, responseProjectInOrgMonitor);
 
   return mock;
 }
@@ -132,7 +133,7 @@ describe("Logus nock app tests", () => {
         expect(body.variables.teamQuery).toEqual("");
         return true;
       })
-      .reply(200, responseUserTeamsInOrg)
+      .reply(200, responseRepoTeamsInOrg)
 
       .post("/graphql", (body) => {
         expect(body.variables.organizationLogin).toEqual(
@@ -141,7 +142,7 @@ describe("Logus nock app tests", () => {
         expect(body.variables.projectQuery).toEqual("is:open prefix-Project 1");
         return true;
       })
-      .reply(200, responseProjectInOrg);
+      .reply(200, responseProjectInOrgPrefix);
 
     await probot.receive({
       name: "pull_request.opened",
@@ -183,7 +184,7 @@ describe("Logus nock app tests", () => {
         expect(body.variables.teamQuery).toEqual("");
         return true;
       })
-      .reply(200, responseUserTeamsInOrg)
+      .reply(200, responseRepoTeamsInOrg)
 
       .post("/graphql", (body) => {
         expect(body.variables.organizationLogin).toEqual(
@@ -192,7 +193,7 @@ describe("Logus nock app tests", () => {
         expect(body.variables.projectQuery).toEqual("is:open prefix-Project 1");
         return true;
       })
-      .reply(200, responseProjectInOrg);
+      .reply(200, responseProjectInOrgPrefix);
 
     await probot.receive({
       name: "pull_request.opened",
@@ -223,7 +224,7 @@ describe("Logus nock app tests", () => {
         expect(body.variables.teamQuery).toEqual("");
         return true;
       })
-      .reply(200, responseUserTeamsInOrg)
+      .reply(200, responseRepoTeamsInOrg)
 
       .post("/graphql", (body) => {
         expect(body.variables.organizationLogin).toEqual(
@@ -234,7 +235,7 @@ describe("Logus nock app tests", () => {
         );
         return true;
       })
-      .reply(200, responseProjectsInOrg);
+      .reply(200, responseProjectInOrgUnmatched);
 
     await probot.receive({
       name: "pull_request_review.submitted",
@@ -271,7 +272,7 @@ describe("Logus nock app tests", () => {
         return true;
       })
       .times(2)
-      .reply(200, responseUserTeamsInOrg)
+      .reply(200, responseRepoTeamsInOrg)
 
       .post("/graphql", (body) => {
         expect(body.variables.organizationLogin).toEqual(
@@ -282,7 +283,7 @@ describe("Logus nock app tests", () => {
         );
         return true;
       })
-      .reply(200, responseProjectsInOrg)
+      .reply(200, responseProjectInOrgMonitor)
 
       .post("/graphql", (body) => {
         expect(body.variables.pullRequestId).toEqual(
@@ -329,7 +330,7 @@ describe("Logus nock app tests", () => {
         expect(body.variables.teamQuery).toEqual("");
         return true;
       })
-      .reply(200, responseUserTeamsInOrg)
+      .reply(200, responseRepoTeamsInOrg)
 
       .post("/graphql", (body) => {
         expect(body.variables.organizationLogin).toEqual(
@@ -340,7 +341,7 @@ describe("Logus nock app tests", () => {
         );
         return true;
       })
-      .reply(200, responseProjectsInOrg);
+      .reply(200, responseProjectInOrgMonitor);
 
     await probot.receive({
       name: "pull_request.opened",
@@ -376,7 +377,7 @@ describe("Logus nock app tests", () => {
         expect(body.variables.teamQuery).toEqual("");
         return true;
       })
-      .reply(200, responseUserTeamsInOrg)
+      .reply(200, responseRepoTeamsInOrg)
 
       .post("/graphql", (body) => {
         expect(body.variables.organizationLogin).toEqual(
@@ -387,7 +388,7 @@ describe("Logus nock app tests", () => {
         );
         return true;
       })
-      .reply(200, responseProjectsInOrg)
+      .reply(200, responseProjectInOrgMonitor)
 
       .post("/graphql", (body) => {
         expect(body.variables.projectId).toEqual("PVT_kwDOCzSoN84AtAzg");
@@ -683,7 +684,7 @@ describe("Logus nock app tests", () => {
         expect(body.variables.teamQuery).toEqual("");
         return true;
       })
-      .reply(200, responseUserTeamsInOrg)
+      .reply(200, responseRepoTeamsInOrg)
 
       .post("/graphql", (body) => {
         expect(body.variables.organizationLogin).toEqual(

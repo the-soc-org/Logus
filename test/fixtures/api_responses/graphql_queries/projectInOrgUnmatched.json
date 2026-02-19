@@ -1,0 +1,109 @@
+{
+  "data": {
+    "organization": {
+      "projectsV2": {
+        "edges": [
+          {
+            "node": {
+              "id": "PVT_kwDOCzSoN84AtAzg",
+              "number": 7,
+              "title": "monitor-Project 1",
+              "closed": false,
+              "fields": {
+                "edges": [
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtAzgzgj18Q0",
+                      "name": "Title",
+                      "dataType": "TITLE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtAzgzgj18Q4",
+                      "name": "Assignees",
+                      "dataType": "ASSIGNEES"
+                    }
+                  },
+                  {
+                    "node": {}
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtAzgzgj18RA",
+                      "name": "Labels",
+                      "dataType": "LABELS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtAzgzgj18RE",
+                      "name": "Linked pull requests",
+                      "dataType": "LINKED_PULL_REQUESTS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtAzgzgj18RI",
+                      "name": "Milestone",
+                      "dataType": "MILESTONE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtAzgzgj18RM",
+                      "name": "Repository",
+                      "dataType": "REPOSITORY"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtAzgzgj18Rc",
+                      "name": "Reviewers",
+                      "dataType": "REVIEWERS"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtAzgzgj2VmM",
+                      "name": "INTENTIONALLY_UNMATCHED__OPEN_DATE",
+                      "dataType": "DATE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtAzgzgj2VuM",
+                      "name": "INTENTIONALLY_UNMATCHED__FIRST_REVIEW_DATE",
+                      "dataType": "DATE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtAzgzgj2VyY",
+                      "name": "INTENTIONALLY_UNMATCHED__REVIEW_ITERATION",
+                      "dataType": "NUMBER"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtAzgzgj2WEo",
+                      "name": "INTENTIONALLY_UNMATCHED__LAST_REVIEW_DATE",
+                      "dataType": "DATE"
+                    }
+                  },
+                  {
+                    "node": {
+                      "id": "PVTF_lADOCzSoN84AtAzgzgj2WIE",
+                      "name": "INTENTIONALLY_UNMATCHED__LAST_APPROVE_REVIEW_DATE",
+                      "dataType": "DATE"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

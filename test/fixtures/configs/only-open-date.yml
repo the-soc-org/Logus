@@ -1,3 +1,7 @@
 projectTitlePrefix: "monitor-"
 openPullRequestDateProjectFieldName: "Open Date"
-addPullRequestAuthorAsAssignee: false
+firstReviewSubmitDateProjectFieldName: null
+lastReviewSubmitDateProjectFieldName: null
+lastApprovedReviewSubmitDateProjectFieldName: null
+reviewIterationNumberProjectFieldName: null
+addPullRequestAuthorAsAssignee: null
