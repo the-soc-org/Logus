@@ -119,9 +119,15 @@ Typical workflow actions include (see [Project Template Workflows](https://githu
 
 ## Configuration
 
-The application's organization-level configuration can be done by adding a `.github/logus.yml` file
-to the organization's `.github-private` repository. Make sure that the GitHub App has access to this
+The application works with default configuration values out of the box. Custom organization-level
+configuration can be provided by adding a `.github/logus.yml` file to the organization's
+`.github-private` or `.github` repository. Make sure that the GitHub App has access to this
 repository in the organization's settings.
+
+**When no configuration file is present**, Logus uses the default values.
+
+**When a custom configuration file exists**, values defined in the file override the corresponding
+defaults, while any fields not specified in the custom configuration retain their default values.
 
 ### Sample `logus.yml`
 
@@ -135,6 +141,24 @@ reviewIterationNumberProjectFieldName: "Review Iteration"
 addPullRequestAuthorAsAssignee: true
 ```
 
+### Disabling Features
+
+To disable tracking for a specific Project field, set its corresponding configuration parameter to
+one of the following values in your `logus.yml` file:
+
+```yaml
+# Option 1: null keyword
+reviewIterationNumberProjectFieldName: null
+
+# Option 2: tilde (~)
+reviewIterationNumberProjectFieldName: ~
+
+# Option 3: empty value
+reviewIterationNumberProjectFieldName:
+```
+
+When a field is disabled, Logus will not create or update that field in Project items.
+
 ### Configuration Parameters
 
 Logus operates only on GitHub Projects explicitly selected by configuration.
@@ -146,13 +170,15 @@ Prefix of GitHub Project titles that Logus should target.
 
 Only Projects whose titles start with this prefix will be scanned and updated.
 
+**Default value:** `"monitor-"`
+
 ---
 
 #### `openPullRequestDateProjectFieldName`
 
 Name of the Project field where the pull request posted date will be stored.
 
-Optional parameter.
+**Default value:** `"Posted Date"`
 
 ---
 
@@ -160,7 +186,7 @@ Optional parameter.
 
 Name of the Project field where the date of the first submitted pull request review will be stored.
 
-Optional parameter.
+**Default value:** `"First Review Date"`
 
 ---
 
@@ -168,7 +194,7 @@ Optional parameter.
 
 Name of the Project field where the date of the most recent pull request review submission will be stored.
 
-Optional parameter.
+**Default value:** `"Last Review Date"`
 
 ---
 
@@ -176,7 +202,7 @@ Optional parameter.
 
 Name of the Project field where the date of the most recent approved pull request review will be stored.
 
-Optional parameter.
+**Default value:** `"Last Approved Review Date"`
 
 ---
 
@@ -184,7 +210,7 @@ Optional parameter.
 
 Name of the Project field where the number of completed pull request review iterations will be stored.
 
-Optional parameter.
+**Default value:** `"Review Iteration"`
 
 ---
 
@@ -193,7 +219,9 @@ Optional parameter.
 Determines whether the pull request author should be automatically added as an Assignee to the
 corresponding Project item.
 
-Default value: `false`.
+Use `true` or `false`.
+
+**Default value:** `true`
 
 ---
 
