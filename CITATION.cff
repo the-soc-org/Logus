@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+title: >-
+  Logus: a structured record of collaborative pull request activity
+type: software
+authors:
+  - given-names: Mikołaj
+    family-names: Makowski
+  - given-names: Sebastian
+    family-names: Sztankowski
+  - given-names: Michał
+    family-names: Pierzchalski
+    email: pierzcham@umk.pl
+    affiliation: Nicolaus Copernicus University
+    orcid: 'https://orcid.org/0000-0002-9936-1169'
+identifiers:
+  - type: url
+    value: 'https://the-soc-org.github.io/Logus/'
+repository-code: 'https://github.com/the-soc-org/Logus'
+keywords:
+  - github-app
+  - github-projects
+  - code-review
+  - peer-review
+  - pull-requests
+  - classroom-tools
+  - nodejs
+  - typescript
+  - probot
+license: MIT
+version: v2.0.1
+date-released: '2026-02-21'
