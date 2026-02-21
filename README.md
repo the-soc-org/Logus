@@ -112,6 +112,8 @@ Typical workflow actions include (see [Project Template Workflows](https://githu
   - `npm run build` – transpile TypeScript code to JavaScript
   - `npm start` – start the server handling the GitHub App
 - [Register the GitHub App](https://probot.github.io/docs/development/#configuring-a-github-app)
+  - *Note:* The GitHub App Manifest (`app.yml`) contains the app’s permissions and settings on
+    GitHub
 - Install the application within the target organization
 - Restart the service using `npm start`
 
