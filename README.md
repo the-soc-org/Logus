@@ -66,7 +66,7 @@ and downloaded in JSON format.
 
 ### Quick Start
 
-- Install the [GitHub App](https://github.com/apps/logus) within the organization
+- Install Logus within the organization (see [Self-hosting](#self-hosting))
 - Configure the application settings (see [Configuration](#configuration))
 - Copy the ready-to-use [Project Template](https://github.com/orgs/IS-UMK/projects/45) with
   preconfigured workflows
