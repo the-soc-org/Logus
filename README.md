@@ -1,6 +1,6 @@
 # Logus
 
-[![Build and Test](https://github.com/the-soc-org/Logus/actions/workflows/ci-push.yml/badge.svg?branch=master)](https://github.com/the-soc-org/Logus/actions/workflows/ci-push.yml)
+[![Test — Push](https://github.com/the-soc-org/Logus/actions/workflows/test-on-push.yml/badge.svg?branch=master)](https://github.com/the-soc-org/Logus/actions/workflows/test-on-push.yml)
 
 ## The Log of Us
 *A structured record of collaborative pull request activity*
