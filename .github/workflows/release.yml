@@ -4,7 +4,7 @@ run-name: "${{ github.event.workflow_run.head_commit.message }}"
 on:
   workflow_run:
     workflows:
-      - "CI — Push (build & test)"
+      - "Test — Push"
     types:
       - completed
     branches:
@@ -19,10 +19,10 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Check CI workflow result
+      - name: Check test workflow result
         run: |
           if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
-            echo "Skipping release as the CI workflow failed. Release cannot proceed."
+            echo "Skipping release as the test workflow failed. Release cannot proceed."
             exit 1
           fi
 
