@@ -18,6 +18,11 @@ export default defineConfig([
   tseslint.configs.recommended,
   prettierConfig,
   {
-    ignores: ["node_modules", "lib"],
+    ignores: [
+      "**/*",
+      "!src/**",
+      "!scripts/**",
+      "!test/**",
+    ],
   },
 ]);

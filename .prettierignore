@@ -1,6 +1,11 @@
-node_modules
-lib
+*
+!src/
+!src/**
 **/*.gql
-package.json
-package-lock.json
-**/*.md
+!scripts/
+!scripts/**
+!test/
+!test/**
+!.github/
+!.github/workflows/
+!.github/workflows/**

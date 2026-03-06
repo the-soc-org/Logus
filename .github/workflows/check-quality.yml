@@ -4,13 +4,19 @@ on:
   push:
     branches:
       - "**"
-    paths-ignore:
-      - "**/*.md"
+    paths:
+      - "src/**"
+      - "scripts/**"
+      - "test/**"
+      - ".github/workflows/**"
   pull_request:
     branches:
       - "**"
-    paths-ignore:
-      - "**/*.md"
+    paths:
+      - "src/**"
+      - "scripts/**"
+      - "test/**"
+      - ".github/workflows/**"
 
 jobs:
   check-quality:
