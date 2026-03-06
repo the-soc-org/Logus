@@ -1,0 +1,53 @@
+---
+config:
+  theme: mc
+  layout: elk
+  look: classic
+---
+graph TD
+    subgraph GitHub App: Dependabot 
+      subgraph Configuration["Configuration "]
+        subgraph DependabotSection["GitHub&nbsp;repository&nbsp;settings&nbsp;⮕&nbsp;Security&nbsp;⮕&nbsp;Advanced&nbsp;Security&nbsp;⮕&nbsp;Dependabot"]
+          direction LR
+
+          subgraph AlertsSection["&nbsp;"]
+            AlertsText["Dependabot alerts &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"]
+            AlertsText@{ shape: text}
+
+            AlertsBtn("Enable")
+
+            AlertsText ~~~ AlertsBtn
+          end
+          
+          subgraph UpdatesSection["&nbsp;"]
+            UpdatesText["Dependabot version updates"]
+            UpdatesText@{ shape: text}
+
+            UpdatesBtn("Enable")
+
+            UpdatesText ~~~ UpdatesBtn
+          end
+
+          ConfigFile([".github/dependabot.yml"])
+          UpdatesSection --- |configuration file| ConfigFile
+        end
+      end
+        
+      BotAlerts(["Dependabot alerts"])
+      BotAlerts --> Scan["Scan for vulnerabilities"]
+      Scan --> Notify["Notify on GitHub Alerts"]
+      Notify --> |user-initiated| Generate["Generate Dependabot PR"]
+
+      BotVersionCheck(["Dependabot version updates"])
+      BotVersionCheck --> BotSchedule["Schedule"]
+      BotSchedule -- monthly --> Check1["Check for npm dependencies"]
+      BotSchedule -- monthly --> Check2["Check for GitHub Actions dependencies"]
+      Check1 --> |if new version found| PR1["Open PR"]
+      Check2 --> |if new version found| PR2["Open PR"]
+    end
+
+    classDef stroke1 font-size:0px, height:79, y:140
+    class AlertsSection stroke1
+
+    classDef stroke2 font-size:0px, height:79, y:269
+    class UpdatesSection stroke2

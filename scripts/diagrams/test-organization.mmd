@@ -1,0 +1,75 @@
+---
+config:
+  theme: mc
+  layout: elk
+  look: classic
+---
+flowchart LR
+      subgraph Organization["GitHub Organization"]
+            subgraph Teams["Teams"]
+                  team1["team1"]
+                  team2["team2"]
+                  team3["team3"]
+                  team4["team4"]
+            end
+            subgraph Projects["Projects"]
+                  project1["prefix-project1"]
+                  project2["prefix-project2"]
+                  project3["prefix-project3"]
+            end
+            subgraph Members["Members"]
+                  member1["member1"]
+                  member2["member2"]
+                  member3["member3"]
+            end
+            subgraph Repositories["Repositories"]
+                  repository1["repository1"]
+                  repository2["repository2"]
+                  repository3["repository3"]
+            end
+            subgraph SpecialRepositories["Special Repository"]
+                  sRepository1[".github-private"]
+                  sRepository2[".github"]
+            end
+            subgraph Pull_Request["Pull Request"]
+                  pr_title["Title"]
+                  pr_assignee["Assignee"]
+                  pr_reviewer["Reviewer"]
+                  pr_conversation["Conversation"]
+                  pr_other["Other"]
+            end
+            subgraph Project_Fields["Project Fields"]
+                  pf1["<strong>Title</strong><br>(Text)"]
+                  pf2["<strong>Assignees</strong><br>(Text)"]
+                  pf3["<strong>Repository</strong><br>(Text)"]
+                  pf4["<strong>Open Date</strong><br>(Date)"]
+                  pf5["<strong>First Review Date</strong><br>(Date)"]
+                  pf6["<strong>Last Review Date</strong><br>(Date)"]
+                  pf7["<strong>Last Approve Review Date</strong><br>(Date)"]
+                  pf8["<strong>Review Iteration</strong><br>(Number)"]
+                  pf9["<strong>Other fields</strong>"]
+            end
+
+            Teams ==> Projects & Repositories & Members
+            Projects ==> Project_Fields
+            Repositories ==> Pull_Request
+
+            subgraph Czujnikownia["GitHub App: Czujnikownia"]
+                  test1["<strong>Test 1</strong><br>pull_request.opened"] --> sRepository1
+                  test2["<strong>Test 2</strong><br>pull_request.opened"] --> sRepository1 & sRepository2
+                  test3["<strong>Test 3</strong><br>pull_request_review.submitted"] --> sRepository1 & sRepository2
+                  test4["<strong>Test 4</strong><br>pull_request.opened"] --> pr_assignee & pf2
+                  test5["<strong>Test 5</strong><br>pull_request.opened"] --> pr_assignee & pf2
+                  test6["<strong>Test 6</strong><br>pull_request.opened"] --> pf4
+                  test7["<strong>Test 7</strong><br>pull_request_review.submitted"] --> pf6
+                  test8["<strong>Test 8</strong><br>pull_request_review.submitted"] --> pf6
+                  test9["<strong>Test 9</strong><br>pull_request_review.submitted"] --> pf8
+                  test10["<strong>Test 10</strong><br>pull_request_review.submitted"] --> pf8
+                  test11["<strong>Test 11</strong><br>pull_request_review.submitted"] --> pf7
+                  test12["<strong>Test 12</strong><br>pull_request_review.submitted"] --> pf7
+                  test13["<strong>Test 13</strong><br>pull_request_review.submitted"] --> pf7
+                  test14["<strong>Test 14</strong><br>pull_request_review.submitted"] --> pf5
+                  test15["<strong>Test 15</strong><br>pull_request_review.submitted"] --> pf5
+                  test16["<strong>Test 16</strong><br>pull_request_review.submitted"] --> pf6
+            end
+      end

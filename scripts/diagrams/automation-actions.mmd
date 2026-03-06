@@ -1,0 +1,114 @@
+---
+config:
+  theme: mc
+  layout: tidy-tree
+  look: classic
+---
+graph TD
+    subgraph GitHub Actions
+        direction TB
+        CI-P(["<strong>test-on-push.yml</strong>"])
+        CI-P --- CI-P-Push
+        CI-P-Push(["<strong>Push</strong>"]) ---|Branch: all branches| CI-P-Job
+        CI-P-Job(["<strong>build-and-test</0strong>"]) --> CI-P-S1
+        CI-P-S1["Checkout a Git repository"] --> CI-P-S2
+        CI-P-S2["Setup a Node.js environment"] --> CI-P-S3
+        CI-P-S3["Install dependencies<br>(npm install)"] --> CI-P-S4
+        CI-P-S4["Build the project<br>(npm run build)"] --> CI-P-S5
+        CI-P-S5["Run tests<br>(npm test)"]
+
+        CI-PR(["<strong>test-on-pr.yml</strong>"])
+        CI-PR --- CI-PR-Pull
+        CI-PR-Pull(["<strong>Pull Request</strong>"]) ---|Branch: all branches| CI-PR-Job
+        CI-PR-Job(["<strong>build-and-test</0strong>"]) --> CI-PR-S1
+        CI-PR-S1["Checkout a Git repository"] --> CI-PR-S2
+        CI-PR-S2["Setup a Node.js environment"] --> CI-PR-S3
+        CI-PR-S3["Install dependencies<br>(npm install)"] --> CI-PR-S4
+        CI-PR-S4["Build the project<br>(npm run build)"] --> CI-PR-S5
+        CI-PR-S5["Run tests<br>(npm test)"] --> CI-PR-S6
+        CI-PR-S6["Check tools"]
+        
+        Quality(["<strong>check-quality.yml</strong>"])
+        Quality --- Quality-Push
+        Quality --- Quality-Pull
+        Quality-Push(["<strong>Push</strong>"]) ---|Branch: all branches<br>Paths: src, scripts,<br> test, .github/workflows| Quality-Job
+        Quality-Pull(["<strong>Pull Request</strong>"]) ---|Branch: all branches<br>Paths: src, scripts,<br> test, .github/workflows| Quality-Job
+        Quality-Job(["<strong>check-quality</strong>"]) --> Quality-S1
+        Quality-S1["Checkout a Git repository"] --> Quality-S2
+        Quality-S2["Setup a Node.js environment"] --> Quality-S3
+        Quality-S3["Install dependencies<br>(npm install)"] --> Quality-S4
+        Quality-S4["Check code formatting using Prettier<br>(npm run format:check)"] --> Quality-S5
+        Quality-S5["Run static code analysis using ESLint<br>(npm run lint)"] --> Quality-S6
+        Quality-S6["Fail if any step failed"]
+
+        Docs(["<strong>generate-docs.yml</strong>"])
+        Docs --- Docs-Push
+        Docs-Push(["<strong>Push</strong>"]) ---|Branch: master| Docs-Job
+        Docs-Job(["<strong>generate-docs</strong>"]) --> Docs-S1
+        Docs-S1["Checkout a Git repository"] --> Docs-S2
+        Docs-S2["Setup a Node.js environment"] --> Docs-S3
+        Docs-S3["Install dependencies<br>(npm install)"] --> Docs-S4
+        Docs-S4["Generate documentation<br>(npm run docs)"] --> Docs-S5
+        Docs-S5["Deploy documentation"]
+
+        CodeQL(["<strong>codeql-analysis.yml</strong>"])
+        CodeQL --- CodeQL-Push
+        CodeQL --- CodeQL-Pull
+        CodeQL --- CodeQL-Schedule
+        CodeQL-Push(["<strong>Push</strong>"]) ---|Branch: master| CodeQL-Job
+        CodeQL-Pull(["<strong>Pull Request</strong>"]) ---|Branch: master| CodeQL-Job
+        CodeQL-Schedule(["<strong>Schedule</strong>"]) ---|Weekly| CodeQL-Job
+        CodeQL-Job(["<strong>codeql-analysis</strong>"]) --> CodeQL-S1
+        CodeQL-S1["Checkout a Git repository"] --> CodeQL-S2
+        CodeQL-S2["Initialize CodeQL"] --> CodeQL-S3
+        CodeQL-S3["Install dependencies<br>(npm install)"] --> CodeQL-S4
+        CodeQL-S4["Build the project<br>(npm run build)"] --> CodeQL-S5
+        CodeQL-S5["Run CodeQL analysis"]
+
+        Release(["<strong>release.yml</strong>"])
+        Release --- Release-WorkflowRun
+        Release-WorkflowRun(["<strong>Workflow Run</strong>"]) ---|Workflow: Test — Push<br>Type: completed<br>Branch: master| Release-Job
+        Release-Job(["<strong>release</strong>"]) --> Release-S1
+        Release-S1["Check test workflow result"] --> |Result: success| Release-S2
+        Release-S2["Checkout a Git repository"] --> Release-S3
+        Release-S3["Setup a Node.js environment"] --> Release-S4
+        Release-S4["Install dependencies<br>(npm install)"] --> Release-S5
+        Release-S5["Build the project<br>(npm run build)"] --> Release-S6
+        Release-S6["Run automated release<br>(npm run release)"]
+
+        subgraph Files["Files"]
+          CI-P
+          CI-PR
+          Quality
+          Docs
+          CodeQL
+          Release
+        end
+        subgraph Triggers["Workflow Triggers"]
+          CI-P-Push
+          CI-PR-Pull
+          Quality-Push
+          Quality-Pull
+          Docs-Push
+          CodeQL-Push
+          CodeQL-Pull
+          CodeQL-Schedule
+          Release-WorkflowRun
+        end
+        subgraph Jobs["Jobs"]
+          CI-P-Job
+          CI-PR-Job
+          Quality-Job
+          Docs-Job
+          CodeQL-Job
+          Release-Job
+          subgraph Steps["Steps"]
+            CI-P-S1 & CI-P-S2 & CI-P-S3 & CI-P-S4 & CI-P-S5
+            CI-PR-S1 & CI-PR-S2 & CI-PR-S3 & CI-PR-S4 & CI-PR-S5 & CI-PR-S6
+            Quality-S1 & Quality-S2 & Quality-S3 & Quality-S4 & Quality-S5 & Quality-S6
+            Docs-S1 & Docs-S2 & Docs-S3 & Docs-S4 & Docs-S5
+            CodeQL-S1 & CodeQL-S2 & CodeQL-S3 & CodeQL-S4 & CodeQL-S5
+            Release-S1 & Release-S2 & Release-S3 & Release-S4 & Release-S5 & Release-S6
+          end
+        end
+    end
