@@ -21,8 +21,8 @@ manually at any time.</p>
 </li>
 <li>
 <p><strong>Author assignment (Logus)</strong><br>
-If <code>addPullRequestAuthorAsAssignee: true</code> is set in <code>logus.yml</code>, Logus assigns the pull request
-author as an <strong>Assignee</strong>. The Assignee field may still be modified manually later.</p>
+Unless <code>addPullRequestAuthorAsAssignee: false</code> is configured in <code>logus.yml</code>, Logus automatically
+assigns the pull request author as an <strong>Assignee</strong>. The Assignee field may still be modified manually later.</p>
 </li>
 <li>
 <p><strong>Project linking (Logus)</strong><br>
@@ -121,44 +121,57 @@ GitHub</li>
 </ul>
 <hr>
 <h2 id="configuration" class="tsd-anchor-link">Configuration<a href="#configuration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
-<p>The application's organization-level configuration can be done by adding a <code>.github/logus.yml</code> file
-to the organization's <code>.github-private</code> repository. Make sure that the GitHub App has access to this
+<p>The application works with default configuration values out of the box. Custom organization-level
+configuration can be provided by adding a <code>.github/logus.yml</code> file to the organization's
+<code>.github-private</code> or <code>.github</code> repository. Make sure that the GitHub App has access to this
 repository in the organization's settings.</p>
+<p><strong>When no configuration file is present</strong>, Logus uses the default values.</p>
+<p><strong>When a custom configuration file exists</strong>, values defined in the file override the corresponding
+defaults, while any fields not specified in the custom configuration retain their default values.</p>
 <h3 id="sample" class="tsd-anchor-link">Sample <code>logus.yml</code><a href="#sample" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <pre><code class="yaml"><span class="hl-0">projectTitlePrefix</span><span class="hl-1">: </span><span class="hl-2">"monitor-"</span><br><span class="hl-0">openPullRequestDateProjectFieldName</span><span class="hl-1">: </span><span class="hl-2">"Posted Date"</span><br><span class="hl-0">firstReviewSubmitDateProjectFieldName</span><span class="hl-1">: </span><span class="hl-2">"First Review Date"</span><br><span class="hl-0">lastReviewSubmitDateProjectFieldName</span><span class="hl-1">: </span><span class="hl-2">"Last Review Date"</span><br><span class="hl-0">lastApprovedReviewSubmitDateProjectFieldName</span><span class="hl-1">: </span><span class="hl-2">"Last Approved Review Date"</span><br><span class="hl-0">reviewIterationNumberProjectFieldName</span><span class="hl-1">: </span><span class="hl-2">"Review Iteration"</span><br><span class="hl-0">addPullRequestAuthorAsAssignee</span><span class="hl-1">: </span><span class="hl-3">true</span>
 </code><button type="button">Copy</button></pre>
 
+<h3 id="disabling-features" class="tsd-anchor-link">Disabling Features<a href="#disabling-features" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>To disable tracking for a specific Project field, set its corresponding configuration parameter to
+one of the following values in your <code>logus.yml</code> file:</p>
+<pre><code class="yaml"><span class="hl-4"># Option 1: null keyword</span><br><span class="hl-0">reviewIterationNumberProjectFieldName</span><span class="hl-1">: </span><span class="hl-3">null</span><br><br><span class="hl-4"># Option 2: tilde (~)</span><br><span class="hl-0">reviewIterationNumberProjectFieldName</span><span class="hl-1">: </span><span class="hl-3">~</span><br><br><span class="hl-4"># Option 3: empty value</span><br><span class="hl-0">reviewIterationNumberProjectFieldName</span><span class="hl-1">:</span>
+</code><button type="button">Copy</button></pre>
+
+<p>When a field is disabled, Logus will not create or update that field in Project items.</p>
 <h3 id="configuration-parameters" class="tsd-anchor-link">Configuration Parameters<a href="#configuration-parameters" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <p>Logus operates only on GitHub Projects explicitly selected by configuration.
 Project selection is based on matching Project titles against a configured prefix.</p>
 <h4 id="" class="tsd-anchor-link"><code>projectTitlePrefix</code></h4>
 <p>Prefix of GitHub Project titles that Logus should target.</p>
 <p>Only Projects whose titles start with this prefix will be scanned and updated.</p>
+<p><strong>Default value:</strong> <code>"monitor-"</code></p>
 <hr>
 <h4 id="-1" class="tsd-anchor-link"><code>openPullRequestDateProjectFieldName</code><a href="#-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <p>Name of the Project field where the pull request posted date will be stored.</p>
-<p>Optional parameter.</p>
+<p><strong>Default value:</strong> <code>"Posted Date"</code></p>
 <hr>
 <h4 id="-2" class="tsd-anchor-link"><code>firstReviewSubmitDateProjectFieldName</code><a href="#-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <p>Name of the Project field where the date of the first submitted pull request review will be stored.</p>
-<p>Optional parameter.</p>
+<p><strong>Default value:</strong> <code>"First Review Date"</code></p>
 <hr>
 <h4 id="-3" class="tsd-anchor-link"><code>lastReviewSubmitDateProjectFieldName</code><a href="#-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <p>Name of the Project field where the date of the most recent pull request review submission will be stored.</p>
-<p>Optional parameter.</p>
+<p><strong>Default value:</strong> <code>"Last Review Date"</code></p>
 <hr>
 <h4 id="-4" class="tsd-anchor-link"><code>lastApprovedReviewSubmitDateProjectFieldName</code><a href="#-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <p>Name of the Project field where the date of the most recent approved pull request review will be stored.</p>
-<p>Optional parameter.</p>
+<p><strong>Default value:</strong> <code>"Last Approved Review Date"</code></p>
 <hr>
 <h4 id="-5" class="tsd-anchor-link"><code>reviewIterationNumberProjectFieldName</code><a href="#-5" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <p>Name of the Project field where the number of completed pull request review iterations will be stored.</p>
-<p>Optional parameter.</p>
+<p><strong>Default value:</strong> <code>"Review Iteration"</code></p>
 <hr>
 <h4 id="-6" class="tsd-anchor-link"><code>addPullRequestAuthorAsAssignee</code><a href="#-6" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4>
 <p>Determines whether the pull request author should be automatically added as an Assignee to the
 corresponding Project item.</p>
-<p>Default value: <code>false</code>.</p>
+<p>Use <code>true</code> or <code>false</code>.</p>
+<p><strong>Default value:</strong> <code>true</code></p>
 <hr>
 <h2 id="contributing" class="tsd-anchor-link">Contributing<a href="#contributing" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p>We welcome contributions! Please read our <a href="media/CONTRIBUTING.md">Contributing Guide</a> to learn about our development process and how to propose changes.</p>
