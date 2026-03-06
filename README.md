@@ -25,8 +25,8 @@ queryable Project item that captures its collaboration history within a GitHub P
    manually at any time.
 
 2. **Author assignment (Logus)**  
-   If `addPullRequestAuthorAsAssignee: true` is set in `logus.yml`, Logus assigns the pull request
-   author as an **Assignee**. The Assignee field may still be modified manually later.
+   Unless `addPullRequestAuthorAsAssignee: false` is configured in `logus.yml`, Logus automatically
+   assigns the pull request author as an **Assignee**. The Assignee field may still be modified manually later.
 
 3. **Project linking (Logus)**  
    Logus sets the pull request’s **Projects** field to the configured GitHub Project. As a result,
