@@ -1,1 +1,7 @@
 projectTitlePrefix: "prefix-"
+openPullRequestDateProjectFieldName: null
+firstReviewSubmitDateProjectFieldName: null
+lastReviewSubmitDateProjectFieldName: null
+lastApprovedReviewSubmitDateProjectFieldName: null
+reviewIterationNumberProjectFieldName: null
+addPullRequestAuthorAsAssignee: null
