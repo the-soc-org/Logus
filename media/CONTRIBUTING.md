@@ -1,5 +1,7 @@
 # Contributing to Logus
 
+> This project is not actively maintained at the moment, so contributions may not receive timely review or merge decisions.
+
 Thank you for your interest in contributing to the Logus project! This guide will help you understand the collaboration process and standards that apply to the project.
 
 ### Why is it worth reading this guide?
