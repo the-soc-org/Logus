@@ -2,6 +2,8 @@
 
 [![Test — Push](https://github.com/the-soc-org/Logus/actions/workflows/test-on-push.yml/badge.svg?branch=master)](https://github.com/the-soc-org/Logus/actions/workflows/test-on-push.yml)
 
+> This project is currently not actively maintained, so responses may be delayed or unavailable.
+
 ## The Log of Us
 *A structured record of collaborative pull request activity*
 
